@@ -1,0 +1,20 @@
+[{
+  "_id": {
+    "$oid": "63a4c1b42ee0ec0123cdf2c7"
+  },
+  "name": "admin",
+  "email": "admin@web.com",
+  "password": "$2y$12$vknVJyM8DZGx7Ia4IuPnturWMX89F/D2wL0XDo/ntwumBMVQUCU7S",
+  "isAdmin": "true",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1671741876268"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1673142802108"
+    }
+  },
+  "__v": 0
+}]
