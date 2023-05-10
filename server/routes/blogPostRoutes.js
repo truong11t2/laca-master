@@ -1,7 +1,7 @@
-import express from 'express';
-import protectRoute from '../middleware/authMiddleware.js';
-import BlogPost from '../models/BlogPost.js';
-import asyncHandler from 'express-async-handler';
+import express from "express";
+import protectRoute from "../middleware/authMiddleware.js";
+import BlogPost from "../models/BlogPost.js";
+import asyncHandler from "express-async-handler";
 
 const blogPostRoutes = express.Router();
 
@@ -12,9 +12,9 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
   const increment = pageNumber + 4;
 
   let getStatus = () => (increment < posts.length ? 200 : 201); //201 response means last chunk of blog posts
-  if (category === 'all') {
+  if (category === "all") {
     res.status(getStatus()).json(posts.slice(pageNumber, increment));
-  } else if (category === 'latest') {
+  } else if (category === "latest") {
     res
       .status(getStatus())
       .json(posts.sort((objA, objB) => Number(objB.createdAt) - Number(objA.createdAt)).slice(pageNumber, increment));
@@ -31,12 +31,12 @@ const getBlogPost = asyncHandler(async (req, res) => {
   if (blogPost) {
     res.json(blogPost);
   } else {
-    res.status(404).send('Blog post not found.');
+    res.status(404).send("Blog post not found.");
   }
 });
 
 const createBlogPost = async (req, res) => {
-  const { image, title, contentOne, contentTwo, category, author = 'Benjamin Fischer' } = req.body;
+  const { image, title, contentOne, contentTwo, category, author = "Truong Hoang" } = req.body;
 
   const newBlogPost = await BlogPost.create({
     image,
@@ -51,7 +51,7 @@ const createBlogPost = async (req, res) => {
   if (newBlogPost) {
     res.json(blogPosts);
   } else {
-    res.status(404).send('Blog post could not be stored.');
+    res.status(404).send("Blog post could not be stored.");
   }
 };
 
@@ -71,7 +71,7 @@ const updateBlogPost = asyncHandler(async (req, res) => {
     const blogPosts = await BlogPost.find({});
     res.json(blogPosts);
   } else {
-    res.status(404).send('Blog post could not be updated');
+    res.status(404).send("Blog post could not be updated");
   }
 });
 
@@ -83,14 +83,14 @@ const deletePost = asyncHandler(async (req, res) => {
   if (allBlogPosts) {
     res.json(allBlogPosts);
   } else {
-    res.status(404).send('Blog post could not be removed.');
+    res.status(404).send("Blog post could not be removed.");
   }
 });
 
-blogPostRoutes.route('/').post(protectRoute, createBlogPost);
-blogPostRoutes.route('/post/:id').get(getBlogPost);
-blogPostRoutes.route('/:id').delete(protectRoute, deletePost);
-blogPostRoutes.route('/').put(protectRoute, updateBlogPost);
-blogPostRoutes.route('/:category/:pageNumber').get(getBlogPostByCategory);
+blogPostRoutes.route("/").post(protectRoute, createBlogPost);
+blogPostRoutes.route("/post/:id").get(getBlogPost);
+blogPostRoutes.route("/:id").delete(protectRoute, deletePost);
+blogPostRoutes.route("/").put(protectRoute, updateBlogPost);
+blogPostRoutes.route("/:category/:pageNumber").get(getBlogPostByCategory);
 
 export default blogPostRoutes;

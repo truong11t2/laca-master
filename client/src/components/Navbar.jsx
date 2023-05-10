@@ -14,12 +14,12 @@ import {
   Menu,
   MenuList,
   MenuButton,
-  ButtonGroup,
+  // ButtonGroup,
 } from "@chakra-ui/react";
 import { Link as ReactLink } from "react-router-dom";
-import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon, ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import { GiWorld } from "react-icons/gi";
-import { FaTwitter, FaYoutube, FaFacebook, FaInstagram } from "react-icons/fa";
+// import { FaTwitter, FaYoutube, FaFacebook, FaInstagram } from "react-icons/fa";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { MdAdminPanelSettings } from "react-icons/md";
@@ -30,8 +30,8 @@ const links = [
 ];
 
 const blogLinks = [
-  { linkName: "All Blogs", category: "all" },
-  { linkName: "Latest Blogs", category: "latest" },
+  /*   { linkName: "All Blogs", category: "all" },
+  { linkName: "Latest Blogs", category: "latest" }, */
   { linkName: "Europe", category: "europe" },
   { linkName: "America", category: "america" },
   { linkName: "Asia", category: "asia" },
@@ -54,6 +54,7 @@ const NavLink = ({ path, children }) => (
 
 const Navbar = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const { isOpen: isMenuOpen, onClose: onMenuClose, onOpen: onMenuOpen } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
   const [logoHover, setLogoHover] = useState(false);
 
@@ -80,8 +81,8 @@ const Navbar = () => {
           >
             <Flex alignItems="center">
               <Icon as={GiWorld} h="10" w="10" color={logoHover ? "gray.200" : mode("gray.600", "gray.400")} />
-              <Text fontWeight="extrabold" color={mode("gray.600", "gray.400")}>
-                TravelBay
+              <Text px="5" fontSize="2xl" fontWeight="extrabold" color={mode("gray.600", "gray.100")}>
+                La Cà
               </Text>
             </Flex>
           </Link>
@@ -91,11 +92,22 @@ const Navbar = () => {
                 {link.linkName}
               </NavLink>
             ))}
-            <Menu>
-              <MenuButton fontWeight="semibold" p="2" _hover={{ bg: mode("blue.100", "blue.800") }}>
-                Blog
+            <Menu isOpen={isMenuOpen}>
+              <MenuButton
+                onMouseEnter={onMenuOpen}
+                onMouseLeave={onMenuClose}
+                onClick={isOpen ? onMenuClose : onMenuOpen}
+                fontWeight="semibold"
+                p="2"
+                _hover={{ bg: mode("blue.100", "blue.800") }}
+              >
+                Blog {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
               </MenuButton>
-              <MenuList>
+              <MenuList
+                onMouseEnter={onMenuOpen}
+                onMouseLeave={onMenuClose}
+                onClick={isOpen ? onMenuClose : onMenuOpen}
+              >
                 {blogLinks.map((link) => (
                   <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
                     {link.linkName}
@@ -111,12 +123,13 @@ const Navbar = () => {
           </HStack>
         </HStack>
         <HStack>
-          <ButtonGroup spacing="0" variant="ghost" mr="3" display={{ base: "none", md: "flex" }}>
+          {/* Hide social media icons */}
+          {/* <ButtonGroup spacing="0" variant="ghost" mr="3" display={{ base: "none", md: "flex" }}>
             <IconButton as="a" href="#" icon={<FaFacebook fontSize="1.25rem" />} />
             <IconButton as="a" href="#" icon={<FaTwitter fontSize="1.25rem" />} />
             <IconButton as="a" href="#" icon={<FaYoutube fontSize="1.25rem" />} />
             <IconButton as="a" href="#" icon={<FaInstagram fontSize="1.25rem" />} />
-          </ButtonGroup>
+          </ButtonGroup> */}
 
           <Icon
             cursor="pointer"
@@ -159,12 +172,13 @@ const Navbar = () => {
               <MdAdminPanelSettings size="30" />
             </Link>
           )}
-          <ButtonGroup spacing="0" variant="ghost" mr="3" mt="5">
+          {/* Hide social media icons */}
+          {/* <ButtonGroup spacing="0" variant="ghost" mr="3" mt="5">
             <IconButton as="a" href="#" icon={<FaFacebook fontSize="1.25rem" />} />
             <IconButton as="a" href="#" icon={<FaTwitter fontSize="1.25rem" />} />
             <IconButton as="a" href="#" icon={<FaYoutube fontSize="1.25rem" />} />
             <IconButton as="a" href="#" icon={<FaInstagram fontSize="1.25rem" />} />
-          </ButtonGroup>
+          </ButtonGroup> */}
         </Box>
       ) : null}
     </Box>

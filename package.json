@@ -1,5 +1,5 @@
 {
-  "name": "travelbay",
+  "name": "laca",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -11,7 +11,7 @@
     "app": "concurrently npm \"npm run start\" \"npm run client\"",
     "build": "cd client && npm install && npm run build"
   },
-  "author": "Benjamin Fischer",
+  "author": "Benjamin Fischer - Truong Hoang",
   "license": "ISC",
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.2",
