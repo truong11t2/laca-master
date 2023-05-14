@@ -1,14 +1,14 @@
-import express from "express";
-import protectRoute from "../middleware/authMiddleware.js";
-import BlogPost from "../models/BlogPost.js";
+import { Router } from "express";
+import protectRoute from "../middlewares/authMiddleware.js";
+import blogPost from "../models/blogPost.js";
 import asyncHandler from "express-async-handler";
 
-const blogPostRoutes = express.Router();
+const blogPostRouter = Router();
 
 const getBlogPostByCategory = asyncHandler(async (req, res) => {
   const { category, pageNumber } = req.params;
 
-  const posts = await BlogPost.find({});
+  const posts = await blogPost.find({});
   const increment = pageNumber + 4;
 
   let getStatus = () => (increment < posts.length ? 200 : 201); //201 response means last chunk of blog posts
@@ -19,14 +19,14 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
       .status(getStatus())
       .json(posts.sort((objA, objB) => Number(objB.createdAt) - Number(objA.createdAt)).slice(pageNumber, increment));
   } else {
-    const blogPosts = await BlogPost.find({ category });
+    const blogPosts = await blogPost.find({ category });
     res.status(getStatus()).json(blogPosts.slice(pageNumber, increment));
   }
 });
 
 const getBlogPost = asyncHandler(async (req, res) => {
   console.log(req.params.id);
-  const blogPost = await BlogPost.findById(req.params.id);
+  const blogPost = await blogPost.findById(req.params.id);
 
   if (blogPost) {
     res.json(blogPost);
@@ -38,7 +38,7 @@ const getBlogPost = asyncHandler(async (req, res) => {
 const createBlogPost = async (req, res) => {
   const { image, title, contentOne, contentTwo, category, author = "Truong Hoang" } = req.body;
 
-  const newBlogPost = await BlogPost.create({
+  const newBlogPost = await blogPost.create({
     image,
     title,
     contentOne,
@@ -47,7 +47,7 @@ const createBlogPost = async (req, res) => {
     author,
   });
   await newBlogPost.save();
-  const blogPosts = await BlogPost.find({});
+  const blogPosts = await blogPost.find({});
   if (newBlogPost) {
     res.json(blogPosts);
   } else {
@@ -58,7 +58,7 @@ const createBlogPost = async (req, res) => {
 const updateBlogPost = asyncHandler(async (req, res) => {
   const { _id, title, contentOne, contentTwo, category, image } = req.body;
 
-  const blogPost = await BlogPost.findById(_id);
+  const blogPost = await blogPost.findById(_id);
 
   if (blogPost) {
     blogPost.contentOne = contentOne;
@@ -68,7 +68,7 @@ const updateBlogPost = asyncHandler(async (req, res) => {
     blogPost.image = image;
     await blogPost.save();
 
-    const blogPosts = await BlogPost.find({});
+    const blogPosts = await blogPost.find({});
     res.json(blogPosts);
   } else {
     res.status(404).send("Blog post could not be updated");
@@ -76,9 +76,9 @@ const updateBlogPost = asyncHandler(async (req, res) => {
 });
 
 const deletePost = asyncHandler(async (req, res) => {
-  const blogPost = await BlogPost.findByIdAndDelete(req.params.id);
+  const blogPost = await blogPost.findByIdAndDelete(req.params.id);
 
-  const allBlogPosts = await BlogPost.find({});
+  const allBlogPosts = await blogPost.find({});
 
   if (allBlogPosts) {
     res.json(allBlogPosts);
@@ -87,10 +87,10 @@ const deletePost = asyncHandler(async (req, res) => {
   }
 });
 
-blogPostRoutes.route("/").post(protectRoute, createBlogPost);
-blogPostRoutes.route("/post/:id").get(getBlogPost);
-blogPostRoutes.route("/:id").delete(protectRoute, deletePost);
-blogPostRoutes.route("/").put(protectRoute, updateBlogPost);
-blogPostRoutes.route("/:category/:pageNumber").get(getBlogPostByCategory);
+blogPostRouter.route("/").post(protectRoute, createBlogPost);
+blogPostRouter.route("/post/:id").get(getBlogPost);
+blogPostRouter.route("/:id").delete(protectRoute, deletePost);
+blogPostRouter.route("/").put(protectRoute, updateBlogPost);
+blogPostRouter.route("/:category/:pageNumber").get(getBlogPostByCategory);
 
-export default blogPostRoutes;
+export default blogPostRouter;
