@@ -1,6 +1,6 @@
 import { createHash } from "crypto";
 import ErrorResponse from "../utils/errorResponse.js";
-import User from "../models/user.js";
+import user from "../models/user.js";
 import sendEmail from "../utils/sendEmail.js";
 
 // @desc    Login user
@@ -14,7 +14,7 @@ export async function login(req, res, next) {
 
   try {
     // Check that user exists by email
-    const user = await User.findOne({ email }).select("+password");
+    const user = await user.findOne({ email }).select("+password");
 
     if (!user) {
       return next(new ErrorResponse("Invalid credentials", 401));
@@ -56,7 +56,7 @@ export async function forgotPassword(req, res, next) {
   const { email } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await user.findOne({ email });
 
     if (!user) {
       return next(new ErrorResponse("No email could not be sent", 404));

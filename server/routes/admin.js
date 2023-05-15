@@ -1,5 +1,5 @@
 import { Router } from "express";
-import User from "../models/user.js";
+import admin from "../models/admin.js";
 import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 
@@ -7,12 +7,12 @@ const adminRouter = Router();
 
 //TODO: redefine expiresIn
 const genToken = (id) => {
-  return jwt.sign({ id }, process.env.TOKEN_SECRET, { expiresIn: "30d" });
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  const user = await admin.findOne({ email });
 
   if (user && (await user.matchPasswords(password))) {
     res.json({

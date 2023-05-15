@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import ErrorResponse from "../utils/errorResponse.js";
+import user from "../models/user.js";
 
 const protect = async (req, res, next) => {
   let token;
@@ -14,9 +15,9 @@ const protect = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await UserNew.findById(decoded.id);
+    const curUser = await user.findById(decoded.id);
 
-    if (!user) {
+    if (!curUser) {
       return next(new ErrorResponse("No user found with this id", 404));
     }
 

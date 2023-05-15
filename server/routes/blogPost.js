@@ -19,17 +19,17 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
       .status(getStatus())
       .json(posts.sort((objA, objB) => Number(objB.createdAt) - Number(objA.createdAt)).slice(pageNumber, increment));
   } else {
-    const blogPosts = await blogPost.find({ category });
-    res.status(getStatus()).json(blogPosts.slice(pageNumber, increment));
+    const posts = await blogPost.find({ category });
+    res.status(getStatus()).json(posts.slice(pageNumber, increment));
   }
 });
 
 const getBlogPost = asyncHandler(async (req, res) => {
   console.log(req.params.id);
-  const blogPost = await blogPost.findById(req.params.id);
+  const post = await blogPost.findById(req.params.id);
 
-  if (blogPost) {
-    res.json(blogPost);
+  if (post) {
+    res.json(post);
   } else {
     res.status(404).send("Blog post not found.");
   }
@@ -38,7 +38,7 @@ const getBlogPost = asyncHandler(async (req, res) => {
 const createBlogPost = async (req, res) => {
   const { image, title, contentOne, contentTwo, category, author = "Truong Hoang" } = req.body;
 
-  const newBlogPost = await blogPost.create({
+  const newPost = await blogPost.create({
     image,
     title,
     contentOne,
@@ -46,10 +46,10 @@ const createBlogPost = async (req, res) => {
     category: String(category).toLowerCase(),
     author,
   });
-  await newBlogPost.save();
-  const blogPosts = await blogPost.find({});
-  if (newBlogPost) {
-    res.json(blogPosts);
+  await newPost.save();
+  const posts = await blogPost.find({});
+  if (newPost) {
+    res.json(posts);
   } else {
     res.status(404).send("Blog post could not be stored.");
   }
@@ -58,30 +58,30 @@ const createBlogPost = async (req, res) => {
 const updateBlogPost = asyncHandler(async (req, res) => {
   const { _id, title, contentOne, contentTwo, category, image } = req.body;
 
-  const blogPost = await blogPost.findById(_id);
+  const post = await blogPost.findById(_id);
 
-  if (blogPost) {
-    blogPost.contentOne = contentOne;
-    blogPost.contentTwo = contentTwo;
-    blogPost.title = title;
-    blogPost.category = category;
-    blogPost.image = image;
-    await blogPost.save();
+  if (post) {
+    post.contentOne = contentOne;
+    post.contentTwo = contentTwo;
+    post.title = title;
+    post.category = category;
+    post.image = image;
+    await post.save();
 
-    const blogPosts = await blogPost.find({});
-    res.json(blogPosts);
+    const posts = await blogPost.find({});
+    res.json(posts);
   } else {
     res.status(404).send("Blog post could not be updated");
   }
 });
 
 const deletePost = asyncHandler(async (req, res) => {
-  const blogPost = await blogPost.findByIdAndDelete(req.params.id);
+  const post = await blogPost.findByIdAndDelete(req.params.id);
 
-  const allBlogPosts = await blogPost.find({});
+  const allPosts = await blogPost.find({});
 
-  if (allBlogPosts) {
-    res.json(allBlogPosts);
+  if (allPosts) {
+    res.json(allPosts);
   } else {
     res.status(404).send("Blog post could not be removed.");
   }
