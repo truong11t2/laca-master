@@ -40,7 +40,7 @@ const Footer = () => {
           py={{ base: "12", md: "5" }}
         >
           <Stack spacing={{ base: "6", md: "8" }} align="start">
-            <Flex alignItems="center">
+            <Flex alignItems="center" py="5">
               <Icon as={GiWorld} h="10" w="10" />
               <Text px="3" fontSize="2xl" fontWeight="extrabold">
                 La Cà
@@ -70,7 +70,7 @@ const Footer = () => {
                   Subscribe
                 </Button>
               </Stack>
-              {userInfo ? (
+              {/*   {userInfo ? (
                 <Button variant="link" onClick={logoutHandler} alignSelf="flex-start">
                   Logout
                 </Button>
@@ -78,7 +78,7 @@ const Footer = () => {
                 <Button variant="link" as={ReactLink} to="/login" alignSelf="flex-start">
                   Admin
                 </Button>
-              )}
+              )} */}
             </Stack>
           </Stack>
         </Stack>
