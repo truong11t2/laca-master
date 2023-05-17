@@ -9,6 +9,7 @@ import AdminScreen from "./screens/AdminScreen";
 import Footer from "./components/Footer";
 import AboutScreen from "./screens/AboutScreen";
 import HomeScreen from "./screens/HomeScreen";
+import NotFoundScreen from "./screens/NotFoundScreen";
 
 const App = () => {
   return (
@@ -25,6 +26,8 @@ const App = () => {
             <Route path="/about" element={<AboutScreen />}></Route>
             {/* <Route path="/" element={<HomeScreen />}></Route> */}
             <Route path="/" element={<Navigate to="/blog/latest" replace={true} />}></Route>
+            <Route path="/404" element={<NotFoundScreen />}></Route>
+            <Route path="*" element={<Navigate to="/404" replace={true} />}></Route>
           </Routes>
         </main>
         <Footer />
