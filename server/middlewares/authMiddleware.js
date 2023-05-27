@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
-import admin from "../models/admin.js";
+import Admin from "../models/admin.js";
 
 const protectRoute = asyncHandler(async (req, res, next) => {
   let token;
@@ -9,7 +9,7 @@ const protectRoute = asyncHandler(async (req, res, next) => {
     try {
       token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = admin.findById(decoded.id);
+      req.user = Admin.findById(decoded.id);
 
       next();
     } catch (error) {

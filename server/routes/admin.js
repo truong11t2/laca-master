@@ -1,5 +1,5 @@
 import { Router } from "express";
-import admin from "../models/admin.js";
+import Admin from "../models/admin.js";
 import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 
@@ -12,9 +12,9 @@ const genToken = (id) => {
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  const user = await admin.findOne({ email });
+  const user = await Admin.findOne({ email });
 
-  if (user && (await user.matchPasswords(password))) {
+  if (user && (await user.matchPassword(password))) {
     res.json({
       _id: user._id,
       email: user.email,

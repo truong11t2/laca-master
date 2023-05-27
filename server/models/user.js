@@ -1,7 +1,7 @@
 import { randomBytes, createHash } from "crypto";
 import { Schema, model } from "mongoose";
 import bcrypt from "bcryptjs";
-import sign from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const UserSchema = new Schema({
   username: {
@@ -42,7 +42,7 @@ UserSchema.methods.matchPassword = async function (password) {
 };
 
 UserSchema.methods.getSignedJwtToken = function () {
-  return sign({ id: this._id }, process.env.JWT_SECRET, {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
   });
 };
@@ -59,6 +59,6 @@ UserSchema.methods.getResetPasswordToken = function () {
   return resetToken;
 };
 
-const user = model("user", UserSchema);
+const User = model("User", UserSchema);
 
-export default user;
+export default User;

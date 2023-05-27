@@ -1,6 +1,6 @@
 import { createHash } from "crypto";
 import ErrorResponse from "../utils/errorResponse.js";
-import user from "../models/user.js";
+import User from "../models/user.js";
 import sendEmail from "../utils/sendEmail.js";
 
 // @desc    Login user
@@ -14,7 +14,7 @@ export async function login(req, res, next) {
 
   try {
     // Check that user exists by email
-    const user = await user.findOne({ email }).select("+password");
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
       return next(new ErrorResponse("Invalid credentials", 401));
@@ -38,7 +38,7 @@ export async function register(req, res, next) {
   const { username, email, password } = req.body;
 
   try {
-    const user = await create({
+    const user = await User.create({
       username,
       email,
       password,
@@ -56,14 +56,14 @@ export async function forgotPassword(req, res, next) {
   const { email } = req.body;
 
   try {
-    const user = await user.findOne({ email });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return next(new ErrorResponse("No email could not be sent", 404));
     }
 
     // Reset Token Gen and add to database hashed (private) version of token
-    const resetToken = user.getResetPasswordToken();
+    const resetToken = User.getResetPasswordToken();
 
     await user.save();
 
@@ -106,7 +106,7 @@ export async function resetPassword(req, res, next) {
   const resetPasswordToken = createHash("sha256").update(req.params.resetToken).digest("hex");
 
   try {
-    const user = await findOne({
+    const user = await User.findOne({
       resetPasswordToken,
       resetPasswordExpire: { $gt: Date.now() },
     });
