@@ -325,7 +325,7 @@ const Navbar = () => {
               )}
             </HStack>
           </HStack>
-          <Spacer />
+          <Spacer display={{ base: "none", md: "block" }} />
           {/* Login Register area */}
           <HStack display={{ base: "none", md: "block" }}>
             {authLinks.map((link) => (
@@ -529,7 +529,7 @@ const Navbar = () => {
           </Menu>
 
           {/* About and Contact Menu */}
-          <Stack as="nav" spacing="4">
+          <Stack as="nav" spacing="4" pt="4">
             {links.map((link) => (
               <NavLink key={link.linkName} path={link.path}>
                 {link.linkName}
