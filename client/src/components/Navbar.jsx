@@ -1,5 +1,6 @@
 import {
   Box,
+  Container,
   Flex,
   HStack,
   Link,
@@ -15,6 +16,7 @@ import {
   MenuList,
   MenuButton,
   // ButtonGroup,
+  Spacer,
 } from "@chakra-ui/react";
 import { Link as ReactLink } from "react-router-dom";
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon, ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
@@ -23,6 +25,11 @@ import { GiWorld } from "react-icons/gi";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { MdAdminPanelSettings } from "react-icons/md";
+
+const authLinks = [
+  { linkName: "Login", path: "/login" },
+  { linkName: "Register", path: "/register" },
+];
 
 const links = [
   { linkName: "About", path: "/about" },
@@ -67,6 +74,19 @@ const NavLink = ({ path, children }) => (
     py="2"
     fontWeight="semibold"
     _hover={{ textDecoration: "none", bg: mode("blue.100", "blue.800") }}
+  >
+    {children}
+  </Link>
+);
+
+const NavAuthLink = ({ path, children }) => (
+  <Link
+    as={ReactLink}
+    to={path}
+    px="2"
+    py="2"
+    color={mode("blue.900", "greenyellow")}
+    //_hover={{ textDecoration: "none", bg: mode("blue.100", "blue.800") }}
   >
     {children}
   </Link>
@@ -118,211 +138,229 @@ const Navbar = () => {
 
   return (
     <Box bg={mode("blue.200", "blue.900")} zIndex="sticky" px={4} position={["static", "fixed"]} w="100%" top={0}>
-      <Flex h="16" alignItems="center" justifyContent="space-between">
-        <IconButton
-          bg={mode("blue.200", "blue.900")}
-          icon={isIconOpen ? <CloseIcon /> : <HamburgerIcon />}
-          display={{ md: "none" }}
-          onClick={isIconOpen ? onIconClose : onIconOpen}
-        />
+      <Container as="header" maxW="7xl">
+        <Flex h="16" alignItems="center" justifyContent="space-between">
+          <IconButton
+            bg={mode("blue.200", "blue.900")}
+            icon={isIconOpen ? <CloseIcon /> : <HamburgerIcon />}
+            display={{ md: "none" }}
+            onClick={isIconOpen ? onIconClose : onIconOpen}
+          />
 
-        <HStack>
-          <Link
-            as={ReactLink}
-            to="/"
-            style={{ textDecoration: "none" }}
-            onMouseEnter={() => setLogoHover(true)}
-            onMouseLeave={() => setLogoHover(false)}
-          >
-            <Flex alignItems="center">
-              <Icon as={GiWorld} h="10" w="10" color={logoHover ? "gray.200" : mode("gray.600", "gray.400")} />
-              <Text px="5" fontSize="2xl" fontWeight="extrabold" color={mode("gray.600", "gray.100")}>
-                La Cà
-              </Text>
-            </Flex>
-          </Link>
-          <HStack display={{ base: "none", md: "flex" }} pl="10">
-            <Menu isOpen={isMenuOpen}>
-              <MenuButton
-                onMouseEnter={onMenuOpen}
-                onMouseLeave={onMenuClose}
-                onClick={isMenuOpen ? onMenuClose : onMenuOpen}
-                fontWeight="semibold"
-                p="2"
-                _hover={{ bg: mode("blue.100", "blue.800") }}
-              >
-                Blog {isMenuOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-              </MenuButton>
-              <MenuList
-                onMouseEnter={onMenuOpen}
-                onMouseLeave={onMenuClose}
-                onClick={isMenuOpen ? onMenuClose : onMenuOpen}
-              >
-                {blogLinks.map((link) => (
-                  <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
-                    {link.linkName}
-                  </MenuItem>
-                ))}
-              </MenuList>
-            </Menu>
+          <HStack>
+            <Link
+              as={ReactLink}
+              to="/"
+              style={{ textDecoration: "none" }}
+              onMouseEnter={() => setLogoHover(true)}
+              onMouseLeave={() => setLogoHover(false)}
+            >
+              <Flex alignItems="center">
+                <Icon as={GiWorld} h="10" w="10" color={logoHover ? "gray.200" : mode("gray.600", "gray.400")} />
+                <Text px="5" fontSize="2xl" fontWeight="extrabold" color={mode("gray.600", "gray.100")}>
+                  La Cà
+                </Text>
+              </Flex>
+            </Link>
+            <HStack display={{ base: "none", md: "flex" }} pl="10">
+              <Menu isOpen={isMenuOpen}>
+                <MenuButton
+                  onMouseEnter={onMenuOpen}
+                  onMouseLeave={onMenuClose}
+                  onClick={isMenuOpen ? onMenuClose : onMenuOpen}
+                  fontWeight="semibold"
+                  p="2"
+                  _hover={{ bg: mode("blue.100", "blue.800") }}
+                >
+                  Blog {isMenuOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                </MenuButton>
+                <MenuList
+                  onMouseEnter={onMenuOpen}
+                  onMouseLeave={onMenuClose}
+                  onClick={isMenuOpen ? onMenuClose : onMenuOpen}
+                >
+                  {blogLinks.map((link) => (
+                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                      {link.linkName}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </Menu>
 
-            {/* Europe Menu */}
-            <Menu isOpen={isMenuEuropeOpen}>
-              <MenuButton
-                onMouseEnter={onMenuEuropeOpen}
-                onMouseLeave={onMenuEuropeClose}
-                onClick={isMenuEuropeOpen ? onMenuEuropeClose : onMenuEuropeOpen}
-                fontWeight="semibold"
-                p="2"
-                _hover={{ bg: mode("blue.100", "blue.800") }}
-              >
-                Europe {isMenuEuropeOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-              </MenuButton>
-              <MenuList
-                onMouseEnter={onMenuEuropeOpen}
-                onMouseLeave={onMenuEuropeClose}
-                onClick={isMenuEuropeOpen ? onMenuEuropeClose : onMenuEuropeOpen}
-              >
-                {europeLinks.map((link) => (
-                  <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
-                    {link.linkName}
-                  </MenuItem>
-                ))}
-              </MenuList>
-            </Menu>
+              {/* Europe Menu */}
+              <Menu isOpen={isMenuEuropeOpen}>
+                <MenuButton
+                  onMouseEnter={onMenuEuropeOpen}
+                  onMouseLeave={onMenuEuropeClose}
+                  onClick={isMenuEuropeOpen ? onMenuEuropeClose : onMenuEuropeOpen}
+                  fontWeight="semibold"
+                  p="2"
+                  _hover={{ bg: mode("blue.100", "blue.800") }}
+                >
+                  Europe {isMenuEuropeOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                </MenuButton>
+                <MenuList
+                  onMouseEnter={onMenuEuropeOpen}
+                  onMouseLeave={onMenuEuropeClose}
+                  onClick={isMenuEuropeOpen ? onMenuEuropeClose : onMenuEuropeOpen}
+                >
+                  {europeLinks.map((link) => (
+                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                      {link.linkName}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </Menu>
 
-            {/* Asia Menu */}
-            <Menu isOpen={isMenuAsiaOpen}>
-              <MenuButton
-                onMouseEnter={onMenuAsiaOpen}
-                onMouseLeave={onMenuAsiaClose}
-                onClick={isMenuAsiaOpen ? onMenuAsiaClose : onMenuAsiaOpen}
-                fontWeight="semibold"
-                p="2"
-                _hover={{ bg: mode("blue.100", "blue.800") }}
-              >
-                Asia {isMenuAsiaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-              </MenuButton>
-              <MenuList
-                onMouseEnter={onMenuAsiaOpen}
-                onMouseLeave={onMenuAsiaClose}
-                onClick={isMenuAsiaOpen ? onMenuAsiaClose : onMenuAsiaOpen}
-              >
-                {asiaLinks.map((link) => (
-                  <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
-                    {link.linkName}
-                  </MenuItem>
-                ))}
-              </MenuList>
-            </Menu>
+              {/* Asia Menu */}
+              <Menu isOpen={isMenuAsiaOpen}>
+                <MenuButton
+                  onMouseEnter={onMenuAsiaOpen}
+                  onMouseLeave={onMenuAsiaClose}
+                  onClick={isMenuAsiaOpen ? onMenuAsiaClose : onMenuAsiaOpen}
+                  fontWeight="semibold"
+                  p="2"
+                  _hover={{ bg: mode("blue.100", "blue.800") }}
+                >
+                  Asia {isMenuAsiaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                </MenuButton>
+                <MenuList
+                  onMouseEnter={onMenuAsiaOpen}
+                  onMouseLeave={onMenuAsiaClose}
+                  onClick={isMenuAsiaOpen ? onMenuAsiaClose : onMenuAsiaOpen}
+                >
+                  {asiaLinks.map((link) => (
+                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                      {link.linkName}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </Menu>
 
-            {/* America Menu */}
-            <Menu isOpen={isMenuAmericaOpen}>
-              <MenuButton
-                onMouseEnter={onMenuAmericaOpen}
-                onMouseLeave={onMenuAmericaClose}
-                onClick={isMenuAmericaOpen ? onMenuAmericaClose : onMenuAmericaOpen}
-                fontWeight="semibold"
-                p="2"
-                _hover={{ bg: mode("blue.100", "blue.800") }}
-              >
-                America {isMenuAmericaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-              </MenuButton>
-              <MenuList
-                onMouseEnter={onMenuAmericaOpen}
-                onMouseLeave={onMenuAmericaClose}
-                onClick={isMenuAmericaOpen ? onMenuAmericaClose : onMenuAmericaOpen}
-              >
-                {americaLinks.map((link) => (
-                  <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
-                    {link.linkName}
-                  </MenuItem>
-                ))}
-              </MenuList>
-            </Menu>
+              {/* America Menu */}
+              <Menu isOpen={isMenuAmericaOpen}>
+                <MenuButton
+                  onMouseEnter={onMenuAmericaOpen}
+                  onMouseLeave={onMenuAmericaClose}
+                  onClick={isMenuAmericaOpen ? onMenuAmericaClose : onMenuAmericaOpen}
+                  fontWeight="semibold"
+                  p="2"
+                  _hover={{ bg: mode("blue.100", "blue.800") }}
+                >
+                  America {isMenuAmericaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                </MenuButton>
+                <MenuList
+                  onMouseEnter={onMenuAmericaOpen}
+                  onMouseLeave={onMenuAmericaClose}
+                  onClick={isMenuAmericaOpen ? onMenuAmericaClose : onMenuAmericaOpen}
+                >
+                  {americaLinks.map((link) => (
+                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                      {link.linkName}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </Menu>
 
-            {/* Oceania Menu */}
-            <Menu isOpen={isMenuOceaniaOpen}>
-              <MenuButton
-                onMouseEnter={onMenuOceaniaOpen}
-                onMouseLeave={onMenuOceaniaClose}
-                onClick={isMenuOceaniaOpen ? onMenuOceaniaClose : onMenuOceaniaOpen}
-                fontWeight="semibold"
-                p="2"
-                _hover={{ bg: mode("blue.100", "blue.800") }}
-              >
-                Oceania {isMenuOceaniaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-              </MenuButton>
-              <MenuList
-                onMouseEnter={onMenuOceaniaOpen}
-                onMouseLeave={onMenuOceaniaClose}
-                onClick={isMenuOceaniaOpen ? onMenuOceaniaClose : onMenuOceaniaOpen}
-              >
-                {oceaniaLinks.map((link) => (
-                  <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
-                    {link.linkName}
-                  </MenuItem>
-                ))}
-              </MenuList>
-            </Menu>
+              {/* Oceania Menu */}
+              <Menu isOpen={isMenuOceaniaOpen}>
+                <MenuButton
+                  onMouseEnter={onMenuOceaniaOpen}
+                  onMouseLeave={onMenuOceaniaClose}
+                  onClick={isMenuOceaniaOpen ? onMenuOceaniaClose : onMenuOceaniaOpen}
+                  fontWeight="semibold"
+                  p="2"
+                  _hover={{ bg: mode("blue.100", "blue.800") }}
+                >
+                  Oceania {isMenuOceaniaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                </MenuButton>
+                <MenuList
+                  onMouseEnter={onMenuOceaniaOpen}
+                  onMouseLeave={onMenuOceaniaClose}
+                  onClick={isMenuOceaniaOpen ? onMenuOceaniaClose : onMenuOceaniaOpen}
+                >
+                  {oceaniaLinks.map((link) => (
+                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                      {link.linkName}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </Menu>
 
-            {/* Africa Menu */}
-            <Menu isOpen={isMenuAfricaOpen}>
-              <MenuButton
-                onMouseEnter={onMenuAfricaOpen}
-                onMouseLeave={onMenuAfricaClose}
-                onClick={isMenuAfricaOpen ? onMenuAfricaClose : onMenuAfricaOpen}
-                fontWeight="semibold"
-                p="2"
-                _hover={{ bg: mode("blue.100", "blue.800") }}
-              >
-                Africa {isMenuAfricaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-              </MenuButton>
-              <MenuList
-                onMouseEnter={onMenuAfricaOpen}
-                onMouseLeave={onMenuAfricaClose}
-                onClick={isMenuAfricaOpen ? onMenuAfricaClose : onMenuAfricaOpen}
-              >
-                {africaLinks.map((link) => (
-                  <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
-                    {link.linkName}
-                  </MenuItem>
-                ))}
-              </MenuList>
-            </Menu>
+              {/* Africa Menu */}
+              <Menu isOpen={isMenuAfricaOpen}>
+                <MenuButton
+                  onMouseEnter={onMenuAfricaOpen}
+                  onMouseLeave={onMenuAfricaClose}
+                  onClick={isMenuAfricaOpen ? onMenuAfricaClose : onMenuAfricaOpen}
+                  fontWeight="semibold"
+                  p="2"
+                  _hover={{ bg: mode("blue.100", "blue.800") }}
+                >
+                  Africa {isMenuAfricaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                </MenuButton>
+                <MenuList
+                  onMouseEnter={onMenuAfricaOpen}
+                  onMouseLeave={onMenuAfricaClose}
+                  onClick={isMenuAfricaOpen ? onMenuAfricaClose : onMenuAfricaOpen}
+                >
+                  {africaLinks.map((link) => (
+                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                      {link.linkName}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </Menu>
 
-            {/* About and Contact Menu */}
-            {links.map((link) => (
-              <NavLink key={link.linkName} path={link.path}>
-                {link.linkName}
-              </NavLink>
-            ))}
-            {userInfo && (
-              <Link as={ReactLink} to="/admin-console">
-                <MdAdminPanelSettings size="30" />
-              </Link>
-            )}
+              {/* About and Contact Menu */}
+              {links.map((link) => (
+                <NavLink key={link.linkName} path={link.path}>
+                  {link.linkName}
+                </NavLink>
+              ))}
+              {userInfo && (
+                <Link as={ReactLink} to="/admin-console">
+                  <MdAdminPanelSettings size="30" />
+                </Link>
+              )}
+            </HStack>
           </HStack>
-        </HStack>
-        <HStack>
-          {/* Hide social media icons */}
-          {/* <ButtonGroup spacing="0" variant="ghost" mr="3" display={{ base: "none", md: "flex" }}>
+          <Spacer />
+          {/* Login Register area */}
+          <HStack display={{ base: "none", md: "block" }}>
+            {authLinks.map((link) => (
+              <NavAuthLink key={link.linkName} path={link.path}>
+                {link.linkName}
+              </NavAuthLink>
+            ))}
+          </HStack>
+          <HStack>
+            {/* Hide social media icons */}
+            {/* <ButtonGroup spacing="0" variant="ghost" mr="3" display={{ base: "none", md: "flex" }}>
             <IconButton as="a" href="#" icon={<FaFacebook fontSize="1.25rem" />} />
             <IconButton as="a" href="#" icon={<FaTwitter fontSize="1.25rem" />} />
             <IconButton as="a" href="#" icon={<FaYoutube fontSize="1.25rem" />} />
             <IconButton as="a" href="#" icon={<FaInstagram fontSize="1.25rem" />} />
           </ButtonGroup> */}
 
-          <Icon
-            cursor="pointer"
-            as={colorMode === "light" ? MoonIcon : SunIcon}
-            onClick={() => toggleColorMode()}
-            w="40px"
-          />
-        </HStack>
-      </Flex>
+            <Icon
+              cursor="pointer"
+              as={colorMode === "light" ? MoonIcon : SunIcon}
+              onClick={() => toggleColorMode()}
+              w="40px"
+            />
+          </HStack>
+        </Flex>
+      </Container>
       {isIconOpen ? (
         <Box pb="4" display={{ md: "none" }}>
+          <Stack spacing="4">
+            {authLinks.map((link) => (
+              <NavLink key={link.linkName} path={link.path}>
+                {link.linkName}
+              </NavLink>
+            ))}
+          </Stack>
           <Menu isOpen={isMenuOpenMobile}>
             <MenuButton
               onClick={isMenuOpenMobile ? onMenuCloseMobile : onMenuOpenMobile}
