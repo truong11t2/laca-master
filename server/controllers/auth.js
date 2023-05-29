@@ -35,11 +35,12 @@ export async function login(req, res, next) {
 
 // @desc    Register user
 export async function register(req, res, next) {
-  const { username, email, password } = req.body;
+  const { firstname, lastname, email, password } = req.body;
 
   try {
     const user = await User.create({
-      username,
+      firstname,
+      lastname,
       email,
       password,
     });

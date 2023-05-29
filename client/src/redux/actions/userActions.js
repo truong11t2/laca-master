@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setLoading, setError, userLogin, userLogout } from "../slices/user";
+import { setLoading, setError, userLogin, userRegister, userLogout } from "../slices/user";
 
 export const login = (email, password) => async (dispatch) => {
   dispatch(setLoading(true));
@@ -10,7 +10,8 @@ export const login = (email, password) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.post("/api/admin/login", { email, password }, config);
+    //const { data } = await axios.post("/api/admin/login", { email, password }, config); //for admin login
+    const { data } = await axios.post("/api/auth/login", { email, password }, config); //for user login
     dispatch(userLogin(data));
     localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
@@ -18,6 +19,30 @@ export const login = (email, password) => async (dispatch) => {
       setError(
         error.response && error.response.data.message
           ? error.response.data.message
+          : error.message
+          ? error.message
+          : "An unexpected error has occured. Please try again later."
+      )
+    );
+  }
+};
+
+export const register = (firstname, lastname, email, password) => async (dispatch) => {
+  dispatch(setLoading(true));
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const { data } = await axios.post("/api/auth/register", { firstname, lastname, email, password }, config);
+    dispatch(userRegister(data));
+    localStorage.setItem("userInfo", JSON.stringify(data));
+  } catch (error) {
+    dispatch(
+      setError(
+        error.response && error.response.data.error
+          ? error.response.data.error
           : error.message
           ? error.message
           : "An unexpected error has occured. Please try again later."

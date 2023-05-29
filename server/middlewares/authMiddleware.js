@@ -13,14 +13,12 @@ const protectRoute = asyncHandler(async (req, res, next) => {
 
       next();
     } catch (error) {
-      res.status(401);
-      throw new Error("Not authorized, token failed.");
+      return next(new ErrorResponse("Not authorized to access this router", 401));
     }
   }
 
   if (!token) {
-    res.status(401);
-    throw new Error("Not authorized, no token.");
+    return next(new ErrorResponse("Not authorized to access this route", 401));
   }
 });
 

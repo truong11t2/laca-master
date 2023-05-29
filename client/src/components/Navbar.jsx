@@ -1,4 +1,5 @@
 import {
+  Button,
   Box,
   Container,
   Flex,
@@ -17,14 +18,17 @@ import {
   MenuButton,
   // ButtonGroup,
   Spacer,
+  useToast,
 } from "@chakra-ui/react";
 import { Link as ReactLink } from "react-router-dom";
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon, ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import { GiWorld } from "react-icons/gi";
 // import { FaTwitter, FaYoutube, FaFacebook, FaInstagram } from "react-icons/fa";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MdAdminPanelSettings } from "react-icons/md";
+
+import { logout } from "../redux/actions/userActions";
 
 const authLinks = [
   { linkName: "Login", path: "/login" },
@@ -135,6 +139,13 @@ const Navbar = () => {
 
   const user = useSelector((state) => state.user);
   const { userInfo } = user;
+
+  const dispatch = useDispatch();
+  const toast = useToast();
+  const logoutHandler = () => {
+    dispatch(logout());
+    toast({ description: "You have been logged out.", status: "success", isClosable: true });
+  };
 
   return (
     <Box bg={mode("blue.200", "blue.900")} zIndex="sticky" px={4} position={["static", "fixed"]} w="100%" top={0}>
@@ -327,13 +338,22 @@ const Navbar = () => {
           </HStack>
           <Spacer display={{ base: "none", md: "block" }} />
           {/* Login Register area */}
-          <HStack display={{ base: "none", md: "block" }}>
-            {authLinks.map((link) => (
-              <NavAuthLink key={link.linkName} path={link.path}>
-                {link.linkName}
-              </NavAuthLink>
-            ))}
-          </HStack>
+          {userInfo ? (
+            <HStack display={{ base: "none", md: "block" }}>
+              <Button variant="link" onClick={logoutHandler} alignSelf="flex-start">
+                Logout
+              </Button>
+            </HStack>
+          ) : (
+            <HStack display={{ base: "none", md: "block" }}>
+              {authLinks.map((link) => (
+                <NavAuthLink key={link.linkName} path={link.path}>
+                  {link.linkName}
+                </NavAuthLink>
+              ))}
+            </HStack>
+          )}
+
           <HStack>
             {/* Hide social media icons */}
             {/* <ButtonGroup spacing="0" variant="ghost" mr="3" display={{ base: "none", md: "flex" }}>

@@ -19,15 +19,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import PasswordField from "../components/PasswordField";
 import TextField from "../components/TextField";
-import { login } from "../redux/actions/userActions";
+import { register } from "../redux/actions/userActions";
 
-const LoginScreen = () => {
+const RegisterScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  //for admin
-  //const redirect = "/admin-console";
-  //for user
   const redirect = "/";
   const toast = useToast();
 
@@ -45,21 +42,28 @@ const LoginScreen = () => {
       } else {
         navigate(redirect);
       }
-      toast({ description: "Login successful.", status: "success", isClosable: true });
+      toast({ description: "Register successful.", status: "success", isClosable: true });
     }
   }, [userInfo, redirect, error, navigate, location.state, toast]);
 
   return (
     <Formik
-      initialValues={{ email: "", password: "" }}
+      initialValues={{ firstname: "", lastname: "", email: "", password: "", confirmPassword: "" }}
       validationSchema={Yup.object({
+        firstname: Yup.string()
+          .min(2, "First name is too short - must contain at least 2 characters.")
+          .required("First name is required."),
         email: Yup.string().email("Invalid email.").required("An email address is required."),
         password: Yup.string()
-          .min(1, "Password is too short - must contain at least 6 characters.")
+          .min(6, "Password is too short - must contain at least 6 characters.")
           .required("Password is required."),
+        confirmPassword: Yup.string()
+          .min(6, "Password is too short - must contain at least 6 characters.")
+          .required("Please retype your password.")
+          .oneOf([Yup.ref("password"), null], "Password must match"),
       })}
       onSubmit={(values) => {
-        dispatch(login(values.email, values.password));
+        dispatch(register(values.firstname, values.lastname, values.email, values.password));
       }}
     >
       {(formik) => (
@@ -67,7 +71,7 @@ const LoginScreen = () => {
           <Stack spacing="8">
             <Stack spacing="6">
               <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
-                <Heading size={headingBR}>Admin account</Heading>
+                <Heading size={headingBR}>Register account</Heading>
               </Stack>
             </Stack>
             <Box
@@ -92,13 +96,21 @@ const LoginScreen = () => {
                 )}
                 <Stack spacing="5">
                   <FormControl>
+                    <TextField type="text" name="firstname" placeholder="First name" label="First Name*" />
+                    <TextField type="text" name="lastname" placeholder="Last name" label="Last Name" />
                     <TextField type="text" name="email" placeholder="you@example.com" label="Email*" />
                     <PasswordField type="password" name="password" placeholder="Type your password" label="Password*" />
+                    <PasswordField
+                      type="password"
+                      name="confirmPassword"
+                      placeholder="Retype your password"
+                      label="Confirm Password*"
+                    />
                   </FormControl>
                 </Stack>
                 <Stack spacing="6">
                   <Button colorScheme="blue" size="lg" fontSize="md" isLoading={loading} type="submit">
-                    Sign in
+                    Sign up
                   </Button>
                 </Stack>
               </Stack>
@@ -110,4 +122,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;

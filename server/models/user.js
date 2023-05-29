@@ -3,29 +3,36 @@ import { Schema, model } from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const UserSchema = new Schema({
-  username: {
-    type: String,
-    required: [true, "Please provide username"],
+const UserSchema = new Schema(
+  {
+    firstname: {
+      type: String,
+      required: [true, "Please provide name"],
+    },
+    lastname: {
+      type: String,
+      require: false,
+    },
+    email: {
+      type: String,
+      required: [true, "Please provide email address"],
+      unique: true,
+      match: [
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        "Please provide a valid email",
+      ],
+    },
+    password: {
+      type: String,
+      required: [true, "Please add a password"],
+      minlength: 6,
+      select: false,
+    },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
   },
-  email: {
-    type: String,
-    required: [true, "Please provide email address"],
-    unique: true,
-    match: [
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      "Please provide a valid email",
-    ],
-  },
-  password: {
-    type: String,
-    required: [true, "Please add a password"],
-    minlength: 6,
-    select: false,
-  },
-  resetPasswordToken: String,
-  resetPasswordExpire: Date,
-});
+  { timestamps: true }
+);
 
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
