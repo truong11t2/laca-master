@@ -329,22 +329,28 @@ const Navbar = () => {
                   {link.linkName}
                 </NavLink>
               ))}
-              {userInfo && (
+              {/*               {userInfo && (
                 <Link as={ReactLink} to="/admin-console">
                   <MdAdminPanelSettings size="30" />
                 </Link>
-              )}
+              )} */}
             </HStack>
           </HStack>
           <Spacer display={{ base: "none", md: "block" }} />
           {/* Login Register area */}
           {userInfo ? (
-            <HStack display={{ base: "none", md: "block" }}>
+            <Menu>
+              <MenuButton>Hi {userInfo.name}</MenuButton>
+              <MenuList>
+                <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+              </MenuList>
+            </Menu>
+          ) : (
+            /*             <HStack display={{ base: "none", md: "block" }}>
               <Button variant="link" onClick={logoutHandler} alignSelf="flex-start">
                 Logout
               </Button>
-            </HStack>
-          ) : (
+            </HStack> */
             <HStack display={{ base: "none", md: "block" }}>
               {authLinks.map((link) => (
                 <NavAuthLink key={link.linkName} path={link.path}>
@@ -374,13 +380,16 @@ const Navbar = () => {
       </Container>
       {isIconOpen ? (
         <Box pb="4" display={{ md: "none" }}>
-          <Stack spacing="4">
-            {authLinks.map((link) => (
-              <NavLink key={link.linkName} path={link.path}>
-                {link.linkName}
-              </NavLink>
-            ))}
-          </Stack>
+          {userInfo ? null : (
+            <Stack spacing="4">
+              {authLinks.map((link) => (
+                <NavLink key={link.linkName} path={link.path}>
+                  {link.linkName}
+                </NavLink>
+              ))}
+            </Stack>
+          )}
+
           <Menu isOpen={isMenuOpenMobile}>
             <MenuButton
               onClick={isMenuOpenMobile ? onMenuCloseMobile : onMenuOpenMobile}
@@ -556,11 +565,11 @@ const Navbar = () => {
               </NavLink>
             ))}
           </Stack>
-          {userInfo && (
+          {/*           {userInfo && (
             <Link as={ReactLink} to="/admin-console">
               <MdAdminPanelSettings size="30" />
             </Link>
-          )}
+          )} */}
           {/* Hide social media icons */}
           {/* <ButtonGroup spacing="0" variant="ghost" mr="3" mt="5">
             <IconButton as="a" href="#" icon={<FaFacebook fontSize="1.25rem" />} />
