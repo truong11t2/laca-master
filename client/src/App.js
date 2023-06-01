@@ -25,6 +25,7 @@ const App = () => {
             <Route path="/login" element={<LoginScreen />}></Route>
             <Route path="/register" element={<RegisterScreen />}></Route>
             <Route path="/admin-console" element={<AdminScreen />}></Route>
+            <Route path="/create-post" element={<AdminScreen />}></Route>
             <Route path="/about" element={<AboutScreen />}></Route>
             {/* <Route path="/" element={<HomeScreen />}></Route> */}
             <Route path="/" element={<Navigate to="/blog/latest" replace={true} />}></Route>

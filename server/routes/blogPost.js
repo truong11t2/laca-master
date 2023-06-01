@@ -36,14 +36,14 @@ const getBlogPost = asyncHandler(async (req, res) => {
 });
 
 const createBlogPost = async (req, res) => {
-  const { image, title, contentOne, contentTwo, category, author = "Truong Hoang" } = req.body;
+  const { image, title, content, category, country, author = "Truong Hoang" } = req.body;
 
   const newPost = await blogPost.create({
     image,
     title,
-    contentOne,
-    contentTwo,
+    content,
     category: String(category).toLowerCase(),
+    country,
     author,
   });
   await newPost.save();
@@ -56,15 +56,15 @@ const createBlogPost = async (req, res) => {
 };
 
 const updateBlogPost = asyncHandler(async (req, res) => {
-  const { _id, title, contentOne, contentTwo, category, image } = req.body;
+  const { _id, title, content, category, country, image } = req.body;
 
   const post = await blogPost.findById(_id);
 
   if (post) {
-    post.contentOne = contentOne;
-    post.contentTwo = contentTwo;
+    post.content = content;
     post.title = title;
     post.category = category;
+    post.country = country;
     post.image = image;
     await post.save();
 

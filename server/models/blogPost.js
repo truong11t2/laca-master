@@ -10,18 +10,19 @@ const blogPostSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    contentOne: {
+    content: {
       type: String,
       required: true,
-    },
-    contentTwo: {
-      type: String,
     },
     author: {
       type: String,
       required: true,
     },
     category: {
+      type: String,
+      required: true,
+    },
+    country: {
       type: String,
       required: true,
     },

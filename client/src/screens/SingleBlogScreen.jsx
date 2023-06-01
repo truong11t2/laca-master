@@ -56,11 +56,7 @@ const SingleBlogScreen = () => {
             </Stack>
 
             <Text px="2" mt="5" lineHeight={{ base: "7", md: "8" }} fontSize={{ base: "md", md: "lg" }}>
-              {blogPost.contentOne}
-            </Text>
-            <Box m="10"></Box>
-            <Text px="2" mt="5" lineHeight={{ base: "7", md: "8" }} fontSize={{ base: "md", md: "lg" }}>
-              {blogPost.contentTwo}
+              {blogPost.content}
             </Text>
           </Container>
         )
