@@ -70,15 +70,15 @@ const Footer = () => {
                   Subscribe
                 </Button>
               </Stack>
-              {/*   {userInfo ? (
+              {userInfo ? (
                 <Button variant="link" onClick={logoutHandler} alignSelf="flex-start">
                   Logout
                 </Button>
               ) : (
-                <Button variant="link" as={ReactLink} to="/login" alignSelf="flex-start">
+                <Button variant="link" as={ReactLink} to="/admin-login" alignSelf="flex-start">
                   Admin
                 </Button>
-              )} */}
+              )}
             </Stack>
           </Stack>
         </Stack>
