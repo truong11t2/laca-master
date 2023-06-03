@@ -49,7 +49,7 @@ const EditBlogPost = () => {
         isClosable: true,
       });
     }
-  }, [blogPostRemoved, blogPostUpdated, dispatch, pageItems, status]);
+  }, [blogPostRemoved, blogPostUpdated, dispatch, pageItems, status, toast]);
 
   return (
     <>
@@ -76,6 +76,7 @@ const EditBlogPost = () => {
                   createdAt={post.createdAt}
                   author={post.author}
                   category={post.category}
+                  country={post.country}
                   title={post.title}
                   _id={post._id}
                 />

@@ -19,15 +19,44 @@ import { useState } from "react";
 import { updatePost, removePost } from "../redux/actions/blogPostActions";
 import ImageUpload from "./ImageUpload";
 import { useDispatch, useSelector } from "react-redux";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "./styleEditor.css";
 
-const PostEdit = ({ _id, content, title, category, image }) => {
+const PostEdit = ({ _id, content, title, category, country, image }) => {
   const [postContent, setPostContent] = useState(content);
   const [postTitle, setPostTitle] = useState(title);
   const [postImage, setPostImage] = useState(image);
   const [postCategory, setPostCategory] = useState(category);
+  const [postCountry, setPostCountry] = useState(country);
 
   const blogPostInfo = useSelector((state) => state.blogPosts);
   const { updateButtonLoading, removeButtonLoading } = blogPostInfo;
+
+  //Quill
+  const modules = {
+    toolbar: [
+      ["bold", "italic", "underline", "strike"], // toggled buttons
+      ["blockquote", "code-block"],
+
+      // [{ header: 1 }, { header: 2 }], // custom button values
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ script: "sub" }, { script: "super" }], // superscript/subscript
+      [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+      [{ direction: "rtl" }], // text direction
+
+      [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+      ["link", "image", "video"],
+
+      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+      [{ font: [] }],
+      [{ align: [] }],
+
+      ["clean"], // remove formatting button
+    ],
+  };
 
   const dispatch = useDispatch();
 
@@ -39,6 +68,7 @@ const PostEdit = ({ _id, content, title, category, image }) => {
         title: postTitle,
         category: postCategory,
         image: postImage,
+        country: postCountry,
       })
     );
   };
@@ -60,7 +90,7 @@ const PostEdit = ({ _id, content, title, category, image }) => {
             </AccordionButton>
           </h2>
           <AccordionPanel pb="4">
-            <VStack direction={{ base: "column", lg: "row" }} spacing="7">
+            <VStack pb="5" direction={{ base: "column", lg: "row" }} spacing="7">
               <Image src={postImage} minW={{ lg: "400px" }} maxH="280px" fit="contain" />
               <ImageUpload setPostImage={setPostImage} />
               <Input value={postTitle} onChange={(e) => setPostTitle(e.target.value)} size="sm" mb="3" />
@@ -75,11 +105,12 @@ const PostEdit = ({ _id, content, title, category, image }) => {
                 <option value="America">America</option>
                 <option value="Africa">Africa</option>
               </Select>
-              <Textarea
+              <Input value={postCountry} onChange={(e) => setPostCountry(e.target.value)} size="sm" mb="3" />
+              <ReactQuill
+                placeholder="Start writing something..."
                 value={postContent}
-                noOfLines="5"
-                fontSize="lg"
-                onChange={(e) => setPostContent(e.target.value)}
+                onChange={(newValue) => setPostContent(newValue)}
+                modules={modules}
               />
             </VStack>
             <Button
