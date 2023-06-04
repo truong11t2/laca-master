@@ -75,8 +75,8 @@ const Footer = () => {
                   Logout
                 </Button>
               ) : (
-                <Button variant="link" as={ReactLink} to="/admin-login" alignSelf="flex-start">
-                  Admin
+                <Button variant="link" as={ReactLink} to="/login" alignSelf="flex-start">
+                  Login
                 </Button>
               )}
             </Stack>

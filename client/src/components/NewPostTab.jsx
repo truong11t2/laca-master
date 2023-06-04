@@ -17,8 +17,10 @@ import {
 } from "@chakra-ui/react";
 import ImageUpload from "./ImageUpload";
 import { createNewBlogPost } from "../redux/actions/blogPostActions";
+import { useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import "./styleEditor.css";
 
 const NewPostTab = () => {
   const [postImage, setPostImage] = useState("");
@@ -57,17 +59,22 @@ const NewPostTab = () => {
     ],
   };
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (blogPostCreated) {
       toast({
         title: "Blog post published",
-        description: "Check out your blog section to see your new post.",
+        description: "Please have a look on it.",
         status: "success",
-        duration: 7000,
+        duration: 5000,
         isClosable: true,
       });
+
+      //Redirecting to post
+      navigate("/" + blogPostCreated[0]._id);
     }
-  }, [postImage, postContent, postTitle, postCategory, blogPostCreated]);
+  }, [postImage, postContent, postTitle, postCategory, blogPostCreated, toast, navigate]);
 
   const handlePublishPost = () => {
     if (postImage === "" || postCategory === "" || postContent === "" || postTitle === "" || postCountry === "") {
@@ -106,7 +113,6 @@ const NewPostTab = () => {
         <Input placeholder="Country" size="lg" onChange={(e) => setPostCountry(e.target.value)} />
         {/* <Textarea placeholder="Blog Content Part One" onChange={(e) => setPostContentOne(e.target.value)} /> */}
         <ReactQuill
-          min-height="600px"
           placeholder="Start writing something..."
           value={postContent}
           onChange={(newValue) => setPostContent(newValue)}

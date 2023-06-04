@@ -47,7 +47,7 @@ const createBlogPost = async (req, res) => {
     author,
   });
   await newPost.save();
-  const posts = await blogPost.find({});
+  const posts = await blogPost.find({ title });
   if (newPost) {
     res.json(posts);
   } else {

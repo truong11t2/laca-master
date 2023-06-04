@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 import {
   setLoading,
@@ -14,7 +14,7 @@ import {
   setPreviousPage,
   reset,
   setStatus,
-} from '../slices/blogPost';
+} from "../slices/blogPost";
 
 export const getBlogPostsByCategory = (category, pageItems) => async (dispatch) => {
   dispatch(setLoading(true));
@@ -30,7 +30,7 @@ export const getBlogPostsByCategory = (category, pageItems) => async (dispatch) 
           ? error.response.data.message
           : error.message
           ? error.message
-          : 'An unexpected error has occured. Please try again later.'
+          : "An unexpected error has occured. Please try again later."
       )
     );
   }
@@ -48,7 +48,7 @@ export const getBlogPost = (id) => async (dispatch) => {
           ? error.response.data.message
           : error.message
           ? error.message
-          : 'An unexpected error has occured. Please try again later.'
+          : "An unexpected error has occured. Please try again later."
       )
     );
   }
@@ -76,12 +76,12 @@ export const createNewBlogPost = (newPost) => async (dispatch, getState) => {
   try {
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    await axios.post(`/api/blog-posts`, newPost, config);
-    dispatch(blogPostCreated(true));
+    const { data } = await axios.post(`/api/blog-posts`, newPost, config);
+    dispatch(blogPostCreated(data));
   } catch (error) {
     dispatch(
       setError(
@@ -89,7 +89,7 @@ export const createNewBlogPost = (newPost) => async (dispatch, getState) => {
           ? error.response.data.message
           : error.message
           ? error.message
-          : 'An unexpected error has occured. Please try again later.'
+          : "An unexpected error has occured. Please try again later."
       )
     );
   }
@@ -105,7 +105,7 @@ export const updatePost = (updatedPost) => async (dispatch, getState) => {
   try {
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -118,7 +118,7 @@ export const updatePost = (updatedPost) => async (dispatch, getState) => {
           ? error.response.data.message
           : error.message
           ? error.message
-          : 'An unexpected error has occured. Please try again later.'
+          : "An unexpected error has occured. Please try again later."
       )
     );
   }
@@ -134,7 +134,7 @@ export const removePost = (_id) => async (dispatch, getState) => {
   try {
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
@@ -148,7 +148,7 @@ export const removePost = (_id) => async (dispatch, getState) => {
           ? error.response.data.message
           : error.message
           ? error.message
-          : 'An unexpected error has occured. Please try again later.'
+          : "An unexpected error has occured. Please try again later."
       )
     );
   }
