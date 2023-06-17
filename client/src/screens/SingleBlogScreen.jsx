@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getBlogPost } from "../redux/actions/blogPostActions";
 import NotFoundScreen from "./NotFoundScreen";
+import parse from "html-react-parser";
 
 const SingleBlogScreen = () => {
   const { id } = useParams();
@@ -54,10 +55,10 @@ const SingleBlogScreen = () => {
             <Stack p="2">
               <Image src={blogPost.image} />
             </Stack>
-
-            <Text px="2" mt="5" lineHeight={{ base: "7", md: "8" }} fontSize={{ base: "md", md: "lg" }}>
+            {/*             <Text px="2" mt="5" lineHeight={{ base: "7", md: "8" }} fontSize={{ base: "md", md: "lg" }}>
               {blogPost.content}
-            </Text>
+            </Text> */}
+            {parse(blogPost.content)}
           </Container>
         )
       )}

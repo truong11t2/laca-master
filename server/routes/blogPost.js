@@ -6,21 +6,52 @@ import asyncHandler from "express-async-handler";
 const blogPostRouter = Router();
 
 const getBlogPostByCategory = asyncHandler(async (req, res) => {
-  const { category, pageNumber } = req.params;
+  const { category, postId, navigate } = req.params;
+  let posts = null;
+  console.log("pageItems: ", postId);
 
-  const posts = await blogPost.find({});
-  const increment = pageNumber + 4;
+  if (navigate === "forward") {
+    if (category === "all" || category === "latest") {
+      posts = await blogPost
+        .find({ _id: { $lt: postId } })
+        .sort({ _id: -1 })
+        .limit(4);
+      posts.map((post) => {
+        console.log(post.id);
+      });
+    } else {
+      posts = await blogPost
+        .find({ $and: [{ category: category }, { _id: { $lt: postId } }] })
+        .sort({ _id: -1 })
+        .limit(4);
+      posts.map((post) => {
+        console.log(post.id);
+      });
+    }
+  } else if (navigate === "back") {
+    posts = await blogPost
+      .find({ _id: { $gt: postId } })
+      .sort({ _id: -1 })
+      .limit(4);
+    posts.map((post) => {
+      console.log(post.id);
+    });
+  } else {
+    posts = await blogPost.find({}).sort({ _id: -1 }).limit(4);
+    posts.map((post) => {
+      console.log(post.id);
+    });
+  }
 
-  let getStatus = () => (increment < posts.length ? 200 : 201); //201 response means last chunk of blog posts
+  let getStatus = () => (posts.length === 4 ? 200 : 201); //201 response means last chunk of blog posts
   if (category === "all") {
-    res.status(getStatus()).json(posts.slice(pageNumber, increment));
+    res.status(getStatus()).json(posts.slice(0, 4));
   } else if (category === "latest") {
     res
       .status(getStatus())
-      .json(posts.sort((objA, objB) => Number(objB.createdAt) - Number(objA.createdAt)).slice(pageNumber, increment));
+      .json(posts.sort((objA, objB) => Number(objB.updatedAt) - Number(objA.updatedAt)).slice(0, 4));
   } else {
-    const posts = await blogPost.find({ category });
-    res.status(getStatus()).json(posts.slice(pageNumber, increment));
+    res.status(getStatus()).json(posts.slice(0, 4));
   }
 });
 
@@ -91,6 +122,6 @@ blogPostRouter.route("/").post(protectRoute, createBlogPost);
 blogPostRouter.route("/post/:id").get(getBlogPost);
 blogPostRouter.route("/:id").delete(protectRoute, deletePost);
 blogPostRouter.route("/").put(protectRoute, updateBlogPost);
-blogPostRouter.route("/:category/:pageNumber").get(getBlogPostByCategory);
+blogPostRouter.route("/:category/:postId/:navigate").get(getBlogPostByCategory);
 
 export default blogPostRouter;

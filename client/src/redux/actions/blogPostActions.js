@@ -14,15 +14,23 @@ import {
   setPreviousPage,
   reset,
   setStatus,
+  setPageItems,
+  setPageNumber,
 } from "../slices/blogPost";
 
-export const getBlogPostsByCategory = (category, pageItems) => async (dispatch) => {
+export const getBlogPostsByCategory = (category, pageItems, navigate) => async (dispatch) => {
   dispatch(setLoading(true));
 
   try {
-    const { data, status } = await axios.get(`/api/blog-posts/${category}/${pageItems}`);
+    let postId = pageItems;
+    const { data, status } = await axios.get(`/api/blog-posts/${category}/${postId}/${navigate}`);
     dispatch(setBlogPostByCategory(data));
     dispatch(setStatus(status));
+    //Get the last post id in current page
+    if (data.length > 0) {
+      data.sort(compare);
+      dispatch(setPageItems(data[data.length - 1]._id));
+    }
   } catch (error) {
     dispatch(
       setError(
@@ -54,12 +62,14 @@ export const getBlogPost = (id) => async (dispatch) => {
   }
 };
 
-export const nextPageClick = (pageItems) => async (dispatch) => {
-  dispatch(setNextPage(pageItems + 4));
+export const nextPageClick = (navigate) => async (dispatch) => {
+  dispatch(setNextPage(navigate));
+  dispatch(setPageNumber(true));
 };
 
-export const previousPageClick = (pageItems) => async (dispatch) => {
-  dispatch(setPreviousPage(pageItems - 4));
+export const previousPageClick = (navigate) => async (dispatch) => {
+  dispatch(setPreviousPage(navigate));
+  dispatch(setPageNumber(false));
 };
 
 export const resetLoaderAndFlags = () => async (dispatch) => {
@@ -152,4 +162,14 @@ export const removePost = (_id) => async (dispatch, getState) => {
       )
     );
   }
+};
+
+const compare = (a, b) => {
+  if (a._id < b._id) {
+    return 1;
+  }
+  if (a._id > b._id) {
+    return -1;
+  }
+  return 0;
 };

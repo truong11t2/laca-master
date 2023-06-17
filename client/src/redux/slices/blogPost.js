@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   blogPosts: [],
@@ -6,23 +6,26 @@ export const initialState = {
   loading: false,
   error: null,
   pageItems: 0,
+  topPostId: 0,
   status: 200,
   updateButtonLoading: false,
   blogPostCreated: false,
   blogPostUpdated: false,
   blogPostRemoved: false,
   removeButtonLoading: false,
+  navigate: null,
+  pageNumber: 1,
 };
 
 export const blogPostSlice = createSlice({
-  name: 'blogPosts',
+  name: "blogPosts",
   initialState,
   reducers: {
     setLoading: (state, { payload }) => {
       state.loading = payload;
     },
     setBlogPostByCategory: (state, { payload }) => {
-      state.blogPosts = payload;
+      state.blogPosts = [...state.blogPosts, ...payload];
       state.loading = false;
       state.error = null;
     },
@@ -61,10 +64,17 @@ export const blogPostSlice = createSlice({
       state.status = payload;
     },
     setNextPage: (state, { payload }) => {
-      state.pageItems = payload;
+      state.navigate = payload;
     },
     setPreviousPage: (state, { payload }) => {
-      state.pageItems = payload;
+      state.navigate = payload;
+    },
+    setPageNumber: (state, { payload }) => {
+      if (payload === true) {
+        state.pageNumber += 1;
+      } else {
+        state.pageNumber -= 1;
+      }
     },
     reset: (state) => {
       state.error = null;
@@ -74,11 +84,19 @@ export const blogPostSlice = createSlice({
       state.updateButtonLoading = false;
       state.removeButtonLoading = false;
       state.loading = false;
+      state.navigate = null;
+      state.pageNumber = 1;
     },
     setRemoveButtonLoading: (state, { payload }) => {
       state.removeButtonLoading = payload;
       state.loading = false;
       state.error = null;
+    },
+    setPageItems: (state, { payload }) => {
+      state.pageItems = payload;
+    },
+    setTopPostId: (state, { payload }) => {
+      state.topPostId = payload;
     },
   },
 });
@@ -97,6 +115,9 @@ export const {
   setPreviousPage,
   reset,
   setStatus,
+  setPageItems,
+  setTopPostId,
+  setPageNumber,
 } = blogPostSlice.actions;
 export default blogPostSlice.reducer;
 
