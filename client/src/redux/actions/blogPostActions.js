@@ -4,32 +4,46 @@ import {
   setLoading,
   setBlogPost,
   setBlogPostByCategory,
+  setBlogPostByCategoryNew,
   setError,
   blogPostCreated,
   blogPostRemoved,
   blogPostUpdated,
   setRemoveButtonLoading,
   setUpdateButtonLoading,
-  setNextPage,
-  setPreviousPage,
   reset,
   setStatus,
-  setPageItems,
+  setLastId,
+  setNextPage,
   setPageNumber,
+  setCategory,
 } from "../slices/blogPost";
 
-export const getBlogPostsByCategory = (category, pageItems, navigate) => async (dispatch) => {
+export const getBlogPostsByCategory = (curCategory, lastId, nextPage, category) => async (dispatch) => {
   dispatch(setLoading(true));
 
+  //Check if category is changed
+  //const prevCategory = useSelector((state) => state.blogPosts);
+  //const { oldCategory: category } = prevCategory;
+
   try {
-    let postId = pageItems;
-    const { data, status } = await axios.get(`/api/blog-posts/${category}/${postId}/${navigate}`);
-    dispatch(setBlogPostByCategory(data));
+    if (curCategory !== category) {
+      lastId = 0;
+      nextPage = false;
+    }
+    const { data, status } = await axios.get(`/api/blog-posts/${curCategory}/${lastId}/${nextPage}`);
+    if (curCategory === category) {
+      dispatch(setBlogPostByCategory(data));
+    } else {
+      dispatch(setBlogPostByCategoryNew(data));
+      dispatch(setCategory(curCategory));
+    }
+
     dispatch(setStatus(status));
     //Get the last post id in current page
     if (data.length > 0) {
       data.sort(compare);
-      dispatch(setPageItems(data[data.length - 1]._id));
+      dispatch(setLastId(data[data.length - 1]._id));
     }
   } catch (error) {
     dispatch(
@@ -62,16 +76,10 @@ export const getBlogPost = (id) => async (dispatch) => {
   }
 };
 
-export const nextPageClick = (navigate) => async (dispatch) => {
-  dispatch(setNextPage(navigate));
-  dispatch(setPageNumber(true));
+export const getNextPage = () => async (dispatch) => {
+  dispatch(setNextPage(true));
+  dispatch(setPageNumber());
 };
-
-export const previousPageClick = (navigate) => async (dispatch) => {
-  dispatch(setPreviousPage(navigate));
-  dispatch(setPageNumber(false));
-};
-
 export const resetLoaderAndFlags = () => async (dispatch) => {
   dispatch(reset());
 };

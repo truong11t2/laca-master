@@ -5,16 +5,16 @@ export const initialState = {
   blogPost: null,
   loading: false,
   error: null,
-  pageItems: 0,
-  topPostId: 0,
+  lastId: 0,
   status: 200,
   updateButtonLoading: false,
   blogPostCreated: false,
   blogPostUpdated: false,
   blogPostRemoved: false,
   removeButtonLoading: false,
-  navigate: null,
+  nextPage: false,
   pageNumber: 1,
+  category: null,
 };
 
 export const blogPostSlice = createSlice({
@@ -26,6 +26,11 @@ export const blogPostSlice = createSlice({
     },
     setBlogPostByCategory: (state, { payload }) => {
       state.blogPosts = [...state.blogPosts, ...payload];
+      state.loading = false;
+      state.error = null;
+    },
+    setBlogPostByCategoryNew: (state, { payload }) => {
+      state.blogPosts = payload.map((x) => x);
       state.loading = false;
       state.error = null;
     },
@@ -64,19 +69,13 @@ export const blogPostSlice = createSlice({
       state.status = payload;
     },
     setNextPage: (state, { payload }) => {
-      state.navigate = payload;
+      state.nextPage = payload;
     },
-    setPreviousPage: (state, { payload }) => {
-      state.navigate = payload;
-    },
-    setPageNumber: (state, { payload }) => {
-      if (payload === true) {
-        state.pageNumber += 1;
-      } else {
-        state.pageNumber -= 1;
-      }
+    setPageNumber: (state) => {
+      state.pageNumber += 1;
     },
     reset: (state) => {
+      state.blogPost = null;
       state.error = null;
       state.blogPostCreated = false;
       state.blogPostRemoved = false;
@@ -84,7 +83,6 @@ export const blogPostSlice = createSlice({
       state.updateButtonLoading = false;
       state.removeButtonLoading = false;
       state.loading = false;
-      state.navigate = null;
       state.pageNumber = 1;
     },
     setRemoveButtonLoading: (state, { payload }) => {
@@ -92,11 +90,11 @@ export const blogPostSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
-    setPageItems: (state, { payload }) => {
-      state.pageItems = payload;
+    setLastId: (state, { payload }) => {
+      state.lastId = payload;
     },
-    setTopPostId: (state, { payload }) => {
-      state.topPostId = payload;
+    setCategory: (state, { payload }) => {
+      state.category = payload;
     },
   },
 });
@@ -105,6 +103,7 @@ export const {
   setLoading,
   setBlogPost,
   setBlogPostByCategory,
+  setBlogPostByCategoryNew,
   setError,
   blogPostCreated,
   blogPostRemoved,
@@ -112,12 +111,11 @@ export const {
   setRemoveButtonLoading,
   setUpdateButtonLoading,
   setNextPage,
-  setPreviousPage,
   reset,
   setStatus,
-  setPageItems,
-  setTopPostId,
+  setLastId,
   setPageNumber,
+  setCategory,
 } = blogPostSlice.actions;
 export default blogPostSlice.reducer;
 

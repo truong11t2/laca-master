@@ -19,21 +19,24 @@ import {
 import { Link as ReactLink, useParams } from "react-router-dom";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getBlogPostsByCategory, previousPageClick, nextPageClick } from "../redux/actions/blogPostActions";
+import { getBlogPostsByCategory, getNextPage } from "../redux/actions/blogPostActions";
 // import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 
 const BlogScreen = () => {
-  const { category } = useParams();
+  const { category: curCategory } = useParams();
 
   const blogPostInfo = useSelector((state) => state.blogPosts);
-  const { blogPosts, loading, error, pageTitle, pageItems, status, navigate, pageNumber } = blogPostInfo;
+  const { blogPosts, loading, error, pageTitle, lastId, status, nextPage, pageNumber, category } = blogPostInfo;
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getBlogPostsByCategory(category, pageItems, navigate));
+    if (curCategory !== category) {
+      window.scroll(0, 0);
+    }
+    dispatch(getBlogPostsByCategory(curCategory, lastId, nextPage, category));
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, [category, dispatch, navigate, pageNumber]);
+  }, [curCategory, dispatch, nextPage, pageNumber]);
 
   const onScroll = () => {
     const scrollTop = document.documentElement.scrollTop;
@@ -41,7 +44,7 @@ const BlogScreen = () => {
     const clientHeight = document.documentElement.clientHeight;
 
     if (scrollTop + clientHeight >= scrollHeight) {
-      dispatch(nextPageClick("forward"));
+      dispatch(getNextPage());
     }
   };
 
@@ -51,7 +54,7 @@ const BlogScreen = () => {
         {pageTitle}
       </Heading>
       <>
-        <Heading>{category.charAt(0).toUpperCase() + category.slice(1)} Blogs</Heading>
+        <Heading>{curCategory.charAt(0).toUpperCase() + curCategory.slice(1)} Blogs</Heading>
         {blogPosts.map((post) => (
           <Box key={post._id} maxW={{ base: "3xl", lg: "7xl" }} px={{ base: "6", md: "8", lg: "20" }} py="6">
             <Stack direction={{ base: "column", lg: "row" }} spacing="7">
@@ -101,18 +104,6 @@ const BlogScreen = () => {
         ) : (
           <></>
         )}
-        {/*           <Flex>
-            <Button m="3" isDisabled={pageNumber === 1} onClick={() => dispatch(previousPageClick("back"))}>
-              <ArrowLeftIcon />
-            </Button>
-            <Button
-              m="3"
-              isDisabled={status === 201 || blogPosts.length <= 3}
-              onClick={() => dispatch(nextPageClick("forward"))}
-            >
-              <ArrowRightIcon />
-            </Button>
-          </Flex> */}
       </>
     </VStack>
   );

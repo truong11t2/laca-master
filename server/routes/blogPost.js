@@ -6,12 +6,13 @@ import asyncHandler from "express-async-handler";
 const blogPostRouter = Router();
 
 const getBlogPostByCategory = asyncHandler(async (req, res) => {
-  const { category, postId, navigate } = req.params;
+  const { category, postId, nextPage } = req.params;
   let posts = null;
   console.log("pageItems: ", postId);
 
-  if (navigate === "forward") {
-    if (category === "all" || category === "latest") {
+  if (nextPage === "true") {
+    //Get all the posts
+    if (category === "all") {
       posts = await blogPost
         .find({ _id: { $lt: postId } })
         .sort({ _id: -1 })
@@ -19,7 +20,19 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
       posts.map((post) => {
         console.log(post.id);
       });
-    } else {
+    }
+    //Get the latest posts
+    else if (category === "latest") {
+      posts = await blogPost
+        .find({ _id: { $lt: postId } })
+        .sort({ updatedAt: -1 })
+        .limit(4);
+      posts.map((post) => {
+        console.log(post.id);
+      });
+    }
+    //Get only category
+    else {
       posts = await blogPost
         .find({ $and: [{ category: category }, { _id: { $lt: postId } }] })
         .sort({ _id: -1 })
@@ -28,14 +41,6 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
         console.log(post.id);
       });
     }
-  } else if (navigate === "back") {
-    posts = await blogPost
-      .find({ _id: { $gt: postId } })
-      .sort({ _id: -1 })
-      .limit(4);
-    posts.map((post) => {
-      console.log(post.id);
-    });
   } else {
     posts = await blogPost.find({}).sort({ _id: -1 }).limit(4);
     posts.map((post) => {
@@ -122,6 +127,6 @@ blogPostRouter.route("/").post(protectRoute, createBlogPost);
 blogPostRouter.route("/post/:id").get(getBlogPost);
 blogPostRouter.route("/:id").delete(protectRoute, deletePost);
 blogPostRouter.route("/").put(protectRoute, updateBlogPost);
-blogPostRouter.route("/:category/:postId/:navigate").get(getBlogPostByCategory);
+blogPostRouter.route("/:category/:postId/:nextPage").get(getBlogPostByCategory);
 
 export default blogPostRouter;
