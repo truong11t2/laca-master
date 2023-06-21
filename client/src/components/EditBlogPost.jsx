@@ -12,12 +12,7 @@ import {
   Flex,
   Button,
 } from "@chakra-ui/react";
-import {
-  getBlogPostsByCategory,
-  resetLoaderAndFlags,
-  previousPageClick,
-  nextPageClick,
-} from "../redux/actions/blogPostActions";
+import { getBlogPostsByCategory, resetLoaderAndFlags, getNextPage } from "../redux/actions/blogPostActions";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import PostEdit from "./PostEdit";
 
@@ -25,11 +20,24 @@ const EditBlogPost = () => {
   const dispatch = useDispatch();
   const toast = useToast();
   const blogPostInfo = useSelector((state) => state.blogPosts);
-  const { blogPosts, loading, error, blogPostUpdated, blogPostRemoved, pageItems, status } = blogPostInfo;
+  const {
+    blogPosts,
+    loading,
+    error,
+    blogPostUpdated,
+    blogPostRemoved,
+    pageTitle,
+    lastId,
+    status,
+    nextPage,
+    pageNumber,
+    category,
+  } = blogPostInfo;
 
   useEffect(() => {
     dispatch(resetLoaderAndFlags());
-    dispatch(getBlogPostsByCategory("all", pageItems));
+    dispatch(getBlogPostsByCategory("all", lastId, nextPage, category));
+    window.addEventListener("scroll", onScroll);
     if (blogPostUpdated) {
       window.scroll(0, 0);
       toast({
@@ -49,7 +57,18 @@ const EditBlogPost = () => {
         isClosable: true,
       });
     }
-  }, [blogPostRemoved, blogPostUpdated, dispatch, pageItems, status, toast]);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [blogPostRemoved, blogPostUpdated, dispatch, nextPage, status, toast]);
+
+  const onScroll = () => {
+    const scrollTop = document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = document.documentElement.clientHeight;
+
+    if (scrollTop + clientHeight >= scrollHeight) {
+      dispatch(getNextPage());
+    }
+  };
 
   return (
     <>
@@ -84,18 +103,6 @@ const EditBlogPost = () => {
           </>
         )}
       </VStack>
-      <Flex justify="center" mt="20">
-        <Button m="3" isDisabled={pageItems === 0} onClick={() => dispatch(previousPageClick(pageItems))}>
-          <ArrowLeftIcon />
-        </Button>
-        <Button
-          m="3"
-          isDisabled={status === 201 || blogPosts.length <= 3}
-          onClick={() => dispatch(nextPageClick(pageItems))}
-        >
-          <ArrowRightIcon />
-        </Button>
-      </Flex>
     </>
   );
 };
