@@ -19,12 +19,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { getBlogPost } from "../redux/actions/blogPostActions";
 import NotFoundScreen from "./NotFoundScreen";
 import parse from "html-react-parser";
+import "../components/comment/comment.css";
+import Comments from "../components/comment/Comments";
 
 const SingleBlogScreen = () => {
   const { id } = useParams();
   const blogPostInfo = useSelector((state) => state.blogPosts);
   const { blogPost, loading, error } = blogPostInfo;
   const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user);
+  const { userInfo } = user;
 
   useEffect(() => {
     window.scroll(0, 0);
@@ -59,6 +64,9 @@ const SingleBlogScreen = () => {
               {blogPost.content}
             </Text> */}
             {parse(blogPost.content)}
+
+            {/* comment section */}
+            <Comments postId={id} currentUser={userInfo} />
           </Container>
         )
       )}

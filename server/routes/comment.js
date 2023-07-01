@@ -57,10 +57,8 @@ const updateComment = asyncHandler(async (req, res) => {
 });
 
 const deleteComment = asyncHandler(async (req, res) => {
-  const { _id } = req.body;
-
   try {
-    let deletedComment = await comment.findByIdAndDelete(_id);
+    let deletedComment = await comment.findByIdAndDelete(req.params.commentId);
     res.json(deletedComment);
   } catch (error) {
     res.status(404).send("Comment could not be deleted");
@@ -70,6 +68,6 @@ const deleteComment = asyncHandler(async (req, res) => {
 commentRouter.route("/create").post(protectRoute, createComment);
 commentRouter.route("/:postId/get").get(getComment);
 commentRouter.route("/update").put(protectRoute, updateComment);
-commentRouter.route("/delete").delete(protectRoute, deleteComment);
+commentRouter.route("/delete/:commentId").delete(protectRoute, deleteComment);
 
 export default commentRouter;
