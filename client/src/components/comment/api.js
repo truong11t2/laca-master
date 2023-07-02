@@ -16,7 +16,7 @@ export const createComment = async (postId, parentId = null, content, userInfo) 
   };
   try {
     const { data } = await axios.post(`/api/comment/create`, comment, config);
-    console.log(data);
+    //console.log(data);
     return data;
   } catch (error) {
     return error.message;
@@ -47,7 +47,7 @@ export const updateComment = async (commentId, content, userInfo) => {
 
   try {
     const { data } = await axios.put(`/api/comment/update`, updatedComment, config);
-    console.log(data);
+    //console.log(data);
     return data;
   } catch (error) {
     return error.message;
@@ -63,7 +63,7 @@ export const deleteComment = async (commentId, userInfo) => {
   };
   try {
     const { data } = await axios.delete(`/api/comment/delete/${commentId}`, config);
-    console.log(data);
+    //console.log(data);
     return data;
   } catch (error) {
     return error.message;

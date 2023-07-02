@@ -1,9 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
+import jwt_decode from "jwt-decode";
+
+const parseJWT = () => {
+  let user = JSON.parse(localStorage.getItem("userInfo"));
+  if (user) {
+    let decode = jwt_decode(user.token);
+    if (decode.exp < (new Date().getTime() + 1) / 1000) {
+      //log out
+      localStorage.removeItem("userInfo");
+      //redirect login page
+      return null;
+    }
+  }
+  return user;
+};
 
 export const initialState = {
   loading: false,
   error: null,
-  userInfo: JSON.parse(localStorage.getItem("userInfo")) ?? null,
+  userInfo: parseJWT(),
 };
 
 export const userSlice = createSlice({
