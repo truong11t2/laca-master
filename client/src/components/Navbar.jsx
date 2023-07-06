@@ -142,7 +142,6 @@ const Navbar = () => {
 
   const dispatch = useDispatch();
   const toast = useToast();
-  const createPost = () => {};
   const logoutHandler = () => {
     dispatch(logout());
     toast({ description: "You have been logged out.", status: "success", isClosable: true });
@@ -343,9 +342,13 @@ const Navbar = () => {
             <Menu>
               <MenuButton>Hi {userInfo.name}</MenuButton>
               <MenuList>
-                <MenuItem key="Create Post" as={ReactLink} to={`/create-post`}>
-                  Create Post
-                </MenuItem>
+                {userInfo.isAdmin || userInfo.isWriter ? (
+                  <MenuItem key="Create Post" as={ReactLink} to={`/create-post`}>
+                    Create Post
+                  </MenuItem>
+                ) : (
+                  <></>
+                )}
                 <MenuItem onClick={logoutHandler}>Logout</MenuItem>
               </MenuList>
             </Menu>

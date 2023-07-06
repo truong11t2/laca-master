@@ -28,6 +28,10 @@ const UserSchema = new Schema(
       minlength: 6,
       select: false,
     },
+    roles: {
+      type: [String],
+      default: ["user"],
+    },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
   },
@@ -49,7 +53,7 @@ UserSchema.methods.matchPassword = async function (password) {
 };
 
 UserSchema.methods.getSignedJwtToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+  return jwt.sign({ email: this.email, name: this.firstname, roles: this.roles }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
   });
 };

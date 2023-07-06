@@ -1,24 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
 import jwt_decode from "jwt-decode";
 
-const parseJWT = () => {
-  let user = JSON.parse(localStorage.getItem("userInfo"));
-  if (user) {
-    let decode = jwt_decode(user.token);
-    if (decode.exp < (new Date().getTime() + 1) / 1000) {
-      //log out
-      localStorage.removeItem("userInfo");
-      //redirect login page
-      return null;
-    }
+const parseJWT = (userInfo) => {
+  if (userInfo === null) return null;
+  let isAdmin = false;
+  let isWriter = false;
+  const decoded = jwt_decode(userInfo.token);
+  if (decoded.exp < (new Date().getTime() + 1) / 1000) {
+    //log out
+    localStorage.removeItem("userInfo");
+    //redirect login page
+    return null;
+  } else {
+    const { email, name, roles } = decoded;
+    isAdmin = roles.includes("admin");
+    isWriter = roles.includes("writer");
+    return { email, name, roles, isAdmin, isWriter, token: userInfo.token };
   }
-  return user;
 };
 
 export const initialState = {
   loading: false,
   error: null,
-  userInfo: parseJWT(),
+  userInfo: parseJWT(JSON.parse(localStorage.getItem("userInfo"))),
 };
 
 export const userSlice = createSlice({
@@ -29,12 +33,12 @@ export const userSlice = createSlice({
       state.loading = payload;
     },
     userLogin: (state, { payload }) => {
-      state.userInfo = payload;
+      state.userInfo = parseJWT(payload);
       state.error = null;
       state.loading = false;
     },
     userRegister: (state, { payload }) => {
-      state.userInfo = payload;
+      state.userInfo = parseJWT(payload);
       state.error = null;
       state.loading = false;
     },
