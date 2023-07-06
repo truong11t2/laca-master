@@ -65,9 +65,19 @@ const deleteComment = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteComments = asyncHandler(async (req, res) => {
+  try {
+    let deletedComments = await comment.deleteMany({ postId: req.params.postId });
+    res.json(deletedComments);
+  } catch (error) {
+    res.status(404).send("Comments could not be deleted");
+  }
+});
+
 commentRouter.route("/create").post(protectRoute, createComment);
 commentRouter.route("/:postId/get").get(getComment);
 commentRouter.route("/update").put(protectRoute, updateComment);
 commentRouter.route("/delete/:commentId").delete(protectRoute, deleteComment);
+commentRouter.route("/delete/post/:postId").delete(protectRoute, deleteComments);
 
 export default commentRouter;

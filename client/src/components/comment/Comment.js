@@ -16,7 +16,8 @@ const Comment = ({
   const fiveMinutes = 300000;
   const timePassed = new Date() - new Date(comment.createdAt) > fiveMinutes;
   const canDelete =
-    currentUser === null ? false : currentUser.email === comment.email && replies.length === 0 && !timePassed;
+    (currentUser === null ? false : currentUser.email === comment.email && replies.length === 0 && !timePassed) ||
+    currentUser.isAdmin;
   const canReply = Boolean(currentUser);
   const canEdit = currentUser === null ? false : currentUser.email === comment.email && !timePassed;
   const replyId = parentId ? parentId : comment._id;

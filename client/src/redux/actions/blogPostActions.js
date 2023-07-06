@@ -18,6 +18,7 @@ import {
   setPageNumber,
   setCategory,
 } from "../slices/blogPost";
+import { deleteComments } from "../../components/comment/api";
 
 export const getBlogPostsByCategory = (curCategory, lastId, nextPage, category) => async (dispatch) => {
   dispatch(setLoading(true));
@@ -156,6 +157,9 @@ export const removePost = (_id) => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
+
+    deleteComments(_id, userInfo);
+
     const { data } = await axios.delete(`/api/blog-posts/${_id}`, config);
     dispatch(setBlogPostByCategory(data));
     dispatch(blogPostRemoved(true));

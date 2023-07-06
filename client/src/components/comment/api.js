@@ -69,3 +69,19 @@ export const deleteComment = async (commentId, userInfo) => {
     return error.message;
   }
 };
+
+export const deleteComments = async (postId, userInfo) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${userInfo.token}`,
+    },
+  };
+  try {
+    const { data } = await axios.delete(`/api/comment/delete/post/${postId}`, config);
+    //console.log(data);
+    return data;
+  } catch (error) {
+    return error.message;
+  }
+};
