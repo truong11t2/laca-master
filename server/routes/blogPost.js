@@ -17,9 +17,9 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
         .find({ _id: { $lt: postId } })
         .sort({ _id: -1 })
         .limit(4);
-      posts.map((post) => {
-        //console.log(post.id);
-      });
+      // posts.map((post) => {
+      //   console.log(post.id);
+      // });
     }
     //Get the latest posts
     else if (category === "latest") {
@@ -27,9 +27,9 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
         .find({ _id: { $lt: postId } })
         .sort({ updatedAt: -1 })
         .limit(4);
-      posts.map((post) => {
-        //console.log(post.id);
-      });
+      // posts.map((post) => {
+      //   console.log(post.id);
+      // });
     }
     //Get only category
     else {
@@ -37,26 +37,50 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
         .find({ $and: [{ category: category }, { _id: { $lt: postId } }] })
         .sort({ _id: -1 })
         .limit(4);
-      posts.map((post) => {
-        //console.log(post.id);
-      });
+      // posts.map((post) => {
+      //   console.log(post.id);
+      // });
     }
   } else {
-    posts = await blogPost.find({}).sort({ _id: -1 }).limit(4);
-    posts.map((post) => {
-      //console.log(post.id);
-    });
+    //Get all the posts
+    if (category === "all") {
+      posts = await blogPost
+        .find({ })
+        .sort({ _id: -1 })
+        .limit(4);
+      // posts.map((post) => {
+      //   console.log(post.id);
+      // });
+    }
+    //Get the latest posts
+    else if (category === "latest") {
+      posts = await blogPost
+        .find({ })
+        .sort({ updatedAt: -1 })
+        .limit(4);
+      // posts.map((post) => {
+      //   console.log(post.id);
+      // });
+    }
+    //Get only category
+    else {
+      posts = await blogPost
+        .find({ category: category })
+        .sort({ _id: -1 })
+        .limit(4);
+      // posts.map((post) => {
+      //   console.log(post.id);
+      // });
+    }
   }
 
-  let getStatus = () => (posts.length === 4 ? 200 : 201); //201 response means last chunk of blog posts
-  if (category === "all") {
-    res.status(getStatus()).json(posts.slice(0, 4));
-  } else if (category === "latest") {
+  let status = (posts.length === 4 ? 200 : 201); //201 response means last chunk of blog posts
+  if (category === "latest") {
     res
-      .status(getStatus())
+      .status(status)
       .json(posts.sort((objA, objB) => Number(objB.updatedAt) - Number(objA.updatedAt)).slice(0, 4));
   } else {
-    res.status(getStatus()).json(posts.slice(0, 4));
+    res.status(status).json(posts.slice(0, 4));
   }
 });
 
