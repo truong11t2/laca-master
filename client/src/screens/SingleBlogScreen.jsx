@@ -12,8 +12,9 @@ import {
   Container,
   Box,
   VStack,
+  Link,
 } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { Link as ReactLink, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getBlogPost } from "../redux/actions/blogPostActions";
@@ -55,7 +56,10 @@ const SingleBlogScreen = () => {
               <Text mx="2">|</Text>
               <Text>{new Date(blogPost.createdAt).toDateString()}</Text>
               <Text mx="2">|</Text>
-              <Text>{blogPost.category.charAt(0).toUpperCase() + blogPost.category.slice(1)}</Text>
+              {/* <Text>{blogPost.category.charAt(0).toUpperCase() + blogPost.category.slice(1)}</Text> */}
+              <Link pl="1" as={ReactLink} to={`/blog/${blogPost.category}`}>
+                      {blogPost.category.charAt(0).toUpperCase() + blogPost.category.slice(1)}
+                    </Link>
             </Flex>
             <Stack p="2">
               <Image src={blogPost.image} />

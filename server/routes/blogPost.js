@@ -84,6 +84,35 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
   }
 });
 
+const getBlogPostByCountry = asyncHandler(async (req, res) => {
+  const { country, postId, nextPage } = req.params;
+  let posts = null;
+  console.log("pageItems: ", postId);
+
+  if (nextPage === "true") {
+    //Get only country
+    posts = await blogPost
+      .find({ $and: [{ country: country }, { _id: { $lt: postId } }] })
+      .sort({ updatedAt: -1 })
+      .limit(4);
+    // posts.map((post) => {
+    //   console.log(post.id);
+    // });
+  } else {
+    //Get only country
+    posts = await blogPost
+      .find({ country: country })
+      .sort({ updatedAt: -1 })
+      .limit(4);
+    // posts.map((post) => {
+    //   console.log(post.id);
+    // });
+  }
+
+  let status = (posts.length === 4 ? 200 : 201); //201 response means last chunk of blog posts
+  res.status(status).json(posts.sort((objA, objB) => Number(objB.updatedAt) - Number(objA.updatedAt)).slice(0, 4));
+});
+
 const getBlogPost = asyncHandler(async (req, res) => {
   //console.log(req.params.id);
   const post = await blogPost.findById(req.params.id);
@@ -103,7 +132,7 @@ const createBlogPost = async (req, res) => {
     title,
     content,
     category: String(category).toLowerCase(),
-    country,
+    country: String(country).toLowerCase(),
     introduction,
     author,
   });
@@ -124,8 +153,8 @@ const updateBlogPost = asyncHandler(async (req, res) => {
   if (post) {
     post.content = content;
     post.title = title;
-    post.category = category;
-    post.country = country;
+    post.category = String(category).toLowerCase();
+    post.country = String(country).toLowerCase();
     post.introduction = introduction;
     post.image = image;
     await post.save();
@@ -154,5 +183,6 @@ blogPostRouter.route("/post/:id").get(getBlogPost);
 blogPostRouter.route("/:id").delete(protectRoute, deletePost);
 blogPostRouter.route("/").put(protectRoute, updateBlogPost);
 blogPostRouter.route("/:category/:postId/:nextPage").get(getBlogPostByCategory);
+blogPostRouter.route("/country/:country/:postId/:nextPage").get(getBlogPostByCountry);
 
 export default blogPostRouter;
