@@ -27,12 +27,16 @@ const NewPostTab = () => {
   const [postContent, setPostContent] = useState("");
   const [postTitle, setPostTitle] = useState("");
   const [postCountry, setPostCountry] = useState("");
+  const [postIntroduction, setPostIntroduction] = useState("");
   const [postCategory, setPostCategory] = useState("");
   const toast = useToast();
   const dispatch = useDispatch();
 
   const blogPostInfo = useSelector((state) => state.blogPosts);
   const { blogPostCreated, error, updateButtonLoading } = blogPostInfo;
+
+  const user = useSelector((state) => state.user);
+  const { userInfo } = user;
 
   //Quill
   const modules = {
@@ -77,7 +81,7 @@ const NewPostTab = () => {
   }, [postImage, postContent, postTitle, postCategory, blogPostCreated, toast, navigate]);
 
   const handlePublishPost = () => {
-    if (postImage === "" || postCategory === "" || postContent === "" || postTitle === "" || postCountry === "") {
+    if (postImage === "" || postCategory === "" || postContent === "" || postTitle === "" || postCountry === "" || postIntroduction === "") {
       toast({
         title: "Post could not be published",
         description: "Please fill out all fields and make sure that you have provided an image.",
@@ -93,6 +97,8 @@ const NewPostTab = () => {
           content: postContent,
           title: postTitle,
           country: postCountry,
+          introduction: postIntroduction,
+          author: userInfo.name,
         })
       );
     }
@@ -111,7 +117,7 @@ const NewPostTab = () => {
           <option value="Africa">Africa</option>
         </Select>
         <Input placeholder="Country" size="lg" onChange={(e) => setPostCountry(e.target.value)} />
-        {/* <Textarea placeholder="Blog Content Part One" onChange={(e) => setPostContentOne(e.target.value)} /> */}
+        <Textarea placeholder="Introduction about the post with 5 lines" onChange={(e) => setPostIntroduction(e.target.value)} />
         <ReactQuill
           placeholder="Start writing something..."
           value={postContent}

@@ -53,6 +53,9 @@ const RegisterScreen = () => {
         firstname: Yup.string()
           .min(2, "First name is too short - must contain at least 2 characters.")
           .required("First name is required."),
+          lastname: Yup.string()
+          .min(2, "Last name is too short - must contain at least 2 characters.")
+          .required("Last name is required."),
         email: Yup.string().email("Invalid email.").required("An email address is required."),
         password: Yup.string()
           .min(6, "Password is too short - must contain at least 6 characters.")
@@ -97,7 +100,7 @@ const RegisterScreen = () => {
                 <Stack spacing="5">
                   <FormControl>
                     <TextField type="text" name="firstname" placeholder="First name" label="First Name*" />
-                    <TextField type="text" name="lastname" placeholder="Last name" label="Last Name" />
+                    <TextField type="text" name="lastname" placeholder="Last name" label="Last Name*" />
                     <TextField type="text" name="email" placeholder="you@example.com" label="Email*" />
                     <PasswordField type="password" name="password" placeholder="Type your password" label="Password*" />
                     <PasswordField

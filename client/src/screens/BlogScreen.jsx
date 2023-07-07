@@ -64,7 +64,7 @@ const BlogScreen = () => {
                   {post.title}
                 </Text>
                 <Text noOfLines="5" fontSize="lg">
-                  {post.content}
+                  {post.introduction}
                 </Text>
                 <Spacer />
                 <Divider />

@@ -18,7 +18,7 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
         .sort({ _id: -1 })
         .limit(4);
       posts.map((post) => {
-        console.log(post.id);
+        //console.log(post.id);
       });
     }
     //Get the latest posts
@@ -28,7 +28,7 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
         .sort({ updatedAt: -1 })
         .limit(4);
       posts.map((post) => {
-        console.log(post.id);
+        //console.log(post.id);
       });
     }
     //Get only category
@@ -38,13 +38,13 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
         .sort({ _id: -1 })
         .limit(4);
       posts.map((post) => {
-        console.log(post.id);
+        //console.log(post.id);
       });
     }
   } else {
     posts = await blogPost.find({}).sort({ _id: -1 }).limit(4);
     posts.map((post) => {
-      console.log(post.id);
+      //console.log(post.id);
     });
   }
 
@@ -61,7 +61,7 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
 });
 
 const getBlogPost = asyncHandler(async (req, res) => {
-  console.log(req.params.id);
+  //console.log(req.params.id);
   const post = await blogPost.findById(req.params.id);
 
   if (post) {
@@ -72,7 +72,7 @@ const getBlogPost = asyncHandler(async (req, res) => {
 });
 
 const createBlogPost = async (req, res) => {
-  const { image, title, content, category, country, author = "Truong Hoang" } = req.body;
+  const { image, title, content, category, country, introduction, author } = req.body;
 
   const newPost = await blogPost.create({
     image,
@@ -80,6 +80,7 @@ const createBlogPost = async (req, res) => {
     content,
     category: String(category).toLowerCase(),
     country,
+    introduction,
     author,
   });
   await newPost.save();
@@ -92,7 +93,7 @@ const createBlogPost = async (req, res) => {
 };
 
 const updateBlogPost = asyncHandler(async (req, res) => {
-  const { _id, title, content, category, country, image } = req.body;
+  const { _id, title, content, category, country, introduction, image } = req.body;
 
   const post = await blogPost.findById(_id);
 
@@ -101,6 +102,7 @@ const updateBlogPost = asyncHandler(async (req, res) => {
     post.title = title;
     post.category = category;
     post.country = country;
+    post.introduction = introduction;
     post.image = image;
     await post.save();
 

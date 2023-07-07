@@ -26,6 +26,10 @@ const blogPostSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    introduction: {
+      type: String,
+      require: true,
+    }
   },
   { timestamps: true }
 );

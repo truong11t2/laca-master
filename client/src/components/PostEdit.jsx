@@ -23,12 +23,13 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./styleEditor.css";
 
-const PostEdit = ({ _id, content, title, category, country, image }) => {
+const PostEdit = ({ _id, content, title, category, country, introduction, image }) => {
   const [postContent, setPostContent] = useState(content);
   const [postTitle, setPostTitle] = useState(title);
   const [postImage, setPostImage] = useState(image);
   const [postCategory, setPostCategory] = useState(category);
   const [postCountry, setPostCountry] = useState(country);
+  const [postIntroduction, setPostIntroduction] = useState(introduction);
 
   const blogPostInfo = useSelector((state) => state.blogPosts);
   const { updateButtonLoading, removeButtonLoading } = blogPostInfo;
@@ -69,6 +70,7 @@ const PostEdit = ({ _id, content, title, category, country, image }) => {
         category: postCategory,
         image: postImage,
         country: postCountry,
+        introduction: postIntroduction,
       })
     );
   };
@@ -106,6 +108,7 @@ const PostEdit = ({ _id, content, title, category, country, image }) => {
                 <option value="Africa">Africa</option>
               </Select>
               <Input value={postCountry} onChange={(e) => setPostCountry(e.target.value)} size="sm" mb="3" />
+              <Textarea placeholder="Introduction about the post with 5 lines" onChange={(e) => setPostIntroduction(e.target.value)} />
               <ReactQuill
                 placeholder="Start writing something..."
                 value={postContent}
