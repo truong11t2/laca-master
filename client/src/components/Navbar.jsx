@@ -40,34 +40,36 @@ const links = [
   { linkName: "Contact", path: "/contact" },
 ];
 
+const homeLink = {linkName: "Home", path: "/blog/latest"}
+
 const blogLinks = [
   //Todo: route to most viewed posts
-  { linkName: "Most Viewed", category: "all" },
+  // { linkName: "Most Viewed", category: "all" },
   { linkName: "All Blogs", category: "all" },
   { linkName: "Latest Blogs", category: "latest" },
 ];
 
 const europeLinks = [
-  { linkName: "France", category: "europe" },
-  { linkName: "Germany", category: "europe" },
+  { linkName: "France", category: "europe", country: "france" },
+  { linkName: "Germany", category: "europe", country: "germany" },
 ];
 
 const asiaLinks = [
-  { linkName: "Japan", category: "asia" },
-  { linkName: "Korea", category: "asia" },
+  { linkName: "Japan", category: "asia", country: "japan" },
+  { linkName: "Korea", category: "asia", country: "korea" },
 ];
 
 const americaLinks = [
-  { linkName: "USA", category: "america" },
-  { linkName: "Canada", category: "america" },
+  { linkName: "USA", category: "america", country: "usa" },
+  { linkName: "Canada", category: "america", country: "canada" },
 ];
 const oceaniaLinks = [
-  { linkName: "Australia", category: "oceania" },
-  { linkName: "New Zealand", category: "oceania" },
+  { linkName: "Australia", category: "oceania", country: "australia" },
+  { linkName: "New Zealand", category: "oceania", country: "new-zealand" },
 ];
 const africaLinks = [
-  { linkName: "Ecrypt", category: "africa" },
-  { linkName: "South Africa", category: "africa" },
+  { linkName: "Ecrypt", category: "africa", country: "ecrypt" },
+  { linkName: "South Africa", category: "africa", country: "south-africa" },
 ];
 
 const NavLink = ({ path, children }) => (
@@ -140,6 +142,9 @@ const Navbar = () => {
   const user = useSelector((state) => state.user);
   const { userInfo } = user;
 
+  const isOceaniaMenu = false;
+  const isAfricaMenu = false;
+
   const dispatch = useDispatch();
   const toast = useToast();
   const logoutHandler = () => {
@@ -174,7 +179,7 @@ const Navbar = () => {
               </Flex>
             </Link>
             <HStack display={{ base: "none", md: "flex" }} pl="10">
-              <Menu isOpen={isMenuOpen}>
+{/*               <Menu isOpen={isMenuOpen}>
                 <MenuButton
                   onMouseEnter={onMenuOpen}
                   onMouseLeave={onMenuClose}
@@ -196,7 +201,12 @@ const Navbar = () => {
                     </MenuItem>
                   ))}
                 </MenuList>
-              </Menu>
+              </Menu> */}
+
+              {/* Home page link */}
+              <NavLink key={homeLink.linkName} path={homeLink.path}>
+                {homeLink.linkName}
+              </NavLink>
 
               {/* Europe Menu */}
               <Menu isOpen={isMenuEuropeOpen}>
@@ -216,7 +226,7 @@ const Navbar = () => {
                   onClick={isMenuEuropeOpen ? onMenuEuropeClose : onMenuEuropeOpen}
                 >
                   {europeLinks.map((link) => (
-                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/country/${link.country}`}>
                       {link.linkName}
                     </MenuItem>
                   ))}
@@ -241,7 +251,7 @@ const Navbar = () => {
                   onClick={isMenuAsiaOpen ? onMenuAsiaClose : onMenuAsiaOpen}
                 >
                   {asiaLinks.map((link) => (
-                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/country/${link.country}`}>
                       {link.linkName}
                     </MenuItem>
                   ))}
@@ -266,7 +276,7 @@ const Navbar = () => {
                   onClick={isMenuAmericaOpen ? onMenuAmericaClose : onMenuAmericaOpen}
                 >
                   {americaLinks.map((link) => (
-                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/country/${link.country}`}>
                       {link.linkName}
                     </MenuItem>
                   ))}
@@ -274,7 +284,7 @@ const Navbar = () => {
               </Menu>
 
               {/* Oceania Menu */}
-              <Menu isOpen={isMenuOceaniaOpen}>
+              {(isOceaniaMenu ? (<Menu isOpen={isMenuOceaniaOpen}>
                 <MenuButton
                   onMouseEnter={onMenuOceaniaOpen}
                   onMouseLeave={onMenuOceaniaClose}
@@ -291,15 +301,15 @@ const Navbar = () => {
                   onClick={isMenuOceaniaOpen ? onMenuOceaniaClose : onMenuOceaniaOpen}
                 >
                   {oceaniaLinks.map((link) => (
-                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/country/${link.country}`}>
                       {link.linkName}
                     </MenuItem>
                   ))}
                 </MenuList>
-              </Menu>
+              </Menu>):(<></>))}
 
               {/* Africa Menu */}
-              <Menu isOpen={isMenuAfricaOpen}>
+              {(isAfricaMenu) ? (<Menu isOpen={isMenuAfricaOpen}>
                 <MenuButton
                   onMouseEnter={onMenuAfricaOpen}
                   onMouseLeave={onMenuAfricaClose}
@@ -316,12 +326,12 @@ const Navbar = () => {
                   onClick={isMenuAfricaOpen ? onMenuAfricaClose : onMenuAfricaOpen}
                 >
                   {africaLinks.map((link) => (
-                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                    <MenuItem key={link.linkName} as={ReactLink} to={`/blog/country/${link.country}`}>
                       {link.linkName}
                     </MenuItem>
                   ))}
                 </MenuList>
-              </Menu>
+              </Menu>) : (<></>)}
 
               {/* About and Contact Menu */}
               {links.map((link) => (
@@ -397,7 +407,7 @@ const Navbar = () => {
             </Stack>
           )}
 
-          <Menu isOpen={isMenuOpenMobile}>
+{/*           <Menu isOpen={isMenuOpenMobile}>
             <MenuButton
               onClick={isMenuOpenMobile ? onMenuCloseMobile : onMenuOpenMobile}
               onMouseEnter={onMenuOpenMobile}
@@ -422,7 +432,14 @@ const Navbar = () => {
                 </MenuItem>
               ))}
             </MenuList>
-          </Menu>
+          </Menu> */}
+
+          {/* Home page link */}
+          <Stack as="nav" spacing="4" pt="4">
+            <NavLink key={homeLink.linkName} path={homeLink.path}>
+              {homeLink.linkName}
+            </NavLink>
+          </Stack>
 
           {/* Europe Mobile Menu */}
           <Menu isOpen={isMenuEuropeOpenMobile}>
@@ -445,7 +462,7 @@ const Navbar = () => {
               onClick={isMenuEuropeOpenMobile ? onMenuEuropeCloseMobile : onMenuEuropeOpenMobile}
             >
               {europeLinks.map((link) => (
-                <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                <MenuItem key={link.linkName} as={ReactLink} to={`/blog/country/${link.country}`}>
                   {link.linkName}
                 </MenuItem>
               ))}
@@ -473,7 +490,7 @@ const Navbar = () => {
               onClick={isMenuAsiaOpenMobile ? onMenuAsiaCloseMobile : onMenuAsiaOpenMobile}
             >
               {asiaLinks.map((link) => (
-                <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                <MenuItem key={link.linkName} as={ReactLink} to={`/blog/country/${link.country}`}>
                   {link.linkName}
                 </MenuItem>
               ))}
@@ -501,7 +518,7 @@ const Navbar = () => {
               onClick={isMenuAmericaOpenMobile ? onMenuAmericaCloseMobile : onMenuAmericaOpenMobile}
             >
               {americaLinks.map((link) => (
-                <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                <MenuItem key={link.linkName} as={ReactLink} to={`/blog/country/${link.country}`}>
                   {link.linkName}
                 </MenuItem>
               ))}
@@ -509,7 +526,7 @@ const Navbar = () => {
           </Menu>
 
           {/* Oceania Mobile Menu */}
-          <Menu isOpen={isMenuOceaniaOpenMobile}>
+          {(isOceaniaMenu) ? (<Menu isOpen={isMenuOceaniaOpenMobile}>
             <MenuButton
               onClick={isMenuOceaniaOpenMobile ? onMenuOceaniaCloseMobile : onMenuOceaniaOpenMobile}
               onMouseEnter={onMenuOceaniaOpenMobile}
@@ -529,15 +546,15 @@ const Navbar = () => {
               onClick={isMenuOceaniaOpenMobile ? onMenuOceaniaCloseMobile : onMenuOceaniaOpenMobile}
             >
               {oceaniaLinks.map((link) => (
-                <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                <MenuItem key={link.linkName} as={ReactLink} to={`/blog/country/${link.country}`}>
                   {link.linkName}
                 </MenuItem>
               ))}
             </MenuList>
-          </Menu>
+          </Menu>):(<></>)}
 
           {/* Africa Mobile Menu */}
-          <Menu isOpen={isMenuAfricaOpenMobile}>
+          {(isAfricaMenu) ? (<Menu isOpen={isMenuAfricaOpenMobile}>
             <MenuButton
               onClick={isMenuAfricaOpenMobile ? onMenuAfricaCloseMobile : onMenuAfricaOpenMobile}
               onMouseEnter={onMenuAfricaOpenMobile}
@@ -557,12 +574,12 @@ const Navbar = () => {
               onClick={isMenuAfricaOpenMobile ? onMenuAfricaCloseMobile : onMenuAfricaOpenMobile}
             >
               {africaLinks.map((link) => (
-                <MenuItem key={link.linkName} as={ReactLink} to={`/blog/${link.category}`}>
+                <MenuItem key={link.linkName} as={ReactLink} to={`/blog/country/${link.country}`}>
                   {link.linkName}
                 </MenuItem>
               ))}
             </MenuList>
-          </Menu>
+          </Menu>) : (<></>)}
 
           {/* About and Contact Menu */}
           <Stack as="nav" spacing="4" pt="4">

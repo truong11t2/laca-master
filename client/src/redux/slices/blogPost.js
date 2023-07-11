@@ -15,6 +15,7 @@ export const initialState = {
   nextPage: false,
   pageNumber: 1,
   category: null,
+  country: null,
 };
 
 export const blogPostSlice = createSlice({
@@ -30,6 +31,16 @@ export const blogPostSlice = createSlice({
       state.error = null;
     },
     setBlogPostByCategoryNew: (state, { payload }) => {
+      state.blogPosts = payload.map((x) => x);
+      state.loading = false;
+      state.error = null;
+    },
+    setBlogPostByCountry: (state, { payload }) => {
+      state.blogPosts = [...state.blogPosts, ...payload];
+      state.loading = false;
+      state.error = null;
+    },
+    setBlogPostByCountryNew: (state, { payload }) => {
       state.blogPosts = payload.map((x) => x);
       state.loading = false;
       state.error = null;
@@ -84,6 +95,11 @@ export const blogPostSlice = createSlice({
       state.removeButtonLoading = false;
       state.loading = false;
       state.pageNumber = 1;
+      state.category = null;
+      state.country = null;
+      state.status = 200;
+      state.lastId = 0;
+      state.nextPage = false;
     },
     setRemoveButtonLoading: (state, { payload }) => {
       state.removeButtonLoading = payload;
@@ -96,6 +112,9 @@ export const blogPostSlice = createSlice({
     setCategory: (state, { payload }) => {
       state.category = payload;
     },
+    setCountry: (state, { payload }) => {
+      state.country = payload;
+    },
   },
 });
 
@@ -104,6 +123,8 @@ export const {
   setBlogPost,
   setBlogPostByCategory,
   setBlogPostByCategoryNew,
+  setBlogPostByCountry,
+  setBlogPostByCountryNew,
   setError,
   blogPostCreated,
   blogPostRemoved,
@@ -116,6 +137,7 @@ export const {
   setLastId,
   setPageNumber,
   setCategory,
+  setCountry,
 } = blogPostSlice.actions;
 export default blogPostSlice.reducer;
 

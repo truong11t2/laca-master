@@ -19,29 +19,29 @@ import {
 import { Link as ReactLink, useParams } from "react-router-dom";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getBlogPostsByCategory, getNextPage, resetPost } from "../redux/actions/blogPostActions";
+import { getBlogPostsByCountry, getNextPage, resetPost } from "../redux/actions/blogPostActions";
 // import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 
-const BlogScreen = () => {
-  const { category: curCategory } = useParams();
+const BlogScreenCountry = () => {
+  const { country: curCountry } = useParams();
 
   const blogPostInfo = useSelector((state) => state.blogPosts);
-  const { blogPosts, loading, error, pageTitle, lastId, status, nextPage, pageNumber, category } = blogPostInfo;
+  const { blogPosts, loading, error, pageTitle, lastId, status, nextPage, pageNumber, country } = blogPostInfo;
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (curCategory !== category) {
+    if (curCountry !== country) {
       //console.log(blogPostInfo);
       window.scroll(0, 0);
       dispatch(resetPost());
     }
     if(status !== 201) {
-      dispatch(getBlogPostsByCategory(curCategory, lastId, nextPage, category));
+      dispatch(getBlogPostsByCountry(curCountry, lastId, nextPage, country, status));
     }
     
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, [curCategory, dispatch, nextPage, pageNumber, status]);
+  }, [curCountry, dispatch, nextPage, pageNumber, status]);
 
   const onScroll = () => {
     const scrollTop = document.documentElement.scrollTop;
@@ -59,7 +59,7 @@ const BlogScreen = () => {
         {pageTitle}
       </Heading>
       <>
-        <Heading>{curCategory.charAt(0).toUpperCase() + curCategory.slice(1)} Blogs</Heading>
+        <Heading>{curCountry.charAt(0).toUpperCase() + curCountry.slice(1)} Blogs</Heading>
         {blogPosts.map((post) => (
           <Box key={post._id} maxW={{ base: "3xl", lg: "7xl" }} px={{ base: "6", md: "8", lg: "20" }} py="6">
             <Stack direction={{ base: "column", lg: "row" }} spacing="7">
@@ -114,4 +114,4 @@ const BlogScreen = () => {
   );
 };
 
-export default BlogScreen;
+export default BlogScreenCountry;

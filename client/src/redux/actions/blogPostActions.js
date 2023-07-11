@@ -5,6 +5,8 @@ import {
   setBlogPost,
   setBlogPostByCategory,
   setBlogPostByCategoryNew,
+  setBlogPostByCountry,
+  setBlogPostByCountryNew,
   setError,
   blogPostCreated,
   blogPostRemoved,
@@ -17,6 +19,7 @@ import {
   setNextPage,
   setPageNumber,
   setCategory,
+  setCountry,
 } from "../slices/blogPost";
 import { deleteComments } from "../../components/comment/api";
 
@@ -38,6 +41,47 @@ export const getBlogPostsByCategory = (curCategory, lastId, nextPage, category) 
     } else {
       dispatch(setBlogPostByCategoryNew(data));
       dispatch(setCategory(curCategory));
+    }
+
+    dispatch(setStatus(status));
+    //Get the last post id in current page
+    if (data.length > 0) {
+      data.sort(compare);
+      dispatch(setLastId(data[data.length - 1]._id));
+    }
+  } catch (error) {
+    dispatch(
+      setError(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+          ? error.message
+          : "An unexpected error has occured. Please try again later."
+      )
+    );
+  }
+};
+
+export const getBlogPostsByCountry = (curCountry, lastId, nextPage, country) => async (dispatch) => {
+  dispatch(setLoading(true));
+
+  //Check if category is changed
+  //const prevCategory = useSelector((state) => state.blogPosts);
+  //const { oldCategory: category } = prevCategory;
+
+  try {
+    if (curCountry !== country) {
+      lastId = 0;
+      nextPage = false;
+    }
+    const { data, status } = await axios.get(`/api/blog-posts/country/${curCountry}/${lastId}/${nextPage}`);
+    console.log(lastId);
+    console.log(nextPage);
+    if (curCountry === country) {
+      dispatch(setBlogPostByCountry(data));
+    } else {
+      dispatch(setBlogPostByCountryNew(data));
+      dispatch(setCountry(curCountry));
     }
 
     dispatch(setStatus(status));
@@ -142,6 +186,10 @@ export const updatePost = (updatedPost) => async (dispatch, getState) => {
     );
   }
 };
+
+export const resetPost = () => async (dispatch) => {
+  dispatch(reset());
+}
 
 export const removePost = (_id) => async (dispatch, getState) => {
   dispatch(setRemoveButtonLoading(true));

@@ -2,6 +2,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import BlogScreen from "./screens/BlogScreen";
+import BlogScreenCountry from "./screens/BlogScreenCountry";
 import ContactScreen from "./screens/ContactScreen";
 import SingleBlogScreen from "./screens/SingleBlogScreen";
 import LoginScreen from "./screens/LoginScreen";
@@ -20,6 +21,7 @@ const App = () => {
         <main>
           <Routes>
             <Route path="/blog/:category" element={<BlogScreen />}></Route>
+            <Route path="/blog/country/:country" element={<BlogScreenCountry />}></Route>
             <Route path="/:id" element={<SingleBlogScreen />}></Route>
             <Route path="/contact" element={<ContactScreen />}></Route>
             <Route path="/login" element={<LoginScreen />}></Route>
