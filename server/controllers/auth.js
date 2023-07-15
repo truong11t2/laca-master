@@ -64,7 +64,7 @@ export async function forgotPassword(req, res, next) {
     }
 
     // Reset Token Gen and add to database hashed (private) version of token
-    const resetToken = User.getResetPasswordToken();
+    const resetToken = user.getResetPasswordToken();
 
     await user.save();
 
@@ -74,7 +74,7 @@ export async function forgotPassword(req, res, next) {
     // HTML Message
     const message = `
       <h1>You have requested a password reset</h1>
-      <p>Please make a put request to the following link:</p>
+      <p>Please follow the below link to create a new one:</p>
       <a href=${resetUrl} clicktracking=off>${resetUrl}</a>
     `;
 

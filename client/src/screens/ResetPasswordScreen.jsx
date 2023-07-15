@@ -11,58 +11,58 @@ import {
   AlertTitle,
   AlertDescription,
   useToast,
-  //Checkbox,
-  Link,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import PasswordField from "../components/PasswordField";
-import TextField from "../components/TextField";
-import { login } from "../redux/actions/userActions";
-import { Link as ReactLink } from "react-router-dom";
+import { resetPassword } from "../redux/actions/userActions";
 
-const LoginScreen = () => {
+const ResetPasswordScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  //for admin
-  //const redirect = "/admin-console";
-  //for user
-  const redirect = "/";
+  const redirect = "/login";
   const toast = useToast();
 
+  const {token} = useParams();
   const user = useSelector((state) => state.user);
   const { loading, error, userInfo } = user;
+  const [success, setSuccess] = useState(false);
 
   const headingBR = useBreakpointValue({ base: "sm", md: "md" });
   const boxBR = useBreakpointValue({ base: "transparent", md: "bg-surface" });
 
   useEffect(() => {
     window.scroll(0, 0);
-    if (userInfo) {
+    
+    if (success) {
       if (location.state?.from) {
         navigate(location.state.from);
       } else {
         navigate(redirect);
       }
-      toast({ description: "Login successful.", status: "success", isClosable: true });
+      toast({ description: "Password has been changed. Please login again.", status: "success", isClosable: true });
     }
-  }, [userInfo, redirect, error, navigate, location.state, toast]);
+  }, [userInfo, error, redirect, navigate, location.state, toast, success]);
 
   return (
     <Formik
-      initialValues={{ email: "", password: "" }}
+      initialValues={{ firstname: "", lastname: "", email: "", password: "", confirmPassword: "" }}
       validationSchema={Yup.object({
-        email: Yup.string().email("Invalid email.").required("An email address is required."),
         password: Yup.string()
-          .min(1, "Password is too short - must contain at least 6 characters.")
+          .min(6, "Password is too short - must contain at least 6 characters.")
           .required("Password is required."),
+        confirmPassword: Yup.string()
+          .min(6, "Password is too short - must contain at least 6 characters.")
+          .required("Please retype your password.")
+          .oneOf([Yup.ref("password"), null], "Password must match"),
       })}
       onSubmit={(values) => {
-        dispatch(login(values.email, values.password));
+        dispatch(resetPassword(values.password, token));
+        setSuccess(true);
       }}
     >
       {(formik) => (
@@ -70,7 +70,7 @@ const LoginScreen = () => {
           <Stack spacing="8">
             <Stack spacing="6">
               <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
-                <Heading size={headingBR}>Login</Heading>
+                <Heading size={headingBR}>Reset password</Heading>
               </Stack>
             </Stack>
             <Box
@@ -95,15 +95,18 @@ const LoginScreen = () => {
                 )}
                 <Stack spacing="5">
                   <FormControl>
-                    <TextField type="text" name="email" placeholder="you@example.com" label="Email*" />
                     <PasswordField type="password" name="password" placeholder="Type your password" label="Password*" />
-                    {/* <Checkbox>Remember me</Checkbox> */}
-                    <Link as={ReactLink} to="/forgotpassword" color={'blue.400'}>Forgot password?</Link>
+                    <PasswordField
+                      type="password"
+                      name="confirmPassword"
+                      placeholder="Retype your password"
+                      label="Confirm Password*"
+                    />
                   </FormControl>
                 </Stack>
                 <Stack spacing="6">
                   <Button colorScheme="blue" size="lg" fontSize="md" isLoading={loading} type="submit">
-                    Sign in
+                    Reset Password
                   </Button>
                 </Stack>
               </Stack>
@@ -115,4 +118,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default ResetPasswordScreen;

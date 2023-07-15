@@ -12,6 +12,8 @@ import Footer from "./components/Footer";
 import AboutScreen from "./screens/AboutScreen";
 import HomeScreen from "./screens/HomeScreen";
 import NotFoundScreen from "./screens/NotFoundScreen";
+import ForgotPasswordScreen from "./screens/ForgotPasswordScreen";
+import ResetPasswordScreen from "./screens/ResetPasswordScreen";
 
 const App = () => {
   return (
@@ -25,6 +27,8 @@ const App = () => {
             <Route path="/:id" element={<SingleBlogScreen />}></Route>
             <Route path="/contact" element={<ContactScreen />}></Route>
             <Route path="/login" element={<LoginScreen />}></Route>
+            <Route path="/forgotpassword" element={<ForgotPasswordScreen />}></Route>
+            <Route path="/passwordreset/:token" element={<ResetPasswordScreen />}></Route>
             <Route path="/register" element={<RegisterScreen />}></Route>
             <Route path="/admin-console" element={<AdminScreen />}></Route>
             <Route path="/create-post" element={<AdminScreen />}></Route>

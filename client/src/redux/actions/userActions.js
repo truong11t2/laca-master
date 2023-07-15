@@ -51,6 +51,47 @@ export const register = (firstname, lastname, email, password) => async (dispatc
   }
 };
 
+export const forgotPassword = (email) => async(dispatch) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    await axios.post("/api/auth/forgotpassword", {email}, config);
+  } catch (error) {
+    dispatch(
+      setError(
+        error.response && error.response.data.error
+          ? error.response.data.error
+          : error.message
+          ? error.message
+          : "An unexpected error has occured. Please try again later."
+      )
+    );
+  }
+};
+
+export const resetPassword = (password, token) => async(dispatch) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    await axios.put("/api/auth/passwordreset/" + token, {password}, config);
+  } catch (error) {
+    dispatch(
+      setError(
+        error.response && error.response.data.error
+          ? error.response.data.error
+          : error.message
+          ? error.message
+          : "An unexpected error has occured. Please try again later."
+      )
+    );
+  }
+}
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   dispatch(userLogout());
