@@ -96,3 +96,24 @@ export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   dispatch(userLogout());
 };
+
+export const subscribe = (email) => async(dispatch) => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    await axios.post("/api/subscribe/email", {email}, config);
+  } catch (error) {
+    dispatch(
+      setError(
+        error.response && error.response.data.error
+          ? error.response.data.error
+          : error.message
+          ? error.message
+          : "An unexpected error has occured. Please try again later."
+      )
+    );
+  }
+}

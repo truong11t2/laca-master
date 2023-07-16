@@ -12,18 +12,24 @@ import {
   Flex,
   Icon,
   useToast,
+  FormControl,
 } from "@chakra-ui/react";
 import { FaTwitter, FaYoutube, FaFacebook, FaInstagram } from "react-icons/fa";
 import { GiWorld } from "react-icons/gi";
 import { Link as ReactLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../redux/actions/userActions";
+import { logout, subscribe } from "../redux/actions/userActions";
+import { useState } from "react";
+import { CheckIcon } from '@chakra-ui/icons';
 
 const Footer = () => {
   const toast = useToast();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const { userInfo } = user;
+  const [email, setEmail] = useState('');
+  const [state, setState] = useState('initial');
+  const [error, setError] = useState(false);
 
   const logoutHandler = () => {
     dispatch(logout());
@@ -60,16 +66,43 @@ const Footer = () => {
                 </Stack>
               </Stack>
             </Stack> */}
-            <Stack spacing="4">
+            <Stack spacing="4" >
               <Text fontSize="sm" fontWeight="semibold" color="subtle">
                 Stay up to date
               </Text>
-              <Stack spacing="4" direction={{ base: "column", sm: "row" }} maxW={{ lg: "360px" }}>
-                <Input placeholder="Enter your email" type="email" required />
-                <Button variant="primary" type="submit" flexShrink={0}>
-                  Subscribe
-                </Button>
+              <Stack spacing="4" direction={{ base: "column", sm: "row" }} maxW={{ lg: "360px" }} 
+              as={'form'}
+              onSubmit={(e) => {
+                e.preventDefault();
+                setError(false);
+                setState("submitting");
+                //Todo: Store email in database
+                dispatch(subscribe(email));
+                console.log(email);
+                console.log("Owesome, you will receive lastest news from us.")
+                setState('success');
+              }
+            }>
+                <FormControl>
+                  <Input placeholder="Enter your email" type="email" required value={email} disabled={state !== 'initial'} onChange={(e) => setEmail(e.target.value)}/>
+                  
+                </FormControl>
+                <FormControl>
+                <Button variant="primary" flexShrink={0}
+                    isLoading={state === "submitting"}
+                    type={state === "success" ? "button" : "submit"} >
+                    {state === 'success' ? <CheckIcon /> : 'Subscribe'}
+                  </Button>
+                </FormControl>
               </Stack>
+              <Text
+                mt={0}
+                textAlign={'left'}
+                color={error ? 'red.500' : 'gray.500'}>
+                {error
+                  ? 'Oh no an error occured! 😢 Please try again later.'
+                  : "You won't receive any spam! ✌️"}
+              </Text>
               {userInfo ? (
                 <Button variant="link" onClick={logoutHandler} alignSelf="flex-start">
                   Logout

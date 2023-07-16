@@ -11,6 +11,7 @@ import authRouter from "./routes/auth.js";
 import privateRouter from "./routes/private.js";
 import errorHandler from "./middlewares/error.js";
 import commentRouter from "./routes/comment.js";
+import subscriberRouter from "./routes/subscriber.js";
 
 db();
 const app = express();
@@ -27,6 +28,7 @@ app.use(
 app.use("/api/blog-posts", blogPostRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/comment", commentRouter);
+app.use("/api/subscribe", subscriberRouter);
 
 app.get("/api/config/emailjs", (req, res) =>
   res.send({
