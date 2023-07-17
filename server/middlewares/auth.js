@@ -1,8 +1,9 @@
-import { verify } from "jsonwebtoken";
+import pkg from "jsonwebtoken";
 import ErrorResponse from "../utils/errorResponse.js";
 import User from "../models/user.js";
 
 const protect = async (req, res, next) => {
+  const {verify} = pkg;
   let token;
 
   if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
