@@ -16,7 +16,7 @@ import {
   VStack,
   Button,
 } from "@chakra-ui/react";
-import { Link as ReactLink, useParams } from "react-router-dom";
+import { Link as ReactLink, useParams, useLocation } from "react-router-dom";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getBlogPostsByCategory, getNextPage, resetPost } from "../redux/actions/blogPostActions";
@@ -28,6 +28,8 @@ const BlogScreen = () => {
   const blogPostInfo = useSelector((state) => state.blogPosts);
   const { blogPosts, loading, error, pageTitle, lastId, status, nextPage, pageNumber, category } = blogPostInfo;
   const dispatch = useDispatch();
+
+  const location = useLocation();
 
   useEffect(() => {
     if (curCategory !== category) {
@@ -42,6 +44,11 @@ const BlogScreen = () => {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, [curCategory, dispatch, nextPage, pageNumber, status]);
+
+  //Reset blog post when changing route
+  useEffect(() => {
+    dispatch(resetPost());
+  }, [dispatch, location])
 
   const onScroll = () => {
     const scrollTop = document.documentElement.scrollTop;

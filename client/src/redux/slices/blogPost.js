@@ -86,6 +86,7 @@ export const blogPostSlice = createSlice({
       state.pageNumber += 1;
     },
     reset: (state) => {
+      state.blogPosts = [];
       state.blogPost = null;
       state.error = null;
       state.blogPostCreated = false;
