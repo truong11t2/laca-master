@@ -12,9 +12,10 @@ import {
   Flex,
   Button,
 } from "@chakra-ui/react";
-import { getBlogPostsByCategory, resetLoaderAndFlags, getNextPage } from "../redux/actions/blogPostActions";
+import { getBlogPostsByCategory, resetLoaderAndFlags, getNextPage, resetPost } from "../redux/actions/blogPostActions";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import PostEdit from "./PostEdit";
+import { useLocation } from "react-router-dom";
 
 const EditBlogPost = () => {
   const dispatch = useDispatch();
@@ -34,11 +35,14 @@ const EditBlogPost = () => {
     category,
   } = blogPostInfo;
 
+  const location = useLocation();
+
   useEffect(() => {
-    dispatch(resetLoaderAndFlags());
+    //dispatch(resetLoaderAndFlags());
     dispatch(getBlogPostsByCategory("all", lastId, nextPage, category));
     window.addEventListener("scroll", onScroll);
     if (blogPostUpdated) {
+      dispatch(resetPost());
       window.scroll(0, 0);
       toast({
         title: "Blog post saved.",
@@ -49,6 +53,7 @@ const EditBlogPost = () => {
       });
     }
     if (blogPostRemoved) {
+      dispatch(resetPost());
       window.scroll(0, 0);
       toast({
         title: "Blog post removed.",
@@ -58,8 +63,13 @@ const EditBlogPost = () => {
       });
     }
     return () => window.removeEventListener("scroll", onScroll);
-  }, [blogPostRemoved, blogPostUpdated, dispatch, nextPage, status, toast]);
+  }, [blogPostRemoved, blogPostUpdated, nextPage]);
 
+    //Reset blog post when changing route
+    useEffect(() => {
+      dispatch(resetPost());
+    }, [dispatch, location])
+    
   const onScroll = () => {
     const scrollTop = document.documentElement.scrollTop;
     const scrollHeight = document.documentElement.scrollHeight;
@@ -96,6 +106,7 @@ const EditBlogPost = () => {
                   author={post.author}
                   category={post.category}
                   country={post.country}
+                  introduction={post.introduction}
                   title={post.title}
                   _id={post._id}
                 />

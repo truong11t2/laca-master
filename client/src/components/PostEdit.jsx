@@ -108,7 +108,7 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image 
                 <option value="Africa">Africa</option>
               </Select>
               <Input value={postCountry} onChange={(e) => setPostCountry(e.target.value)} size="sm" mb="3" />
-              <Textarea placeholder="Introduction about the post with 5 lines" onChange={(e) => setPostIntroduction(e.target.value)} />
+              <Textarea value={postIntroduction} placeholder="Introduction about the post with 5 lines" onChange={(e) => setPostIntroduction(e.target.value)} />
               <ReactQuill
                 placeholder="Start writing something..."
                 value={postContent}

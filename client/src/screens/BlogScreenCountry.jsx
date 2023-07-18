@@ -84,7 +84,7 @@ const BlogScreenCountry = () => {
                   <Box display={{ base: "none", md: "flex" }}>
                     <Text>by {post.author}</Text>
                     <Text mx="2">|</Text>
-                    <Text>{new Date(post.createdAt).toDateString()}</Text>
+                    <Text>{new Date(post.createdAt).toDateString().split(' ').slice(1).join(' ')}</Text>
                     <Text mx="2">|</Text>
                   </Box>
                   <Text>

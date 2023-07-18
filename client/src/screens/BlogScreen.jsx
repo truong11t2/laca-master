@@ -68,13 +68,17 @@ const BlogScreen = () => {
       <>
         <Heading>{curCategory.charAt(0).toUpperCase() + curCategory.slice(1)} Blogs</Heading>
         {blogPosts.map((post) => (
-          <Box key={post._id} maxW={{ base: "3xl", lg: "7xl" }} px={{ base: "6", md: "8", lg: "20" }} py="6">
+          <Box key={post._id} maxW={{ base: "3xl", lg: "5xl" }} px={{ base: "6", md: "8", lg: "20" }} py="6">
             <Stack direction={{ base: "column", lg: "row" }} spacing="7">
-              <Image src={post.image} minW={{ lg: "400px" }} maxH="280px" loading={<Spinner />} fit="cover" />
+              <Link as={ReactLink} to={`/${post._id}`}>
+                <Image src={post.image} minW={{ lg: "350px" }} maxH="245px" loading={<Spinner />} fit="cover" />
+              </Link>
               <Flex direction="column">
-                <Text fontSize="2xl" fontWeight="semibold" mb="3">
-                  {post.title}
-                </Text>
+                <Link as={ReactLink} to={`/${post._id}`}>
+                  <Text fontSize="2xl" fontWeight="semibold" mb="3">
+                    {post.title}
+                  </Text>
+                </Link>
                 <Text noOfLines="5" fontSize="lg">
                   {post.introduction}
                 </Text>
@@ -84,7 +88,7 @@ const BlogScreen = () => {
                   <Box display={{ base: "none", md: "flex" }}>
                     <Text>by {post.author}</Text>
                     <Text mx="2">|</Text>
-                    <Text>{new Date(post.createdAt).toDateString()}</Text>
+                    <Text>{new Date(post.createdAt).toDateString().split(' ').slice(1).join(' ')}</Text>
                     <Text mx="2">|</Text>
                   </Box>
                   <Text>
