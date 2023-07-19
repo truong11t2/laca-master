@@ -38,8 +38,10 @@ const EditBlogPost = () => {
   const location = useLocation();
 
   useEffect(() => {
-    //dispatch(resetLoaderAndFlags());
-    dispatch(getBlogPostsByCategory("all", lastId, nextPage, category));
+      //dispatch(resetLoaderAndFlags());
+    if(status !== 201) {
+      dispatch(getBlogPostsByCategory("all", lastId, nextPage, category));
+    }
     window.addEventListener("scroll", onScroll);
     if (blogPostUpdated) {
       dispatch(resetPost());
@@ -63,7 +65,7 @@ const EditBlogPost = () => {
       });
     }
     return () => window.removeEventListener("scroll", onScroll);
-  }, [blogPostRemoved, blogPostUpdated, nextPage]);
+  }, [blogPostRemoved, blogPostUpdated, pageNumber, status]);
 
     //Reset blog post when changing route
     useEffect(() => {
@@ -75,7 +77,7 @@ const EditBlogPost = () => {
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = document.documentElement.clientHeight;
 
-    if (scrollTop + clientHeight >= scrollHeight) {
+    if (scrollTop + clientHeight >= scrollHeight && status !== 201) {
       dispatch(getNextPage());
     }
   };

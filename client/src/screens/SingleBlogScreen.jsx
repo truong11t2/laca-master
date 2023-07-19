@@ -54,7 +54,7 @@ const SingleBlogScreen = () => {
             <Flex width="full" py="2" justifyContent="center" px="2">
               <Text> By {blogPost.author}</Text>
               <Text mx="2">|</Text>
-              <Text>{new Date(blogPost.createdAt).toDateString().split(' ').slice(1).join(' ')}</Text>
+              <Text>{new Date(blogPost.updatedAt).toDateString().split(' ').slice(1).join(' ')}</Text>
               <Text mx="2">|</Text>
               {/* <Text>{blogPost.category.charAt(0).toUpperCase() + blogPost.category.slice(1)}</Text> */}
               <Link pl="1" as={ReactLink} to={`/blog/${blogPost.category}`}>

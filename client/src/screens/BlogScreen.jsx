@@ -30,19 +30,19 @@ const BlogScreen = () => {
   const dispatch = useDispatch();
 
   const location = useLocation();
-
+  
   useEffect(() => {
-    if (curCategory !== category) {
-      //console.log(blogPostInfo);
-      window.scroll(0, 0);
-      dispatch(resetPost());
-    }
-    if(status !== 201) {
+      if (curCategory !== category) {
+        //console.log(blogPostInfo);
+        window.scroll(0, 0);
+        dispatch(resetPost());
+      }
+      if(status !== 201) {
       dispatch(getBlogPostsByCategory(curCategory, lastId, nextPage, category));
-    }
-    
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+      }
+      
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
   }, [curCategory, dispatch, nextPage, pageNumber, status]);
 
   //Reset blog post when changing route
@@ -88,7 +88,7 @@ const BlogScreen = () => {
                   <Box display={{ base: "none", md: "flex" }}>
                     <Text>by {post.author}</Text>
                     <Text mx="2">|</Text>
-                    <Text>{new Date(post.createdAt).toDateString().split(' ').slice(1).join(' ')}</Text>
+                    <Text>{new Date(post.updatedAt).toDateString().split(' ').slice(1).join(' ')}</Text>
                     <Text mx="2">|</Text>
                   </Box>
                   <Text>

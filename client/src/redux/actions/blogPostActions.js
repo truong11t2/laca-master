@@ -75,8 +75,8 @@ export const getBlogPostsByCountry = (curCountry, lastId, nextPage, country) => 
       nextPage = false;
     }
     const { data, status } = await axios.get(`/api/blog-posts/country/${curCountry}/${lastId}/${nextPage}`);
-    console.log(lastId);
-    console.log(nextPage);
+    //console.log(lastId);
+    //console.log(nextPage);
     if (curCountry === country) {
       dispatch(setBlogPostByCountry(data));
     } else {
