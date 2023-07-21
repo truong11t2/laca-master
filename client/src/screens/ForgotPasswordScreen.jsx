@@ -44,7 +44,7 @@ import {
         } else {
           navigate(redirect);
         }
-        toast({ description: "Email has been sent, it could be in SPAM folder. Please check you mail box to setup new password. ", status: "success", duration: 8000, isClosable: true });
+        toast({ description: "Email đã được gửi, có thể trong thư mục Spam. Vui lòng kiểm tra mail để tạo mới mật khẩu. ", status: "success", duration: 8000, isClosable: true });
       }
     }, [redirect, success, navigate, location.state, toast]);
   
@@ -52,7 +52,7 @@ import {
       <Formik
         initialValues={{ email: "" }}
         validationSchema={Yup.object({
-          email: Yup.string().email("Invalid email.").required("An email address is required."),
+          email: Yup.string().email("Email không hợp lệ.").required("Địa chỉ email là bắt buộc."),
         })}
         onSubmit={(values) => {
           dispatch(forgotPassword(values.email));
@@ -64,7 +64,7 @@ import {
             <Stack spacing="8">
               <Stack spacing="6">
                 <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
-                  <Heading size={headingBR}>Reset password</Heading>
+                  <Heading size={headingBR}>Tạo Mới Mật Khẩu</Heading>
                 </Stack>
               </Stack>
               <Box
@@ -89,7 +89,7 @@ import {
                   )}
                   <Stack spacing="5">
                     <FormControl>
-                      <TextField type="text" name="email" placeholder="you@example.com" label="Email*" />
+                      <TextField type="text" name="email" placeholder="abc@gmail.com" label="Email*" />
                     </FormControl>
                   </Stack>
                   <Stack spacing="6">
@@ -99,7 +99,7 @@ import {
                 justify={'space-between'}>
               </Stack>
                   <Button colorScheme="blue" size="lg" fontSize="md" isLoading={loading} type="submit">
-                    Send
+                    Gửi
                   </Button>
                 </Stack>
                 </Stack>

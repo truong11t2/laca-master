@@ -45,21 +45,21 @@ const Comment = ({
         <div className="comment-actions">
           {canReply && (
             <div className="comment-action" onClick={() => setActiveComment({ _id: comment._id, type: "replying" })}>
-              Reply
+              Trả lời
             </div>
           )}
           {canEdit && (
             <div className="comment-action" onClick={() => setActiveComment({ _id: comment._id, type: "editing" })}>
-              Edit
+              Chỉnh sửa
             </div>
           )}
           {canDelete && (
             <div className="comment-action" onClick={() => deleteComment(comment._id, currentUser)}>
-              Delete
+              Xóa
             </div>
           )}
         </div>
-        {isReplying && <CommentForm submitLabel="Reply" handleSubmit={(text) => addComment(text, replyId)} />}
+        {isReplying && <CommentForm submitLabel="Trả lời" handleSubmit={(text) => addComment(text, replyId)} />}
         {replies.length > 0 && (
           <div className="replies">
             {replies.map((reply) => (

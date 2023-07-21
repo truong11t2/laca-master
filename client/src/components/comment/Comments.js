@@ -7,6 +7,8 @@ import {
   updateComment as updateCommentApi,
   deleteComment as deleteCommentApi,
 } from "./api";
+import { Link as ReactLink } from "react-router-dom";
+import { Link } from "@chakra-ui/react";
 
 const Comments = ({ postId, currentUser }) => {
   const [backendComments, setBackendComments] = useState([]);
@@ -56,14 +58,14 @@ const Comments = ({ postId, currentUser }) => {
 
   return (
     <div className="comments">
-      <h3 className="comments-title">Comments</h3>
+      <h3 className="comments-title">Bình luận</h3>
       {currentUser ? (
         <div>
-          <div className="comment-form-title">Write comment</div>
-          <CommentForm submitLabel="Write" handleSubmit={addComment} />
+          <div className="comment-form-title">Viết bình luận</div>
+          <CommentForm submitLabel="Đăng" handleSubmit={addComment} />
         </div>
       ) : (
-        <div className="comment-form-title">Please login to comment</div>
+        <div className="comment-form-title">Vui lòng <Link as={ReactLink} to={`/login`} color={"blue.500"}>đăng nhập</Link> để bình luận</div>
       )}
       <div className="comments-container">
         {rootComments.map((rootComment) => (

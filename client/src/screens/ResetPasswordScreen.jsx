@@ -44,7 +44,7 @@ const ResetPasswordScreen = () => {
       } else {
         navigate(redirect);
       }
-      toast({ description: "Password has been changed. Please login again.", status: "success", isClosable: true });
+      toast({ description: "Mật khẩu đã đổi. Vui lòng đăng nhập.", status: "success", isClosable: true });
     }
   }, [userInfo, error, redirect, navigate, location.state, toast, success]);
 
@@ -53,12 +53,12 @@ const ResetPasswordScreen = () => {
       initialValues={{ firstname: "", lastname: "", email: "", password: "", confirmPassword: "" }}
       validationSchema={Yup.object({
         password: Yup.string()
-          .min(6, "Password is too short - must contain at least 6 characters.")
-          .required("Password is required."),
+          .min(6, "Mật khẩu quá ngắn - chứa ít nhất 6 ký tự.")
+          .required("Mật khẩu là bắt buộc."),
         confirmPassword: Yup.string()
-          .min(6, "Password is too short - must contain at least 6 characters.")
-          .required("Please retype your password.")
-          .oneOf([Yup.ref("password"), null], "Password must match"),
+          .min(6, "Mật khẩu quá ngắn - chứa ít nhất 6 ký tự.")
+          .required("Vui lòng nhập lại mật khẩu.")
+          .oneOf([Yup.ref("password"), null], "Mật khẩu phải giống nhau"),
       })}
       onSubmit={(values) => {
         dispatch(resetPassword(values.password, token));
@@ -70,7 +70,7 @@ const ResetPasswordScreen = () => {
           <Stack spacing="8">
             <Stack spacing="6">
               <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
-                <Heading size={headingBR}>Reset password</Heading>
+                <Heading size={headingBR}>Tạo mới mật khẩu</Heading>
               </Stack>
             </Stack>
             <Box
@@ -89,24 +89,24 @@ const ResetPasswordScreen = () => {
                     textAlign="center"
                   >
                     <AlertIcon />
-                    <AlertTitle>We are sorry!</AlertTitle>
+                    <AlertTitle>Có lỗi xảy ra!</AlertTitle>
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
                 <Stack spacing="5">
                   <FormControl>
-                    <PasswordField type="password" name="password" placeholder="Type your password" label="Password*" />
+                    <PasswordField type="password" name="password" placeholder="Nhập mật khẩu" label="Mật khẩu*" />
                     <PasswordField
                       type="password"
                       name="confirmPassword"
-                      placeholder="Retype your password"
-                      label="Confirm Password*"
+                      placeholder="Nhập lại mật khẩu"
+                      label="Xác nhận mật khẩu*"
                     />
                   </FormControl>
                 </Stack>
                 <Stack spacing="6">
                   <Button colorScheme="blue" size="lg" fontSize="md" isLoading={loading} type="submit">
-                    Reset Password
+                    Tạo mật khẩu mới
                   </Button>
                 </Stack>
               </Stack>

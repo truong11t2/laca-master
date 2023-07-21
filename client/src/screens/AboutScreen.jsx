@@ -23,24 +23,26 @@ const AboutScreen = () => (
               </Text>
             </Flex> */}
 
-            <Heading fontWeight="normal" size={{ base: "md", md: "lg" }} color="gray.400">
-              <span style={{ fontWeight: "bold" }}>Travel is my life.</span> Since 2023, I've been travelling around the
-              world nonstop. If you also love to travel, you're in the right place.
+            <Heading fontWeight="normal" size={{ base: "sm", md: "md" }} color="gray.500">
+              <span style={{ fontWeight: "bold" }}>Xin chào, Mình là Trường - Một người yêu thích du lịch.</span> Mình hay la cà một mình để tận hưởng sự tự do. 
+              Blog này là nơi mình muốn chia sẻ những thông tin mình cảm thấy hữu ích cho những người cùng sở thích. 
             </Heading>
 
-            <Heading fontWeight="normal" size={{ base: "md", md: "lg" }} color="gray.400">
-              Let's get started...
+            <Heading fontWeight="normal" size={{ base: "sm", md: "md" }} color="gray.500">
+              Nếu bạn là người đam mê du lịch, thích chia sẽ những kỷ niệm đáng nhớ thì đây cũng có thể là một nơi để bạn có thể thử.
+              Liên hệ với mình <Link as={ReactLink} to="/contact" color="blue.500">tại đây</Link> để nhận được quyền viết bài trên blog.
             </Heading>
+            <Heading fontWeight="normal" size={{ base: "sm", md: "md" }} color="gray.500">Chúc một ngày tốt lành!</Heading>
           </Stack>
           <HStack>
             <Link as={ReactLink} to="/blog/all" color="blue.500" fontWeight="bold" fontSize="xl">
-              Explore my Blog
+              Khám Phá Blog
             </Link>
             <Icon color="blue.500" as={FaArrowRight} />
           </HStack>
         </Stack>
       </Box>
-      <Flex flex="1" overflow="hidden">
+        <Flex flex="1" overflow="hidden">
         <Image src="/images/landing.jpg" alt="Lovely Image" maxH="550px" minW="300px" objectFit="cover" flex="1" />
       </Flex>
     </Stack>

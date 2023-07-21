@@ -110,11 +110,11 @@ const NewPostTab = () => {
         <Text>Create new Blog</Text>
         <Input placeholder="Title" size="lg" onChange={(e) => setPostTitle(e.target.value)} />
         <Select placeholder="Choose a Category" size="lg" onChange={(e) => setPostCategory(e.target.value)}>
-          <option value="Europe">Europe</option>
-          <option value="Asia">Asia</option>
-          <option value="Oceania">Oceania</option>
-          <option value="America">America</option>
-          <option value="Africa">Africa</option>
+          <option value="Europe">Châu Âu</option>
+          <option value="Asia">Châu Á</option>
+          <option value="Oceania">Châu Đại Dương</option>
+          <option value="America">Châu Mỹ</option>
+          <option value="Africa">Châu Phi</option>
         </Select>
         <Input placeholder="Country" size="lg" onChange={(e) => setPostCountry(e.target.value)} />
         <Textarea placeholder="Introduction about the post with 5 lines" onChange={(e) => setPostIntroduction(e.target.value)} />

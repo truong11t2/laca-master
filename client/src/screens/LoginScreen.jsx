@@ -48,7 +48,7 @@ const LoginScreen = () => {
       } else {
         navigate(redirect);
       }
-      toast({ description: "Login successful.", status: "success", isClosable: true });
+      toast({ description: "Đăng nhập thành công.", status: "success", isClosable: true });
     }
   }, [userInfo, redirect, error, navigate, location.state, toast]);
 
@@ -56,10 +56,10 @@ const LoginScreen = () => {
     <Formik
       initialValues={{ email: "", password: "" }}
       validationSchema={Yup.object({
-        email: Yup.string().email("Invalid email.").required("An email address is required."),
+        email: Yup.string().email("Email không hợp lệ.").required("Địa chỉ email là bắt buộc."),
         password: Yup.string()
-          .min(1, "Password is too short - must contain at least 6 characters.")
-          .required("Password is required."),
+          .min(1, "Mật khẩu quá ngắn - chứa ít nhất 6 ký tự")
+          .required("Mật khẩu là bắt buộc."),
       })}
       onSubmit={(values) => {
         dispatch(login(values.email, values.password));
@@ -70,7 +70,7 @@ const LoginScreen = () => {
           <Stack spacing="8">
             <Stack spacing="6">
               <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
-                <Heading size={headingBR}>Login</Heading>
+                <Heading size={headingBR}>Đăng Nhập</Heading>
               </Stack>
             </Stack>
             <Box
@@ -89,21 +89,21 @@ const LoginScreen = () => {
                     textAlign="center"
                   >
                     <AlertIcon />
-                    <AlertTitle>We are sorry!</AlertTitle>
+                    <AlertTitle>Có lỗi xảy ra. Thành thật xin lỗi!</AlertTitle>
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
                 <Stack spacing="5">
                   <FormControl>
-                    <TextField type="text" name="email" placeholder="you@example.com" label="Email*" />
-                    <PasswordField type="password" name="password" placeholder="Type your password" label="Password*" />
+                    <TextField type="text" name="email" placeholder="abc@gmail.com" label="Email*" />
+                    <PasswordField type="password" name="password" placeholder="Nhập mật khẩu" label="Mật khẩu*" />
                     {/* <Checkbox>Remember me</Checkbox> */}
-                    <Link as={ReactLink} to="/forgotpassword" color={'blue.400'}>Forgot password?</Link>
+                    <Link as={ReactLink} to="/forgotpassword" color={'blue.400'}>Quên mật khẩu?</Link>
                   </FormControl>
                 </Stack>
                 <Stack spacing="6">
                   <Button colorScheme="blue" size="lg" fontSize="md" isLoading={loading} type="submit">
-                    Sign in
+                    Đăng nhập
                   </Button>
                 </Stack>
               </Stack>

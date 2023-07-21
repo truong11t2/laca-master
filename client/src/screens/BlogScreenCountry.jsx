@@ -66,7 +66,7 @@ const BlogScreenCountry = () => {
         {pageTitle}
       </Heading>
       <>
-        <Heading>{curCountry.charAt(0).toUpperCase() + curCountry.slice(1)} Blogs</Heading>
+        <Heading>{/* {curCountry.charAt(0).toUpperCase() + curCountry.slice(1)} */} Bài Viết</Heading>
         {blogPosts.map((post) => (
           <Box key={post._id} maxW={{ base: "3xl", lg: "7xl" }} px={{ base: "6", md: "8", lg: "20" }} py="6">
             <Stack direction={{ base: "column", lg: "row" }} spacing="7">
@@ -82,20 +82,20 @@ const BlogScreenCountry = () => {
                 <Divider />
                 <Flex width="full" py="2">
                   <Box display={{ base: "none", md: "flex" }}>
-                    <Text>by {post.author}</Text>
+                    <Text>Tác giả: {post.author}</Text>
                     <Text mx="2">|</Text>
                     <Text>{new Date(post.updatedAt).toDateString().split(' ').slice(1).join(' ')}</Text>
                     <Text mx="2">|</Text>
                   </Box>
                   <Text>
-                    Category:
+                    Khu vực:
                     <Link pl="1" as={ReactLink} to={`/blog/${post.category}`}>
                       {post.category.charAt(0).toUpperCase() + post.category.slice(1)}
                     </Link>
                   </Text>
                   <Spacer />
                   <Link as={ReactLink} to={`/${post._id}`}>
-                    Read more...
+                    Xem thêm...
                   </Link>
                 </Flex>
                 <Divider />
@@ -110,7 +110,7 @@ const BlogScreenCountry = () => {
         ) : error ? (
           <Alert status="error">
             <AlertIcon />
-            <AlertTitle>We are sorry!</AlertTitle>
+            <AlertTitle>Có lỗi xảy ra!</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         ) : (

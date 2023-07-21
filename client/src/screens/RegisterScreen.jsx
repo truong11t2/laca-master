@@ -42,7 +42,7 @@ const RegisterScreen = () => {
       } else {
         navigate(redirect);
       }
-      toast({ description: "Register successful.", status: "success", isClosable: true });
+      toast({ description: "Đăng ký thành công.", status: "success", isClosable: true });
     }
   }, [userInfo, redirect, error, navigate, location.state, toast]);
 
@@ -51,19 +51,19 @@ const RegisterScreen = () => {
       initialValues={{ firstname: "", lastname: "", email: "", password: "", confirmPassword: "" }}
       validationSchema={Yup.object({
         firstname: Yup.string()
-          .min(2, "First name is too short - must contain at least 2 characters.")
-          .required("First name is required."),
+          .min(2, "Tên quá ngắn - chứa ít nhất 2 ký tự.")
+          .required("Tên là bắt buộc."),
           lastname: Yup.string()
-          .min(2, "Last name is too short - must contain at least 2 characters.")
-          .required("Last name is required."),
-        email: Yup.string().email("Invalid email.").required("An email address is required."),
+          .min(2, "Họ quá ngắn - chứa ít nhất 2 ký tự.")
+          .required("Họ là bắt buộc."),
+        email: Yup.string().email("Email không hợp lệ.").required("Địa chỉ email là bắt buộc."),
         password: Yup.string()
-          .min(6, "Password is too short - must contain at least 6 characters.")
-          .required("Password is required."),
+          .min(6, "Mật khẩu quá ngắn - chứa ít nhất 6 ký tự.")
+          .required("Mật khẩu là bắt buộc."),
         confirmPassword: Yup.string()
-          .min(6, "Password is too short - must contain at least 6 characters.")
-          .required("Please retype your password.")
-          .oneOf([Yup.ref("password"), null], "Password must match"),
+          .min(6, "Mật khẩu quá ngắn - chứa ít nhất 6 ký tự.")
+          .required("Vui lòng nhập lại mật khẩu.")
+          .oneOf([Yup.ref("password"), null], "Mật khẩu phải giống nhau"),
       })}
       onSubmit={(values) => {
         dispatch(register(values.firstname, values.lastname, values.email, values.password));
@@ -74,7 +74,7 @@ const RegisterScreen = () => {
           <Stack spacing="8">
             <Stack spacing="6">
               <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
-                <Heading size={headingBR}>Register account</Heading>
+                <Heading size={headingBR}>Đăng Ký Tài Khoản</Heading>
               </Stack>
             </Stack>
             <Box
@@ -93,27 +93,27 @@ const RegisterScreen = () => {
                     textAlign="center"
                   >
                     <AlertIcon />
-                    <AlertTitle>We are sorry!</AlertTitle>
+                    <AlertTitle>Có lỗi xảy ra. Thành thật xin lỗi!</AlertTitle>
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
                 <Stack spacing="5">
                   <FormControl>
-                    <TextField type="text" name="firstname" placeholder="First name" label="First Name*" />
-                    <TextField type="text" name="lastname" placeholder="Last name" label="Last Name*" />
-                    <TextField type="text" name="email" placeholder="you@example.com" label="Email*" />
-                    <PasswordField type="password" name="password" placeholder="Type your password" label="Password*" />
+                    <TextField type="text" name="firstname" placeholder="Tên" label="Tên*" />
+                    <TextField type="text" name="lastname" placeholder="Họ" label="Họ*" />
+                    <TextField type="text" name="email" placeholder="abc@gmail.com" label="Email*" />
+                    <PasswordField type="password" name="password" placeholder="Nhập mật khẩu" label="Mật khẩu*" />
                     <PasswordField
                       type="password"
                       name="confirmPassword"
-                      placeholder="Retype your password"
-                      label="Confirm Password*"
+                      placeholder="Nhập lại mật khẩu"
+                      label="Xác thực mật khẩu*"
                     />
                   </FormControl>
                 </Stack>
                 <Stack spacing="6">
                   <Button colorScheme="blue" size="lg" fontSize="md" isLoading={loading} type="submit">
-                    Sign up
+                    Đăng ký
                   </Button>
                 </Stack>
               </Stack>

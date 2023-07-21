@@ -35,8 +35,8 @@ const ContactScreen = () => {
       .send(emailjsInfo.service_id, emailjsInfo.template_id, values, emailjsInfo.public_key)
       .then((res) => {
         toast({
-          title: 'Email send.',
-          description: 'Thanks! I will come back to you soon.',
+          title: 'Email đã gửi đi.',
+          description: 'Cảm ơn! Mình sẽ sớm liên hệ với bạn.',
           status: 'success',
           duration: 7000,
           isClosable: true,
@@ -49,7 +49,7 @@ const ContactScreen = () => {
       .catch((error) => {
         toast({
           title: 'Whoops!',
-          description: 'Something went wrong. Please try again later.',
+          description: 'Có lỗi xảy ra. Vui lòng thử lại sau.',
           status: 'error',
           duration: 7000,
           isClosable: true,
@@ -62,7 +62,7 @@ const ContactScreen = () => {
 
   return (
     <Container maxW='5xl' minH='100vh' mt='20'>
-      <Heading textAlign='center'>Get in Touch</Heading>
+      <Heading textAlign='center'>Liên Hệ</Heading>
       <Formik
         initialValues={{
           email: '',
@@ -76,7 +76,7 @@ const ContactScreen = () => {
           <form onSubmit={handleSubmit}>
             <VStack spacing='5'>
               <FormControl isInvalid={!!errors.email && touched.email}>
-                <FormLabel htmlFor='email'>Email Address</FormLabel>
+                <FormLabel htmlFor='email'>Địa chỉ Email</FormLabel>
                 <Field
                   as={Input}
                   id='email'
@@ -87,7 +87,7 @@ const ContactScreen = () => {
                     let error;
 
                     if (!isValidEmail(value)) {
-                      error = 'The email address must be valid.';
+                      error = 'Địa chỉ email phải hợp lệ.';
                     }
                     return error;
                   }}
@@ -95,7 +95,7 @@ const ContactScreen = () => {
                 <FormErrorMessage>{errors.email}</FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={!!errors.name && touched.name}>
-                <FormLabel htmlFor='text'>Name</FormLabel>
+                <FormLabel htmlFor='text'>Tên</FormLabel>
                 <Field
                   as={Input}
                   id='name'
@@ -105,8 +105,8 @@ const ContactScreen = () => {
                   validate={(value) => {
                     let error;
 
-                    if (value.length < 1) {
-                      error = 'Name must contain at least 1 character.';
+                    if (value.length < 2) {
+                      error = 'Tên phải chứa ít nhất hai ký tự.';
                     }
                     return error;
                   }}
@@ -115,7 +115,7 @@ const ContactScreen = () => {
               </FormControl>
 
               <FormControl isInvalid={!!errors.text && touched.text}>
-                <FormLabel htmlFor='text'>Message</FormLabel>
+                <FormLabel htmlFor='text'>Thông điệp</FormLabel>
                 <Field
                   as={Textarea}
                   id='text'
@@ -126,7 +126,7 @@ const ContactScreen = () => {
                     let error;
 
                     if (value.length < 10) {
-                      error = 'Message must contain at least 10 character.';
+                      error = 'Thông điệp phải chứa ít nhất 10 ký tự.';
                     }
                     return error;
                   }}
@@ -134,7 +134,7 @@ const ContactScreen = () => {
                 <FormErrorMessage>{errors.text}</FormErrorMessage>
               </FormControl>
               <Button type='submit' colorScheme='blue' width='full'>
-                Submit
+                Gửi
               </Button>
             </VStack>
           </form>

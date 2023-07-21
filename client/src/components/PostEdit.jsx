@@ -101,11 +101,11 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image 
                 size="sm"
                 onChange={(e) => setPostCategory(e.target.value)}
               >
-                <option value="Europe">Europe</option>
-                <option value="Asia">Asia</option>
-                <option value="Oceania">Oceania</option>
-                <option value="America">America</option>
-                <option value="Africa">Africa</option>
+                <option value="Europe">Châu Âu</option>
+                <option value="Asia">Châu Á</option>
+                <option value="Oceania">Châu Đại Dương</option>
+                <option value="America">Châu Mỹ</option>
+                <option value="Africa">Châu Phi</option>
               </Select>
               <Input value={postCountry} onChange={(e) => setPostCountry(e.target.value)} size="sm" mb="3" />
               <Textarea value={postIntroduction} placeholder="Introduction about the post with 5 lines" onChange={(e) => setPostIntroduction(e.target.value)} />

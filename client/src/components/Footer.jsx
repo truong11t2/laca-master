@@ -13,10 +13,11 @@ import {
   Icon,
   useToast,
   FormControl,
+  Image,
 } from "@chakra-ui/react";
 import { FaTwitter, FaYoutube, FaFacebook, FaInstagram } from "react-icons/fa";
 import { GiWorld } from "react-icons/gi";
-import { Link as ReactLink } from "react-router-dom";
+import { Link, Link as ReactLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, subscribe } from "../redux/actions/userActions";
 import { useState } from "react";
@@ -33,7 +34,7 @@ const Footer = () => {
 
   const logoutHandler = () => {
     dispatch(logout());
-    toast({ description: "You have been logged out.", status: "success", isClosable: true });
+    toast({ description: "Bạn đã đăng xuất.", status: "success", isClosable: true });
   };
 
   return (
@@ -47,10 +48,13 @@ const Footer = () => {
         >
           <Stack spacing={{ base: "6", md: "8" }} align="start">
             <Flex alignItems="center" py="5">
-              <Icon as={GiWorld} h="10" w="10" />
+              <Link to="/">
+              {/* <Icon as={GiWorld} h="10" w="10" />
               <Text px="3" fontSize="2xl" fontWeight="extrabold">
                 La Cà
-              </Text>
+              </Text> */}
+                <Image src="../../images/logo.png" boxSize='120px' objectFit='cover'></Image>
+              </Link>
             </Flex>
           </Stack>
           <Stack direction={{ base: "column-reverse", md: "column", lg: "row" }} spacing={{ base: "12", md: "8" }}>
@@ -68,7 +72,7 @@ const Footer = () => {
             </Stack> */}
             <Stack spacing="4" >
               <Text fontSize="sm" fontWeight="semibold" color="subtle">
-                Stay up to date
+                Nhận thông tin mới nhất
               </Text>
               <Stack spacing="4" direction={{ base: "column", sm: "row" }} maxW={{ lg: "360px" }} 
               as={'form'}
@@ -78,20 +82,20 @@ const Footer = () => {
                 setState("submitting");
                 //Todo: Store email in database
                 dispatch(subscribe(email));
-                console.log(email);
-                console.log("Owesome, you will receive lastest news from us.")
+                //console.log(email);
+                //console.log("Owesome, you will receive lastest news from us.")
                 setState('success');
               }
             }>
                 <FormControl>
-                  <Input placeholder="Enter your email" type="email" required value={email} disabled={state !== 'initial'} onChange={(e) => setEmail(e.target.value)}/>
+                  <Input placeholder="Địa chỉ email" type="email" required value={email} disabled={state !== 'initial'} onChange={(e) => setEmail(e.target.value)}/>
                   
                 </FormControl>
                 <FormControl>
                 <Button variant="primary" flexShrink={0}
                     isLoading={state === "submitting"}
                     type={state === "success" ? "button" : "submit"} >
-                    {state === 'success' ? <CheckIcon /> : 'Subscribe'}
+                    {state === 'success' ? <CheckIcon /> : 'Theo dõi'}
                   </Button>
                 </FormControl>
               </Stack>
@@ -100,16 +104,16 @@ const Footer = () => {
                 textAlign={'left'}
                 color={error ? 'red.500' : 'gray.500'}>
                 {error
-                  ? 'Oh no an error occured! 😢 Please try again later.'
-                  : "You won't receive any spam! ✌️"}
+                  ? 'Oh Lỗi xảy ra! 😢 Vui lòng thử lại sau.'
+                  : "Yên tâm. Sẽ không có thư rác! ✌️"}
               </Text>
               {userInfo ? (
                 <Button variant="link" onClick={logoutHandler} alignSelf="flex-start">
-                  Logout
+                  Đăng xuất
                 </Button>
               ) : (
                 <Button variant="link" as={ReactLink} to="/login" alignSelf="flex-start">
-                  Login
+                  Đăng nhập
                 </Button>
               )}
             </Stack>

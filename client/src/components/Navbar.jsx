@@ -19,6 +19,7 @@ import {
   // ButtonGroup,
   Spacer,
   useToast,
+  Image,
 } from "@chakra-ui/react";
 import { Link as ReactLink } from "react-router-dom";
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon, ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
@@ -31,45 +32,45 @@ import { MdAdminPanelSettings } from "react-icons/md";
 import { logout } from "../redux/actions/userActions";
 
 const authLinks = [
-  { linkName: "Login", path: "/login" },
-  { linkName: "Register", path: "/register" },
+  { linkName: "Đăng nhập", path: "/login" },
+  { linkName: "Đăng ký", path: "/register" },
 ];
 
 const links = [
-  { linkName: "About", path: "/about" },
-  { linkName: "Contact", path: "/contact" },
+  { linkName: "GIỚI THIỆU", path: "/about" },
+  { linkName: "LIÊN HỆ", path: "/contact" },
 ];
 
-const homeLink = {linkName: "Home", path: "/blog/latest"}
+const homeLink = {linkName: "BÀI VIẾT", path: "/blog/latest"}
 
 const blogLinks = [
   //Todo: route to most viewed posts
   // { linkName: "Most Viewed", category: "all" },
-  { linkName: "All Blogs", category: "all" },
-  { linkName: "Latest Blogs", category: "latest" },
+  { linkName: "Tất Cả", category: "all" },
+  { linkName: "Mới Nhất", category: "latest" },
 ];
 
 const europeLinks = [
-  { linkName: "France", category: "europe", country: "france" },
-  { linkName: "Germany", category: "europe", country: "germany" },
+  { linkName: "Pháp", category: "europe", country: "france" },
+  { linkName: "Đức", category: "europe", country: "germany" },
 ];
 
 const asiaLinks = [
-  { linkName: "Japan", category: "asia", country: "japan" },
-  { linkName: "Korea", category: "asia", country: "korea" },
+  { linkName: "Nhật Bản", category: "asia", country: "japan" },
+  { linkName: "Hàn Quốc", category: "asia", country: "korea" },
 ];
 
 const americaLinks = [
-  { linkName: "USA", category: "america", country: "usa" },
+  { linkName: "Mỹ", category: "america", country: "usa" },
   { linkName: "Canada", category: "america", country: "canada" },
 ];
 const oceaniaLinks = [
-  { linkName: "Australia", category: "oceania", country: "australia" },
+  { linkName: "Úc", category: "oceania", country: "australia" },
   { linkName: "New Zealand", category: "oceania", country: "new-zealand" },
 ];
 const africaLinks = [
-  { linkName: "Ecrypt", category: "africa", country: "ecrypt" },
-  { linkName: "South Africa", category: "africa", country: "south-africa" },
+  { linkName: "Ai Cập", category: "africa", country: "ecrypt" },
+  { linkName: "Nam Phi", category: "africa", country: "south-africa" },
 ];
 
 const NavLink = ({ path, children }) => (
@@ -149,7 +150,7 @@ const Navbar = () => {
   const toast = useToast();
   const logoutHandler = () => {
     dispatch(logout());
-    toast({ description: "You have been logged out.", status: "success", isClosable: true });
+    toast({ description: "Bạn đã đăng xuất.", status: "success", isClosable: true });
   };
 
   return (
@@ -172,10 +173,11 @@ const Navbar = () => {
               onMouseLeave={() => setLogoHover(false)}
             >
               <Flex alignItems="center">
-                <Icon as={GiWorld} h="10" w="10" color={logoHover ? "gray.200" : mode("gray.600", "gray.400")} />
+                {/* <Icon as={GiWorld} h="10" w="10" color={logoHover ? "gray.200" : mode("gray.600", "gray.400")} />
                 <Text px="5" fontSize="2xl" fontWeight="extrabold" color={mode("gray.600", "gray.100")}>
                   La Cà
-                </Text>
+                </Text> */}
+                <Image src="../../images/logo.png" boxSize='90px' objectFit='cover'></Image>
               </Flex>
             </Link>
             <HStack display={{ base: "none", md: "flex" }} pl="10">
@@ -218,7 +220,7 @@ const Navbar = () => {
                   p="2"
                   _hover={{ bg: mode("blue.100", "blue.800") }}
                 >
-                  Europe {isMenuEuropeOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                  CHÂU ÂU {isMenuEuropeOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
                 </MenuButton>
                 <MenuList
                   onMouseEnter={onMenuEuropeOpen}
@@ -243,7 +245,7 @@ const Navbar = () => {
                   p="2"
                   _hover={{ bg: mode("blue.100", "blue.800") }}
                 >
-                  Asia {isMenuAsiaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                  CHÂU Á {isMenuAsiaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
                 </MenuButton>
                 <MenuList
                   onMouseEnter={onMenuAsiaOpen}
@@ -268,7 +270,7 @@ const Navbar = () => {
                   p="2"
                   _hover={{ bg: mode("blue.100", "blue.800") }}
                 >
-                  America {isMenuAmericaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                  CHÂU MỸ {isMenuAmericaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
                 </MenuButton>
                 <MenuList
                   onMouseEnter={onMenuAmericaOpen}
@@ -293,7 +295,7 @@ const Navbar = () => {
                   p="2"
                   _hover={{ bg: mode("blue.100", "blue.800") }}
                 >
-                  Oceania {isMenuOceaniaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                  CHÂU ĐẠI DƯƠNG {isMenuOceaniaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
                 </MenuButton>
                 <MenuList
                   onMouseEnter={onMenuOceaniaOpen}
@@ -318,7 +320,7 @@ const Navbar = () => {
                   p="2"
                   _hover={{ bg: mode("blue.100", "blue.800") }}
                 >
-                  Africa {isMenuAfricaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                  CHÂU PHI {isMenuAfricaOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
                 </MenuButton>
                 <MenuList
                   onMouseEnter={onMenuAfricaOpen}
@@ -354,12 +356,12 @@ const Navbar = () => {
               <MenuList>
                 {userInfo.isAdmin || userInfo.isWriter ? (
                   <MenuItem key="Create Post" as={ReactLink} to={`/create-post`}>
-                    Create Post
+                    Tạo bài viết mới
                   </MenuItem>
                 ) : (
                   <></>
                 )}
-                <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+                <MenuItem onClick={logoutHandler}>Đăng xuất</MenuItem>
               </MenuList>
             </Menu>
           ) : (
@@ -454,7 +456,7 @@ const Navbar = () => {
               p="2"
               //_hover={{ bg: mode("blue.100", "blue.800") }}
             >
-              Europe {isMenuEuropeOpenMobile ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              CHÂU ÂU {isMenuEuropeOpenMobile ? <ChevronUpIcon /> : <ChevronDownIcon />}
             </MenuButton>
             <MenuList
               onMouseEnter={onMenuEuropeOpenMobile}
@@ -482,7 +484,7 @@ const Navbar = () => {
               p="2"
               //_hover={{ bg: mode("blue.100", "blue.800") }}
             >
-              Asia {isMenuAsiaOpenMobile ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              CHÂU Á {isMenuAsiaOpenMobile ? <ChevronUpIcon /> : <ChevronDownIcon />}
             </MenuButton>
             <MenuList
               onMouseEnter={onMenuAsiaOpenMobile}
@@ -510,7 +512,7 @@ const Navbar = () => {
               p="2"
               //_hover={{ bg: mode("blue.100", "blue.800") }}
             >
-              America {isMenuAmericaOpenMobile ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              CHÂU MỸ {isMenuAmericaOpenMobile ? <ChevronUpIcon /> : <ChevronDownIcon />}
             </MenuButton>
             <MenuList
               onMouseEnter={onMenuAmericaOpenMobile}
@@ -538,7 +540,7 @@ const Navbar = () => {
               p="2"
               //_hover={{ bg: mode("blue.100", "blue.800") }}
             >
-              Oceania {isMenuOceaniaOpenMobile ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              CHÂU ĐẠI DƯƠNG {isMenuOceaniaOpenMobile ? <ChevronUpIcon /> : <ChevronDownIcon />}
             </MenuButton>
             <MenuList
               onMouseEnter={onMenuOceaniaOpenMobile}
@@ -566,7 +568,7 @@ const Navbar = () => {
               p="2"
               //_hover={{ bg: mode("blue.100", "blue.800") }}
             >
-              Africa {isMenuAfricaOpenMobile ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              CHÂU PHI {isMenuAfricaOpenMobile ? <ChevronUpIcon /> : <ChevronDownIcon />}
             </MenuButton>
             <MenuList
               onMouseEnter={onMenuAfricaOpenMobile}
