@@ -92,8 +92,9 @@ const NavAuthLink = ({ path, children }) => (
     to={path}
     px="2"
     py="2"
-    color={mode("blue.900", "greenyellow")}
-    //_hover={{ textDecoration: "none", bg: mode("blue.100", "blue.800") }}
+    color={'blue.400'}
+    //color={mode("blue.900", "greenyellow")}
+    _hover={{ textDecoration: "none", bg: mode("blue.100", "blue.800") }}
   >
     {children}
   </Link>
@@ -177,7 +178,7 @@ const Navbar = () => {
                 <Text px="5" fontSize="2xl" fontWeight="extrabold" color={mode("gray.600", "gray.100")}>
                   La Cà
                 </Text> */}
-                <Image src="../../images/logo.png" boxSize='90px' objectFit='cover'></Image>
+                <Image src="../../images/logo-1.png" boxSize='70px' objectFit='cover'></Image>
               </Flex>
             </Link>
             <HStack display={{ base: "none", md: "flex" }} pl="10">

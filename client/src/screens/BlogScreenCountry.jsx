@@ -70,7 +70,7 @@ const BlogScreenCountry = () => {
         {blogPosts.map((post) => (
           <Box key={post._id} maxW={{ base: "3xl", lg: "7xl" }} px={{ base: "6", md: "8", lg: "20" }} py="6">
             <Stack direction={{ base: "column", lg: "row" }} spacing="7">
-              <Image src={post.image} minW={{ lg: "400px" }} maxH="280px" loading={<Spinner />} fit="cover" />
+              <Image src={post.image} minW={{ lg: "350px" }} maxH="245px" loading={<Spinner />} fit="cover" />
               <Flex direction="column">
                 <Text fontSize="2xl" fontWeight="semibold" mb="3">
                   {post.title}

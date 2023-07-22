@@ -53,7 +53,7 @@ const Footer = () => {
               <Text px="3" fontSize="2xl" fontWeight="extrabold">
                 La Cà
               </Text> */}
-                <Image src="../../images/logo.png" boxSize='120px' objectFit='cover'></Image>
+                <Image src="../../images/logo-1.png" boxSize='100px' objectFit='cover'></Image>
               </Link>
             </Flex>
           </Stack>
