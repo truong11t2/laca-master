@@ -8,7 +8,7 @@ const AboutScreen = () => (
     <Stack direction={{ base: "column-reverse", lg: "row" }} spacing={{ base: "0", lg: "20" }}>
       <Box
         width={{ lg: "sm" }}
-        transform={{ base: "translateY(-50%)", lg: "none" }}
+        transform={{ base: "translateY(-10%)", lg: "none" }}
         bg={{ base: useColorModeValue("blue.50", "blue.900"), lg: "transparent" }}
         mx={{ base: "6", md: "8", lg: "0" }}
         px={{ base: "6", md: "8", lg: "0" }}

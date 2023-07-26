@@ -401,13 +401,16 @@ const Navbar = () => {
       {isIconOpen ? (
         <Box pb="4" display={{ md: "none" }}>
           {userInfo ? null : (
-            <Stack spacing="4">
-              {authLinks.map((link) => (
-                <NavLink key={link.linkName} path={link.path}>
-                  {link.linkName}
+            <>
+              <NavLink key="login" path="/login">
+                Đăng Nhập
+              </NavLink>
+              <text> / </text>
+                <NavLink key="register" path="/register">
+                  Đăng Ký
                 </NavLink>
-              ))}
-            </Stack>
+            </>
+                
           )}
 
 {/*           <Menu isOpen={isMenuOpenMobile}>
@@ -445,7 +448,7 @@ const Navbar = () => {
           </Stack>
 
           {/* Europe Mobile Menu */}
-          <Menu isOpen={isMenuEuropeOpenMobile}>
+          {/* <Menu isOpen={isMenuEuropeOpenMobile}>
             <MenuButton
               onClick={isMenuEuropeOpenMobile ? onMenuEuropeCloseMobile : onMenuEuropeOpenMobile}
               onMouseEnter={onMenuEuropeOpenMobile}
@@ -470,10 +473,10 @@ const Navbar = () => {
                 </MenuItem>
               ))}
             </MenuList>
-          </Menu>
+          </Menu> */}
 
           {/* Asia Mobile Menu */}
-          <Menu isOpen={isMenuAsiaOpenMobile}>
+          {/* <Menu isOpen={isMenuAsiaOpenMobile}>
             <MenuButton
               onClick={isMenuAsiaOpenMobile ? onMenuAsiaCloseMobile : onMenuAsiaOpenMobile}
               onMouseEnter={onMenuAsiaOpenMobile}
@@ -498,10 +501,10 @@ const Navbar = () => {
                 </MenuItem>
               ))}
             </MenuList>
-          </Menu>
+          </Menu> */}
 
           {/* America Mobile Menu */}
-          <Menu isOpen={isMenuAmericaOpenMobile}>
+          {/* <Menu isOpen={isMenuAmericaOpenMobile}>
             <MenuButton
               onClick={isMenuAmericaOpenMobile ? onMenuAmericaCloseMobile : onMenuAmericaOpenMobile}
               onMouseEnter={onMenuAmericaOpenMobile}
@@ -526,10 +529,10 @@ const Navbar = () => {
                 </MenuItem>
               ))}
             </MenuList>
-          </Menu>
+          </Menu> */}
 
           {/* Oceania Mobile Menu */}
-          {(isOceaniaMenu) ? (<Menu isOpen={isMenuOceaniaOpenMobile}>
+          {/* {(isOceaniaMenu) ? (<Menu isOpen={isMenuOceaniaOpenMobile}>
             <MenuButton
               onClick={isMenuOceaniaOpenMobile ? onMenuOceaniaCloseMobile : onMenuOceaniaOpenMobile}
               onMouseEnter={onMenuOceaniaOpenMobile}
@@ -554,10 +557,10 @@ const Navbar = () => {
                 </MenuItem>
               ))}
             </MenuList>
-          </Menu>):(<></>)}
+          </Menu>):(<></>)} */}
 
           {/* Africa Mobile Menu */}
-          {(isAfricaMenu) ? (<Menu isOpen={isMenuAfricaOpenMobile}>
+          {/* {(isAfricaMenu) ? (<Menu isOpen={isMenuAfricaOpenMobile}>
             <MenuButton
               onClick={isMenuAfricaOpenMobile ? onMenuAfricaCloseMobile : onMenuAfricaOpenMobile}
               onMouseEnter={onMenuAfricaOpenMobile}
@@ -582,7 +585,7 @@ const Navbar = () => {
                 </MenuItem>
               ))}
             </MenuList>
-          </Menu>) : (<></>)}
+          </Menu>) : (<></>)} */}
 
           {/* About and Contact Menu */}
           <Stack as="nav" spacing="4" pt="4">
