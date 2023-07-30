@@ -2,8 +2,10 @@ import { Router } from "express";
 import protectRoute from "../middlewares/authMiddleware.js";
 import blogPost from "../models/blogPost.js";
 import asyncHandler from "express-async-handler";
+import multer from "multer";
 
 const blogPostRouter = Router();
+const upload = multer({dest: "uploads/"});
 
 const getBlogPostByCategory = asyncHandler(async (req, res) => {
   const { category, postId, nextPage } = req.params;
@@ -178,7 +180,7 @@ const deletePost = asyncHandler(async (req, res) => {
   }
 });
 
-blogPostRouter.route("/").post(protectRoute, createBlogPost);
+blogPostRouter.route("/").post(protectRoute, upload.array("files"), createBlogPost);
 blogPostRouter.route("/post/:id").get(getBlogPost);
 blogPostRouter.route("/:id").delete(protectRoute, deletePost);
 blogPostRouter.route("/").put(protectRoute, updateBlogPost);
