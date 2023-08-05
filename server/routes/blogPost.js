@@ -5,7 +5,35 @@ import asyncHandler from "express-async-handler";
 import multer from "multer";
 
 const blogPostRouter = Router();
-const upload = multer({dest: "uploads/"});
+
+// STORAGE MULTER CONFIG
+let storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+      cb(null, `${Date.now()}_${file.originalname}`);
+  },
+  fileFilter: (req, file, cb) => {
+      const ext = path.extname(file.originalname)
+      if (ext !== '.jpg' && ext !== '.png' && ext !== '.jpeg' && ext !== '.mp4') {
+          return cb(res.status(400).end('only jpg, png, mp4 is allowed'), false);
+      }
+      cb(null, true)
+  }
+});
+
+const upload = multer({ storage: storage }).single("file");
+
+const uploadfile = asyncHandler(async (req, res) => {
+  upload(req, res, err => {
+      if (err) {
+          return res.json({ success: false, err });
+      }
+      return res.json({ success: true, url: "file/" + res.req.file.filename, fileName: res.req.file.filename });
+  });
+});
+
 
 const getBlogPostByCategory = asyncHandler(async (req, res) => {
   const { category, postId, nextPage } = req.params;
@@ -180,7 +208,8 @@ const deletePost = asyncHandler(async (req, res) => {
   }
 });
 
-blogPostRouter.route("/").post(protectRoute, upload.array("files"), createBlogPost);
+blogPostRouter.route("/").post(protectRoute, createBlogPost);
+blogPostRouter.route("/uploadfiles").post(uploadfile);
 blogPostRouter.route("/post/:id").get(getBlogPost);
 blogPostRouter.route("/:id").delete(protectRoute, deletePost);
 blogPostRouter.route("/").put(protectRoute, updateBlogPost);

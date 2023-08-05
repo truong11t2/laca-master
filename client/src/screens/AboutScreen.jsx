@@ -24,13 +24,13 @@ const AboutScreen = () => (
             </Flex> */}
 
             <Heading fontWeight="normal" size={{ base: "sm", md: "md" }} color="gray.500">
-              <span style={{ fontWeight: "bold" }}>Xin chào, Mình là Trường - Một người yêu thích du lịch.</span> Mình hay la cà một mình để tận hưởng sự tự do. 
+              <span style={{ fontWeight: "bold" }}>Xin chào, Mình là Trường</span> - Một kỹ sư máy tính thích lang thang. Mình hay la cà một mình để tận hưởng sự tự do. 
               Blog này là nơi mình muốn chia sẻ những thông tin mình cảm thấy hữu ích cho những người cùng sở thích. 
             </Heading>
 
             <Heading fontWeight="normal" size={{ base: "sm", md: "md" }} color="gray.500">
               Nếu bạn là người đam mê du lịch, thích chia sẽ những kỷ niệm đáng nhớ thì đây cũng có thể là một nơi để bạn có thể thử.
-              Liên hệ với mình <Link as={ReactLink} to="/contact" color="blue.500">tại đây</Link> để nhận được quyền viết bài trên blog.
+              Liên hệ với mình <Link as={ReactLink} to="/contact" color="blue.500">tại đây</Link> nếu bạn muốn chia sẻ về những hành trình của bạn trên blog.
             </Heading>
             <Heading fontWeight="normal" size={{ base: "sm", md: "md" }} color="gray.500">Chúc một ngày tốt lành!</Heading>
           </Stack>

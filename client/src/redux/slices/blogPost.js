@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const initialState = {
   blogPosts: [],
   blogPost: null,
+  imageUrl: null,
   loading: false,
   error: null,
   lastId: 0,
@@ -50,6 +51,11 @@ export const blogPostSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
+    setImageUrl: (state, { payload}) => {
+      state.imageUrl = payload;
+      state.loading = false;
+      state.error = null;
+    },
     blogPostUpdated: (state, { payload }) => {
       state.blogPostUpdated = payload;
       state.loading = false;
@@ -88,6 +94,7 @@ export const blogPostSlice = createSlice({
     reset: (state) => {
       state.blogPosts = [];
       state.blogPost = null;
+      state.imageUrl = null;
       state.error = null;
       state.blogPostCreated = false;
       state.blogPostRemoved = false;
@@ -122,6 +129,7 @@ export const blogPostSlice = createSlice({
 export const {
   setLoading,
   setBlogPost,
+  setImageUrl,
   setBlogPostByCategory,
   setBlogPostByCategoryNew,
   setBlogPostByCountry,

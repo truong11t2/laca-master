@@ -3,6 +3,7 @@ import axios from "axios";
 import {
   setLoading,
   setBlogPost,
+  setImageUrl,
   setBlogPostByCategory,
   setBlogPostByCategoryNew,
   setBlogPostByCountry,
@@ -145,6 +146,33 @@ export const createNewBlogPost = (newPost) => async (dispatch, getState) => {
     };
     const { data } = await axios.post(`/api/blog-posts`, newPost, config);
     dispatch(blogPostCreated(data));
+  } catch (error) {
+    dispatch(
+      setError(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+          ? error.message
+          : "An unexpected error has occured. Please try again later."
+      )
+    );
+  }
+};
+
+export const uploadFile = (file) => async (dispatch, getState) => {
+  const {
+    user: { userInfo },
+  } = getState();
+
+  try {
+    const config = {
+      headers: {
+        header: { 'content-type': 'multipart/form-data' },
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.post(`api/blog-posts/uploadfiles`, file, config);
+    dispatch(setImageUrl(data));
   } catch (error) {
     dispatch(
       setError(

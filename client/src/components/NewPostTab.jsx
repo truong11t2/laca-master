@@ -18,9 +18,7 @@ import {
 import ImageUpload from "./ImageUpload";
 import { createNewBlogPost } from "../redux/actions/blogPostActions";
 import { useNavigate } from "react-router-dom";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import "./styleEditor.css";
+import Editor from "./Editor";
 
 const NewPostTab = () => {
   const [postImage, setPostImage] = useState("");
@@ -37,31 +35,6 @@ const NewPostTab = () => {
 
   const user = useSelector((state) => state.user);
   const { userInfo } = user;
-
-  //Quill
-  const modules = {
-    toolbar: [
-      ["bold", "italic", "underline", "strike"], // toggled buttons
-      ["blockquote", "code-block"],
-
-      // [{ header: 1 }, { header: 2 }], // custom button values
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ script: "sub" }, { script: "super" }], // superscript/subscript
-      [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-      [{ direction: "rtl" }], // text direction
-
-      [{ size: ["small", false, "large", "huge"] }], // custom dropdown
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-      ["link", "image", "video"],
-
-      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-      [{ font: [] }],
-      [{ align: [] }],
-
-      ["clean"], // remove formatting button
-    ],
-  };
 
   const navigate = useNavigate();
 
@@ -118,11 +91,9 @@ const NewPostTab = () => {
         </Select>
         <Input placeholder="Country" size="lg" onChange={(e) => setPostCountry(e.target.value)} />
         <Textarea placeholder="Introduction about the post with 5 lines" onChange={(e) => setPostIntroduction(e.target.value)} />
-        <ReactQuill
-          placeholder="Start writing something..."
+        <Editor
           value={postContent}
           onChange={(newValue) => setPostContent(newValue)}
-          modules={modules}
         />
         <ImageUpload setPostImage={setPostImage} />
         <Image src={postImage} minW={{ lg: "400px" }} maxH="280px" fit="contain" />
