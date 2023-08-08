@@ -33,8 +33,8 @@ const Editor = ({ value, onChange }) => {
 
   useEffect(() => {
     if (imageUrl) {
-      console.log({ src: "http://localhost:5000/" + imageUrl.url, alt: imageUrl.fileName })
       const quill = quillRef.current.getEditor();
+      quill.focus();
       const range = quill.getSelection();
       let position = range ? range.index : 0;
       //quill.insertEmbed(position, 'image', { src: "http://localhost:5000/" + imageUrl.url, alt: imageUrl.fileName});

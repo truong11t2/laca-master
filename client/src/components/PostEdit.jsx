@@ -19,9 +19,9 @@ import { useState } from "react";
 import { updatePost, removePost } from "../redux/actions/blogPostActions";
 import ImageUpload from "./ImageUpload";
 import { useDispatch, useSelector } from "react-redux";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./styleEditor.css";
+import Editor from "./Editor";
 
 const PostEdit = ({ _id, content, title, category, country, introduction, image }) => {
   const [postContent, setPostContent] = useState(content);
@@ -109,11 +109,9 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image 
               </Select>
               <Input value={postCountry} onChange={(e) => setPostCountry(e.target.value)} size="sm" mb="3" />
               <Textarea value={postIntroduction} placeholder="Introduction about the post with 5 lines" onChange={(e) => setPostIntroduction(e.target.value)} />
-              <ReactQuill
-                placeholder="Start writing something..."
+              <Editor
                 value={postContent}
                 onChange={(newValue) => setPostContent(newValue)}
-                modules={modules}
               />
             </VStack>
             <Button

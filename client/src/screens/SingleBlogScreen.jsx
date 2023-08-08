@@ -22,6 +22,7 @@ import NotFoundScreen from "./NotFoundScreen";
 import parse from "html-react-parser";
 import "../components/comment/comment.css";
 import Comments from "../components/comment/Comments";
+import "../components/styleEditor.css";
 
 const SingleBlogScreen = () => {
   const { id } = useParams();
@@ -67,8 +68,9 @@ const SingleBlogScreen = () => {
             {/*             <Text px="2" mt="5" lineHeight={{ base: "7", md: "8" }} fontSize={{ base: "md", md: "lg" }}>
               {blogPost.content}
             </Text> */}
+            <Stack p="2">
             {parse(blogPost.content)}
-
+            </Stack>
             {/* comment section */}
             <Comments postId={id} currentUser={userInfo} />
           </Container>

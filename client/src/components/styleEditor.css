@@ -5,3 +5,21 @@
 .ql-editor {
   min-height: 300px;
 }
+.ql-align-right {
+	text-align: right;
+}
+.ql-align-center {
+	text-align: center;
+}
+.ql-align-left {
+	text-align: left;
+}
+.ql-align-right img {
+  float: right;
+}
+.ql-align-center img {
+	float: center;
+}
+.ql-align-left img {
+	float: left;
+}
