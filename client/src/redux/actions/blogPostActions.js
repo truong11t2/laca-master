@@ -166,46 +166,52 @@ export const createNewBlogPost = (newPost) => async (dispatch, getState) => {
   }
 };
 
-export const uploadFile = (file) => async (dispatch, getState) => {
-  const {
-    user: { userInfo },
-  } = getState();
-  var key, value, val;
-  for ([key, value] of file.entries()) {
-    if (value instanceof File) {
-      val = value.name;
-    } else {
-      val = value;
+export const uploadFile =
+  (file, folder, setPostImage) => async (dispatch, getState) => {
+    const {
+      user: { userInfo },
+    } = getState();
+    var key, value, val;
+    for ([key, value] of file.entries()) {
+      if (value instanceof File) {
+        val = value.name;
+      } else {
+        val = value;
+      }
+      //console.log(key + ": " + val);
     }
-    //console.log(key + ": " + val);
-  }
-  try {
-    const config = {
-      headers: {
-        header: { "content-type": "multipart/form-data" },
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-    const { data } = await axios.post(
-      `api/blog-posts/uploadfiles`,
-      file,
-      config
-    );
-    if (val.includes("cover")) {
-      dispatch(setCoverUrl(data));
-    } else dispatch(setImageUrl(data));
-  } catch (error) {
-    dispatch(
-      setError(
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
-          ? error.message
-          : "An unexpected error has occured. Please try again later."
-      )
-    );
-  }
-};
+    console.log(folder);
+    try {
+      const config = {
+        headers: {
+          header: { "content-type": "multipart/form-data" },
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      const { data } = await axios.post(
+        `api/blog-posts/uploadfiles`,
+        file,
+        config
+      );
+      if (val.includes("cover")) {
+        await dispatch(setCoverUrl(data));
+        setPostImage(data.url);
+      } else {
+        await dispatch(setImageUrl(data));
+        setPostImage(data.url);
+      }
+    } catch (error) {
+      dispatch(
+        setError(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+            ? error.message
+            : "An unexpected error has occured. Please try again later."
+        )
+      );
+    }
+  };
 
 export const updatePost = (updatedPost) => async (dispatch, getState) => {
   dispatch(blogPostUpdated(false));

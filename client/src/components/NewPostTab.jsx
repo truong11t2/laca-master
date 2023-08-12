@@ -18,9 +18,11 @@ import {
 import ImageUpload from "./ImageUpload";
 import { createNewBlogPost } from "../redux/actions/blogPostActions";
 import { useNavigate } from "react-router-dom";
-import Editor from "./Editor";
+//import Editor from "./Editor";
+import TinyMCE from "./editor/TinyMCE";
 
 const NewPostTab = () => {
+  const [coverImage, setCoverImage] = useState("");
   const [postImage, setPostImage] = useState("");
   const [postContent, setPostContent] = useState("");
   const [postTitle, setPostTitle] = useState("");
@@ -51,10 +53,10 @@ const NewPostTab = () => {
       //Redirecting to post
       navigate("/" + blogPostCreated[0]._id);
     }
-  }, [postImage, postContent, postTitle, postCategory, blogPostCreated, toast, navigate]);
+  }, [coverImage, postContent, postTitle, postCategory, blogPostCreated, toast, navigate]);
 
   const handlePublishPost = () => {
-    if (postImage === "" || postCategory === "" || postContent === "" || postTitle === "" || postCountry === "" || postIntroduction === "") {
+    if (coverImage === "" || postCategory === "" || postContent === "" || postTitle === "" || postCountry === "" || postIntroduction === "") {
       toast({
         title: "Post could not be published",
         description: "Please fill out all fields and make sure that you have provided an image.",
@@ -65,7 +67,7 @@ const NewPostTab = () => {
     } else {
       dispatch(
         createNewBlogPost({
-          image: postImage,
+          image: coverImage,
           category: postCategory,
           content: postContent,
           title: postTitle,
@@ -80,7 +82,6 @@ const NewPostTab = () => {
   return (
     <Container maxW="5xl" py={{ base: 12, md: 24 }} px={{ base: 0, md: 8 }} minH="4xl">
       <Stack spacing="5">
-        <Text>Create new Blog</Text>
         <Input placeholder="Title" size="lg" onChange={(e) => setPostTitle(e.target.value)} />
         <Select placeholder="Choose a Category" size="lg" onChange={(e) => setPostCategory(e.target.value)}>
           <option value="Europe">Châu Âu</option>
@@ -90,14 +91,9 @@ const NewPostTab = () => {
           <option value="Africa">Châu Phi</option>
         </Select>
         <Input placeholder="Country" size="lg" onChange={(e) => setPostCountry(e.target.value)} />
-        <Textarea placeholder="Introduction about the post with 5 lines" onChange={(e) => setPostIntroduction(e.target.value)} />
-        <Editor
-          value={postContent}
-          onChange={(newValue) => setPostContent(newValue)}
-        />
         <Text>Upload cover image</Text>
-        <ImageUpload setPostImage={setPostImage} />
-        <Image src={postImage} minW={{ lg: "400px" }} maxH="280px" fit="contain" />
+        <ImageUpload setPostImage={setCoverImage} folderName={postTitle} cover="true" />
+        <Image src={coverImage} minW={{ lg: "400px" }} maxH="280px" fit="contain" />
         {error && (
           <Alert status="error">
             <AlertIcon />
@@ -105,6 +101,18 @@ const NewPostTab = () => {
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
+        <Textarea placeholder="Introduction about the post with 5 lines" onChange={(e) => setPostIntroduction(e.target.value)} />
+        {/* <Editor
+          value={postContent}
+          onChange={(newValue) => setPostContent(newValue)}
+        /> */}
+        <TinyMCE
+          value={postContent}
+          onEditorChange={(newValue) => setPostContent(newValue)}
+        />
+        <Text>Upload images for content</Text>
+        <ImageUpload setPostImage={setPostImage} folderName={postTitle} />
+        <Text>{postImage}</Text>
         <Button
           colorScheme="blue"
           onClick={() => handlePublishPost()}

@@ -21,7 +21,8 @@ import ImageUpload from "./ImageUpload";
 import { useDispatch, useSelector } from "react-redux";
 import "react-quill/dist/quill.snow.css";
 import "./styleEditor.css";
-import Editor from "./Editor";
+// import Editor from "./Editor";
+import TinyMCE from "./editor/TinyMCE";
 
 const PostEdit = ({ _id, content, title, category, country, introduction, image }) => {
   const [postContent, setPostContent] = useState(content);
@@ -35,29 +36,29 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image 
   const { updateButtonLoading, removeButtonLoading } = blogPostInfo;
 
   //Quill
-  const modules = {
-    toolbar: [
-      ["bold", "italic", "underline", "strike"], // toggled buttons
-      ["blockquote", "code-block"],
+  // const modules = {
+  //   toolbar: [
+  //     ["bold", "italic", "underline", "strike"], // toggled buttons
+  //     ["blockquote", "code-block"],
 
-      // [{ header: 1 }, { header: 2 }], // custom button values
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ script: "sub" }, { script: "super" }], // superscript/subscript
-      [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-      [{ direction: "rtl" }], // text direction
+  //     // [{ header: 1 }, { header: 2 }], // custom button values
+  //     [{ list: "ordered" }, { list: "bullet" }],
+  //     [{ script: "sub" }, { script: "super" }], // superscript/subscript
+  //     [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+  //     [{ direction: "rtl" }], // text direction
 
-      [{ size: ["small", false, "large", "huge"] }], // custom dropdown
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+  //     [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+  //     [{ header: [1, 2, 3, 4, 5, 6, false] }],
 
-      ["link", "image", "video"],
+  //     ["link", "image", "video"],
 
-      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-      [{ font: [] }],
-      [{ align: [] }],
+  //     [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+  //     [{ font: [] }],
+  //     [{ align: [] }],
 
-      ["clean"], // remove formatting button
-    ],
-  };
+  //     ["clean"], // remove formatting button
+  //   ],
+  // };
 
   const dispatch = useDispatch();
 
@@ -109,9 +110,13 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image 
               </Select>
               <Input value={postCountry} onChange={(e) => setPostCountry(e.target.value)} size="sm" mb="3" />
               <Textarea value={postIntroduction} placeholder="Introduction about the post with 5 lines" onChange={(e) => setPostIntroduction(e.target.value)} />
-              <Editor
+{/*               <Editor
                 value={postContent}
                 onChange={(newValue) => setPostContent(newValue)}
+              /> */}
+              <TinyMCE
+                value={postContent}
+                onEditorChange={(newValue) => setPostContent(newValue)}
               />
             </VStack>
             <Button
