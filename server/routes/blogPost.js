@@ -3,37 +3,58 @@ import protectRoute from "../middlewares/authMiddleware.js";
 import blogPost from "../models/blogPost.js";
 import asyncHandler from "express-async-handler";
 import multer from "multer";
+import fs from "fs";
+import util from "util";
+import { uploadS3, getFileStream } from "../utils/awsS3.js";
 
 const blogPostRouter = Router();
+const unlinkFile = util.promisify(fs.unlink);
 
 // STORAGE MULTER CONFIG
 let storage = multer.diskStorage({
   destination: (req, file, cb) => {
-      cb(null, "uploads/");
+    cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
-      cb(null, `${Date.now()}_${file.originalname}`);
+    cb(null, `${Date.now()}_${file.originalname}`);
   },
   fileFilter: (req, file, cb) => {
-      const ext = path.extname(file.originalname)
-      if (ext !== '.jpg' && ext !== '.png' && ext !== '.jpeg' && ext !== '.mp4') {
-          return cb(res.status(400).end('only jpg, png, mp4 is allowed'), false);
-      }
-      cb(null, true)
-  }
+    const ext = path.extname(file.originalname);
+    if (ext !== ".jpg" && ext !== ".png" && ext !== ".jpeg" && ext !== ".mp4") {
+      return cb(res.status(400).end("only jpg, png, mp4 is allowed"), false);
+    }
+    cb(null, true);
+  },
 });
 
 const upload = multer({ storage: storage }).single("file");
 
 const uploadfile = asyncHandler(async (req, res) => {
-  upload(req, res, err => {
-      if (err) {
-          return res.json({ success: false, err });
-      }
-      return res.json({ success: true, url: "file/" + res.req.file.filename, fileName: res.req.file.filename });
+  // apply filter
+  // resize
+
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.json({ success: false, err });
+    }
+    // return res.json({
+    //   success: true,
+    //   url: "file/" + res.req.file.filename,
+    //   fileName: res.req.file.filename,
+    // });
+    const file = res.req.file;
+    console.log(file);
+
+    const result = await uploadS3(file);
+    await unlinkFile(file.path);
+    console.log(result);
+    return res.json({
+      success: true,
+      url: result.Location,
+      fileName: result.Key,
+    });
   });
 });
-
 
 const getBlogPostByCategory = asyncHandler(async (req, res) => {
   const { category, postId, nextPage } = req.params;
@@ -74,20 +95,14 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
   } else {
     //Get all the posts
     if (category === "all") {
-      posts = await blogPost
-        .find({ })
-        .sort({ _id: -1 })
-        .limit(4);
+      posts = await blogPost.find({}).sort({ _id: -1 }).limit(4);
       // posts.map((post) => {
       //   console.log(post.id);
       // });
     }
     //Get the latest posts
     else if (category === "latest") {
-      posts = await blogPost
-        .find({ })
-        .sort({ updatedAt: -1 })
-        .limit(4);
+      posts = await blogPost.find({}).sort({ updatedAt: -1 }).limit(4);
       // posts.map((post) => {
       //   console.log(post.id);
       // });
@@ -104,11 +119,15 @@ const getBlogPostByCategory = asyncHandler(async (req, res) => {
     }
   }
 
-  let status = (posts.length === 4 ? 200 : 201); //201 response means last chunk of blog posts
+  let status = posts.length === 4 ? 200 : 201; //201 response means last chunk of blog posts
   if (category === "latest") {
     res
       .status(status)
-      .json(posts.sort((objA, objB) => Number(objB.updatedAt) - Number(objA.updatedAt)).slice(0, 4));
+      .json(
+        posts
+          .sort((objA, objB) => Number(objB.updatedAt) - Number(objA.updatedAt))
+          .slice(0, 4)
+      );
   } else {
     res.status(status).json(posts.slice(0, 4));
   }
@@ -139,8 +158,14 @@ const getBlogPostByCountry = asyncHandler(async (req, res) => {
     // });
   }
 
-  let status = (posts.length === 4 ? 200 : 201); //201 response means last chunk of blog posts
-  res.status(status).json(posts.sort((objA, objB) => Number(objB.updatedAt) - Number(objA.updatedAt)).slice(0, 4));
+  let status = posts.length === 4 ? 200 : 201; //201 response means last chunk of blog posts
+  res
+    .status(status)
+    .json(
+      posts
+        .sort((objA, objB) => Number(objB.updatedAt) - Number(objA.updatedAt))
+        .slice(0, 4)
+    );
 });
 
 const getBlogPost = asyncHandler(async (req, res) => {
@@ -155,7 +180,8 @@ const getBlogPost = asyncHandler(async (req, res) => {
 });
 
 const createBlogPost = async (req, res) => {
-  const { image, title, content, category, country, introduction, author } = req.body;
+  const { image, title, content, category, country, introduction, author } =
+    req.body;
 
   const newPost = await blogPost.create({
     image,
@@ -176,7 +202,8 @@ const createBlogPost = async (req, res) => {
 };
 
 const updateBlogPost = asyncHandler(async (req, res) => {
-  const { _id, title, content, category, country, introduction, image } = req.body;
+  const { _id, title, content, category, country, introduction, image } =
+    req.body;
 
   const post = await blogPost.findById(_id);
 
@@ -214,6 +241,8 @@ blogPostRouter.route("/post/:id").get(getBlogPost);
 blogPostRouter.route("/:id").delete(protectRoute, deletePost);
 blogPostRouter.route("/").put(protectRoute, updateBlogPost);
 blogPostRouter.route("/:category/:postId/:nextPage").get(getBlogPostByCategory);
-blogPostRouter.route("/country/:country/:postId/:nextPage").get(getBlogPostByCountry);
+blogPostRouter
+  .route("/country/:country/:postId/:nextPage")
+  .get(getBlogPostByCountry);
 
 export default blogPostRouter;

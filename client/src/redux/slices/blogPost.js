@@ -4,6 +4,7 @@ export const initialState = {
   blogPosts: [],
   blogPost: null,
   imageUrl: null,
+  coverUrl: null,
   loading: false,
   error: null,
   lastId: 0,
@@ -51,8 +52,13 @@ export const blogPostSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
-    setImageUrl: (state, { payload}) => {
+    setImageUrl: (state, { payload }) => {
       state.imageUrl = payload;
+      state.loading = false;
+      state.error = null;
+    },
+    setCoverUrl: (state, { payload }) => {
+      state.coverUrl = payload;
       state.loading = false;
       state.error = null;
     },
@@ -95,6 +101,7 @@ export const blogPostSlice = createSlice({
       state.blogPosts = [];
       state.blogPost = null;
       state.imageUrl = null;
+      state.coverUrl = null;
       state.error = null;
       state.blogPostCreated = false;
       state.blogPostRemoved = false;
@@ -130,6 +137,7 @@ export const {
   setLoading,
   setBlogPost,
   setImageUrl,
+  setCoverUrl,
   setBlogPostByCategory,
   setBlogPostByCategoryNew,
   setBlogPostByCountry,

@@ -4,6 +4,7 @@ import {
   setLoading,
   setBlogPost,
   setImageUrl,
+  setCoverUrl,
   setBlogPostByCategory,
   setBlogPostByCategoryNew,
   setBlogPostByCountry,
@@ -24,85 +25,91 @@ import {
 } from "../slices/blogPost";
 import { deleteComments } from "../../components/comment/api";
 
-export const getBlogPostsByCategory = (curCategory, lastId, nextPage, category) => async (dispatch) => {
-  dispatch(setLoading(true));
+export const getBlogPostsByCategory =
+  (curCategory, lastId, nextPage, category) => async (dispatch) => {
+    dispatch(setLoading(true));
 
-  //Check if category is changed
-  //const prevCategory = useSelector((state) => state.blogPosts);
-  //const { oldCategory: category } = prevCategory;
+    //Check if category is changed
+    //const prevCategory = useSelector((state) => state.blogPosts);
+    //const { oldCategory: category } = prevCategory;
 
-  try {
-    if (curCategory !== category) {
-      lastId = 0;
-      nextPage = false;
+    try {
+      if (curCategory !== category) {
+        lastId = 0;
+        nextPage = false;
+      }
+      const { data, status } = await axios.get(
+        `/api/blog-posts/${curCategory}/${lastId}/${nextPage}`
+      );
+      if (curCategory === category) {
+        dispatch(setBlogPostByCategory(data));
+      } else {
+        dispatch(setBlogPostByCategoryNew(data));
+        dispatch(setCategory(curCategory));
+      }
+
+      dispatch(setStatus(status));
+      //Get the last post id in current page
+      if (data.length > 0) {
+        data.sort(compare);
+        dispatch(setLastId(data[data.length - 1]._id));
+      }
+    } catch (error) {
+      dispatch(
+        setError(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+            ? error.message
+            : "An unexpected error has occured. Please try again later."
+        )
+      );
     }
-    const { data, status } = await axios.get(`/api/blog-posts/${curCategory}/${lastId}/${nextPage}`);
-    if (curCategory === category) {
-      dispatch(setBlogPostByCategory(data));
-    } else {
-      dispatch(setBlogPostByCategoryNew(data));
-      dispatch(setCategory(curCategory));
-    }
+  };
 
-    dispatch(setStatus(status));
-    //Get the last post id in current page
-    if (data.length > 0) {
-      data.sort(compare);
-      dispatch(setLastId(data[data.length - 1]._id));
-    }
-  } catch (error) {
-    dispatch(
-      setError(
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
-          ? error.message
-          : "An unexpected error has occured. Please try again later."
-      )
-    );
-  }
-};
+export const getBlogPostsByCountry =
+  (curCountry, lastId, nextPage, country) => async (dispatch) => {
+    dispatch(setLoading(true));
 
-export const getBlogPostsByCountry = (curCountry, lastId, nextPage, country) => async (dispatch) => {
-  dispatch(setLoading(true));
+    //Check if category is changed
+    //const prevCategory = useSelector((state) => state.blogPosts);
+    //const { oldCategory: category } = prevCategory;
 
-  //Check if category is changed
-  //const prevCategory = useSelector((state) => state.blogPosts);
-  //const { oldCategory: category } = prevCategory;
+    try {
+      if (curCountry !== country) {
+        lastId = 0;
+        nextPage = false;
+      }
+      const { data, status } = await axios.get(
+        `/api/blog-posts/country/${curCountry}/${lastId}/${nextPage}`
+      );
+      //console.log(lastId);
+      //console.log(nextPage);
+      if (curCountry === country) {
+        dispatch(setBlogPostByCountry(data));
+      } else {
+        dispatch(setBlogPostByCountryNew(data));
+        dispatch(setCountry(curCountry));
+      }
 
-  try {
-    if (curCountry !== country) {
-      lastId = 0;
-      nextPage = false;
+      dispatch(setStatus(status));
+      //Get the last post id in current page
+      if (data.length > 0) {
+        data.sort(compare);
+        dispatch(setLastId(data[data.length - 1]._id));
+      }
+    } catch (error) {
+      dispatch(
+        setError(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+            ? error.message
+            : "An unexpected error has occured. Please try again later."
+        )
+      );
     }
-    const { data, status } = await axios.get(`/api/blog-posts/country/${curCountry}/${lastId}/${nextPage}`);
-    //console.log(lastId);
-    //console.log(nextPage);
-    if (curCountry === country) {
-      dispatch(setBlogPostByCountry(data));
-    } else {
-      dispatch(setBlogPostByCountryNew(data));
-      dispatch(setCountry(curCountry));
-    }
-
-    dispatch(setStatus(status));
-    //Get the last post id in current page
-    if (data.length > 0) {
-      data.sort(compare);
-      dispatch(setLastId(data[data.length - 1]._id));
-    }
-  } catch (error) {
-    dispatch(
-      setError(
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
-          ? error.message
-          : "An unexpected error has occured. Please try again later."
-      )
-    );
-  }
-};
+  };
 
 export const getBlogPost = (id) => async (dispatch) => {
   dispatch(setLoading(true));
@@ -163,16 +170,30 @@ export const uploadFile = (file) => async (dispatch, getState) => {
   const {
     user: { userInfo },
   } = getState();
-
+  var key, value, val;
+  for ([key, value] of file.entries()) {
+    if (value instanceof File) {
+      val = value.name;
+    } else {
+      val = value;
+    }
+    //console.log(key + ": " + val);
+  }
   try {
     const config = {
       headers: {
-        header: { 'content-type': 'multipart/form-data' },
+        header: { "content-type": "multipart/form-data" },
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    const { data } = await axios.post(`api/blog-posts/uploadfiles`, file, config);
-    dispatch(setImageUrl(data));
+    const { data } = await axios.post(
+      `api/blog-posts/uploadfiles`,
+      file,
+      config
+    );
+    if (val.includes("cover")) {
+      dispatch(setCoverUrl(data));
+    } else dispatch(setImageUrl(data));
   } catch (error) {
     dispatch(
       setError(
@@ -217,7 +238,7 @@ export const updatePost = (updatedPost) => async (dispatch, getState) => {
 
 export const resetPost = () => async (dispatch) => {
   dispatch(reset());
-}
+};
 
 export const removePost = (_id) => async (dispatch, getState) => {
   dispatch(setRemoveButtonLoading(true));

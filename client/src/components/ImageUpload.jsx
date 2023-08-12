@@ -1,4 +1,11 @@
+import { useDispatch, useSelector } from "react-redux";
+import { uploadFile } from "../redux/actions/blogPostActions";
+
 const ImageUpload = ({ setPostImage }) => {
+  const dispatch = useDispatch();
+  const blogPostInfo = useSelector((state) => state.blogPosts);
+  const { coverUrl } = blogPostInfo;
+
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
@@ -13,8 +20,13 @@ const ImageUpload = ({ setPostImage }) => {
   };
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
-    const base64 = await convertToBase64(file);
-    setPostImage(base64);
+    //const base64 = await convertToBase64(file);
+    //setPostImage(base64);
+    let formData = new FormData();
+    let ext = file.name.split('.').pop();
+      formData.append("file", file, "cover." + ext);
+      dispatch(uploadFile(formData));
+      setPostImage(coverUrl.url);
   };
 
   return (

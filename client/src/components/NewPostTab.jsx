@@ -95,6 +95,7 @@ const NewPostTab = () => {
           value={postContent}
           onChange={(newValue) => setPostContent(newValue)}
         />
+        <Text>Upload cover image</Text>
         <ImageUpload setPostImage={setPostImage} />
         <Image src={postImage} minW={{ lg: "400px" }} maxH="280px" fit="contain" />
         {error && (
