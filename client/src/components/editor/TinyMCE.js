@@ -3,7 +3,6 @@ import { Editor } from "@tinymce/tinymce-react";
 
 export default function TinyMCE({ value, onEditorChange }) {
   const editorRef = useRef(null);
-  console.log(value);
   return (
     <>
       <Editor

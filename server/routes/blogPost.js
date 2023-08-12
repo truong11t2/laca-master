@@ -33,6 +33,7 @@ const uploadfile = asyncHandler(async (req, res) => {
   // apply filter
   // resize
 
+  console.log(req);
   upload(req, res, async (err) => {
     if (err) {
       return res.json({ success: false, err });
@@ -43,9 +44,10 @@ const uploadfile = asyncHandler(async (req, res) => {
     //   fileName: res.req.file.filename,
     // });
     const file = res.req.file;
+    const folder = res.req.body.folder;
     console.log(file);
 
-    const result = await uploadS3(file);
+    const result = await uploadS3(file, folder);
     await unlinkFile(file.path);
     console.log(result);
     return res.json({

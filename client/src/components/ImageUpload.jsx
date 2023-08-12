@@ -66,8 +66,9 @@ const ImageUpload = ({ setPostImage, folderName, cover }) => {
     } else {
       formData.append("file", file);
     }
+    formData.append("folder", folder);
       
-    dispatch(uploadFile(formData, folder, setPostImage));
+    dispatch(uploadFile(formData, setPostImage));
   };
 
   return (

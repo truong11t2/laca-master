@@ -167,7 +167,7 @@ export const createNewBlogPost = (newPost) => async (dispatch, getState) => {
 };
 
 export const uploadFile =
-  (file, folder, setPostImage) => async (dispatch, getState) => {
+  (file, setPostImage) => async (dispatch, getState) => {
     const {
       user: { userInfo },
     } = getState();
@@ -175,12 +175,8 @@ export const uploadFile =
     for ([key, value] of file.entries()) {
       if (value instanceof File) {
         val = value.name;
-      } else {
-        val = value;
       }
-      //console.log(key + ": " + val);
     }
-    console.log(folder);
     try {
       const config = {
         headers: {

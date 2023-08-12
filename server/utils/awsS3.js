@@ -15,13 +15,13 @@ const s3 = new S3({
 });
 
 // uploads a file to s3
-export const uploadS3 = (file) => {
+export const uploadS3 = (file, folder) => {
   const fileStream = fs.createReadStream(file.path);
 
   const uploadParams = {
     Bucket: bucketName,
     Body: fileStream,
-    Key: file.filename,
+    Key: folder + "/" + file.filename,
   };
 
   return s3.upload(uploadParams).promise();

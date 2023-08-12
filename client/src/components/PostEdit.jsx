@@ -20,7 +20,7 @@ import { updatePost, removePost } from "../redux/actions/blogPostActions";
 import ImageUpload from "./ImageUpload";
 import { useDispatch, useSelector } from "react-redux";
 import "react-quill/dist/quill.snow.css";
-import "./styleEditor.css";
+//import "./editor/styleEditor.css";
 // import Editor from "./Editor";
 import TinyMCE from "./editor/TinyMCE";
 
