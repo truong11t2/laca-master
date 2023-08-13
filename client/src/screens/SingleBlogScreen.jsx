@@ -22,7 +22,7 @@ import NotFoundScreen from "./NotFoundScreen";
 import parse from "html-react-parser";
 import "../components/comment/comment.css";
 import Comments from "../components/comment/Comments";
-//import "../components/editor/styleEditor.css";
+import "../components/editor/styleEditor.css";
 
 const SingleBlogScreen = () => {
   const { id } = useParams();

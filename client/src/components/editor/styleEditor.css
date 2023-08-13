@@ -24,20 +24,33 @@
 	float: left;
 }
 h1 {
+  padding-top: 15px;
+  padding-bottom: 20px;
+  font-weight: bold;
   font-size: 36px;
-  line-height: 40px;
+  line-height: 45px;
+  
 }
 h2 {
+  padding-top: 15px;
+  padding-bottom: 10px;
+  font-weight: bold;
   font-size: 30px;
   line-height: 40px;
 }
 
 h3 {
+  padding-top: 10px;
+  padding-bottom: 5px;
+  font-weight: bold;
   font-size: 24px;
-  line-height: 40px;
+  line-height: 30px;
 }
 
 h4 {
+  padding-top: 10px;
+  padding-bottom: 5px;
+  font-weight: bold;
   font-size: 18px;
   line-height: 20px;
 }
@@ -50,4 +63,28 @@ h5 {
 h6 {
   font-size: 12px;
   line-height: 20px;
+}
+
+ul {
+  margin-left: 40px;
+}
+
+/* unvisited link */
+p a:link {
+  color: rgb(3, 130, 209);
+}
+
+/* visited link */
+p a:visited {
+  color: rgb(91, 99, 91);
+}
+
+/* mouse over link */
+p a:hover {
+  color: rgb(9, 56, 245);
+}
+
+/* selected link */
+p a:active {
+  color: rgb(145, 145, 146);
 }
