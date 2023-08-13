@@ -4,7 +4,7 @@ import { GiWorld } from "react-icons/gi";
 import { Link as ReactLink } from "react-router-dom";
 
 const AboutScreen = () => (
-  <Box maxW="8xl" mx="auto" px={{ base: "0", lg: "12" }} py={{ base: "0", lg: "12" }} minH="6xl">
+  <Box maxW="8xl" mx="auto" px={{ base: "0", lg: "120" }} py={{ base: "0", lg: "20" }} minH="4xl">
     <Stack direction={{ base: "column-reverse", lg: "row" }} spacing={{ base: "0", lg: "20" }}>
       <Box
         width={{ lg: "sm" }}
@@ -24,8 +24,12 @@ const AboutScreen = () => (
             </Flex> */}
 
             <Heading fontWeight="normal" size={{ base: "sm", md: "md" }} color="gray.500">
-              <span style={{ fontWeight: "bold" }}>Xin chào, Mình là Trường</span> - Một kỹ sư máy tính thích lang thang. Mình hay la cà một mình để tận hưởng sự tự do. 
-              Blog này là nơi mình muốn chia sẻ những thông tin mình cảm thấy hữu ích cho những người cùng sở thích. 
+              <span style={{ fontWeight: "bold" }}>Xin chào,</span>
+            </Heading>
+            
+            <Heading fontWeight="normal" size={{ base: "sm", md: "md" }} color="gray.500">
+              <span style={{ fontWeight: "bold" }}>Mình là Trường</span> - Một kỹ sư máy tính. Mình hay la cà đó đây một mình để tận hưởng sự tự do. 
+              <Link as={ReactLink} to="/blog/all" color="blue.500" fontWeight="bold" fontSize="xl"> laca.fun</Link> là nơi mình muốn chia sẻ những thông tin mình cảm thấy hữu ích cho những người cùng sở thích. 
             </Heading>
 
             <Heading fontWeight="normal" size={{ base: "sm", md: "md" }} color="gray.500">
@@ -43,7 +47,8 @@ const AboutScreen = () => (
         </Stack>
       </Box>
         <Flex flex="1" overflow="hidden">
-        <Image src="/images/landing.jpg" alt="Lovely Image" maxH="550px" minW="300px" objectFit="cover" flex="1" />
+        {/* <Image src="/images/landing.jpg" alt="Lovely Image" maxH="1000px" minW="400px" objectFit="cover" flex="1" /> */}
+        <Image src="/images/landing.jpg" alt="about me" />
       </Flex>
     </Stack>
   </Box>
