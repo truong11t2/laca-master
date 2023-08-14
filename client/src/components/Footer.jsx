@@ -40,84 +40,64 @@ const Footer = () => {
   return (
     <Box w="100%" bg={mode("blue.200", "blue.900")}>
       <Container as="footer" role="contentinfo" maxW="7xl">
-        <Stack
-          spacing="8"
-          direction={{ base: "column", md: "row" }}
-          justify="space-between"
-          py={{ base: "12", md: "5" }}
-        >
-          <Stack spacing={{ base: "6", md: "8" }} align="start">
-            <Flex alignItems="center" py="5">
-              <Link to="/">
-              {/* <Icon as={GiWorld} h="10" w="10" />
-              <Text px="3" fontSize="2xl" fontWeight="extrabold">
-                La Cà
-              </Text> */}
-                <Image src="../../images/logo-1.png" boxSize='100px' objectFit='cover'></Image>
-              </Link>
-            </Flex>
-          </Stack>
-          <Stack direction={{ base: "column-reverse", md: "column", lg: "row" }} spacing={{ base: "12", md: "8" }}>
-            {/*             <Stack direction='row' spacing='8'>
-              <Stack spacing='4' minW='36' flex='1'>
-                <Text fontSize='sm' fontWeight='semibold'>
-                  Legal
-                </Text>
-                <Stack spacing='3' shouldWrapChildren>
-                  <Button variant='link'>Privacy</Button>
-                  <Button variant='link'>Terms</Button>
-                  <Button variant='link'>License</Button>
-                </Stack>
-              </Stack>
-            </Stack> */}
-            <Stack spacing="4" >
-              <Text fontSize="sm" fontWeight="semibold" color="subtle">
-                Nhận thông tin mới nhất
-              </Text>
-              <Stack spacing="4" direction={{ base: "column", sm: "row" }} maxW={{ lg: "360px" }} 
+        <Stack direction={{base: 'column', md:'row'}}>
+          <Box pt={3} w='100%'>
+            <Link to="/">
+              <Image src="../../images/logo-1.png" boxSize='100px' objectFit='cover'></Image>
+            </Link>
+            {userInfo ? (
+              <Button mt={3} variant="link" onClick={logoutHandler} alignSelf="flex-start">
+                Đăng xuất
+              </Button>
+            ) : (
+              <Button mt={3} variant="link" as={ReactLink} to="/login" alignSelf="flex-start">
+                Đăng nhập
+              </Button>
+            )}
+          </Box>
+          <Box pt={3} w='100%' >
+            <Text mb={2} fontSize='m' fontWeight='semibold'>
+              Quy định
+            </Text>
+            <Stack spacing='3' shouldWrapChildren>
+              <Button variant='link' as={ReactLink} to="/privacy">Chính sách riêng tư</Button>
+              <Button variant='link' as={ReactLink} to="/terms">Điều khoản sử dụng</Button>
+              <Button variant='link' as={ReactLink} to="/copyright">Bản quyền</Button>
+            </Stack>
+          </Box>
+          <Box pt={3} w='100%'>
+            <Text fontSize="m" fontWeight="semibold" color="subtle">
+              Nhận thông tin mới nhất
+            </Text>
+            <Stack pt='10px' pb='0px' spacing="0" direction={{ base: "column", sm: "column" }} maxW={{ lg: "360px" }} 
               as={'form'}
               onSubmit={(e) => {
                 e.preventDefault();
                 setError(false);
                 setState("submitting");
-                //Todo: Store email in database
                 dispatch(subscribe(email));
                 //console.log(email);
                 //console.log("Owesome, you will receive lastest news from us.")
                 setState('success');
               }
             }>
-                <FormControl>
-                  <Input placeholder="Địa chỉ email" type="email" required value={email} disabled={state !== 'initial'} onChange={(e) => setEmail(e.target.value)}/>
-                  
-                </FormControl>
-                <FormControl>
+              <FormControl>
+                <Input placeholder="Địa chỉ email" type="email" required value={email} disabled={state !== 'initial'} onChange={(e) => setEmail(e.target.value)}/>
+              </FormControl>
+              <FormControl>
                 <Button variant="primary" flexShrink={0}
-                    isLoading={state === "submitting"}
-                    type={state === "success" ? "button" : "submit"} >
-                    {state === 'success' ? <CheckIcon /> : 'Theo dõi'}
-                  </Button>
-                </FormControl>
-              </Stack>
-              <Text
-                mt={0}
-                textAlign={'left'}
-                color={error ? 'red.500' : 'gray.500'}>
-                {error
-                  ? 'Oh Lỗi xảy ra! 😢 Vui lòng thử lại sau.'
-                  : "Yên tâm. Sẽ không có thư rác! ✌️"}
-              </Text>
-              {userInfo ? (
-                <Button variant="link" onClick={logoutHandler} alignSelf="flex-start">
-                  Đăng xuất
+                  isLoading={state === "submitting"}
+                  type={state === "success" ? "button" : "submit"} >
+                  {state === 'success' ? <CheckIcon /> : 'Theo dõi'}
                 </Button>
-              ) : (
-                <Button variant="link" as={ReactLink} to="/login" alignSelf="flex-start">
-                  Đăng nhập
-                </Button>
-              )}
+              </FormControl>
             </Stack>
-          </Stack>
+            <Text mb={1} textAlign={'left'} color={error ? 'red.500' : 'gray.500'}>
+              {error
+                ? 'Oh Lỗi xảy ra! 😢 Vui lòng thử lại sau.'
+                : "Yên tâm. Sẽ không có thư rác! ✌️"}
+            </Text>
+          </Box>
         </Stack>
         <Divider />
         <Stack
