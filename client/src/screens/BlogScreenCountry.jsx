@@ -62,7 +62,7 @@ const BlogScreenCountry = () => {
 
   return (
     <VStack spacing="30px" minHeight="100vh">
-      <Heading fontSize="5xl" mb="16">
+      <Heading fontSize="5xl" mb="6">
         {pageTitle}
       </Heading>
       <>
