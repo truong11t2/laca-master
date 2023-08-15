@@ -48,8 +48,8 @@ const SingleBlogScreen = () => {
         <NotFoundScreen />
       ) : (
         blogPost && (
-          <Container maxW="4xl" py={{ base: "12", md: "24" }} px={{ base: "0", md: "8" }} minH="4xl">
-            <Heading textAlign="center" size="lg">
+          <Container maxW="4xl" py={{ base: "12", md: "12" }} px={{ base: "0", md: "8" }} minH="4xl">
+            <Heading textAlign="center" size="lg" mt='4'>
               {blogPost.title}
             </Heading>
             <Flex width="full" py="2" justifyContent="center" px="2">
