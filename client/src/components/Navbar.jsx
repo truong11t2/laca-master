@@ -155,8 +155,8 @@ const Navbar = () => {
   };
 
   return (
-    <Box bg={mode("blue.200", "blue.900")} zIndex={["sticky","sticky"]} px={4} position={["fixed", "fixed"]} w="100%" top={0}>
-      <Container as="header" maxW="7xl">
+    <Box bg={mode("blue.200", "blue.900")} zIndex={["sticky","sticky"]} px={0} position={["fixed", "fixed"]} w="100%" top={0}>
+      <Container as="header" maxW="6xl" px={0}>
         <Flex h="16" alignItems="center" justifyContent="space-between">
           <IconButton
             bg={mode("blue.200", "blue.900")}
