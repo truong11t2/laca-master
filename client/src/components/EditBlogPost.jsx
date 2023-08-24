@@ -16,6 +16,7 @@ import { getBlogPostsByCategory, resetLoaderAndFlags, getNextPage, resetPost } f
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import PostEdit from "./PostEdit";
 import { useLocation } from "react-router-dom";
+import "./editor/styleEditor.css";
 
 const EditBlogPost = () => {
   const dispatch = useDispatch();

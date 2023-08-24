@@ -14,6 +14,7 @@ import {
   Accordion,
   Select,
   Button,
+  Text,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { updatePost, removePost } from "../redux/actions/blogPostActions";
@@ -25,9 +26,10 @@ import "react-quill/dist/quill.snow.css";
 import TinyMCE from "./editor/TinyMCE";
 
 const PostEdit = ({ _id, content, title, category, country, introduction, image }) => {
+  const [coverImage, setCoverImage] = useState(image);
   const [postContent, setPostContent] = useState(content);
   const [postTitle, setPostTitle] = useState(title);
-  const [postImage, setPostImage] = useState(image);
+  const [postImage, setPostImage] = useState("");
   const [postCategory, setPostCategory] = useState(category);
   const [postCountry, setPostCountry] = useState(country);
   const [postIntroduction, setPostIntroduction] = useState(introduction);
@@ -69,7 +71,7 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image 
         content: postContent,
         title: postTitle,
         category: postCategory,
-        image: postImage,
+        image: coverImage,
         country: postCountry,
         introduction: postIntroduction,
       })
@@ -94,8 +96,9 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image 
           </h2>
           <AccordionPanel pb="4">
             <VStack pb="5" direction={{ base: "column", lg: "row" }} spacing="7">
-              <Image src={postImage} minW={{ lg: "400px" }} maxH="280px" fit="contain" />
-              <ImageUpload setPostImage={setPostImage} />
+              <Text>Upload cover image</Text>
+              <Image src={coverImage} minW={{ lg: "400px" }} maxH="280px" fit="contain" />
+              <ImageUpload setPostImage={setCoverImage} folderName={postTitle} cover="true" />
               <Input value={postTitle} onChange={(e) => setPostTitle(e.target.value)} size="sm" mb="3" />
               <Select
                 defaultValue={postCategory.charAt(0).toUpperCase() + postCategory.slice(1)}
@@ -118,6 +121,9 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image 
                 value={postContent}
                 onEditorChange={(newValue) => setPostContent(newValue)}
               />
+              <Text>Upload images for content</Text>
+                <ImageUpload setPostImage={setPostImage} folderName={postTitle} />
+              <Text>{postImage}</Text>
             </VStack>
             <Button
               loadingText="Updating Post..."
