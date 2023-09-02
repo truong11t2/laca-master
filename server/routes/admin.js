@@ -7,7 +7,9 @@ const adminRouter = Router();
 
 //TODO: redefine expiresIn
 const genToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+  return jwt.sign({ id }, process.env.JWT_ACCESS_TOKEN_SECRET, {
+    expiresIn: "30d",
+  });
 };
 
 const loginUser = asyncHandler(async (req, res) => {

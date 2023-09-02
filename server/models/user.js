@@ -52,17 +52,33 @@ UserSchema.methods.matchPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-UserSchema.methods.getSignedJwtToken = function () {
-  return jwt.sign({ email: this.email, name: this.firstname, roles: this.roles }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
-  });
+UserSchema.methods.getSignedJwtAccessToken = function () {
+  return jwt.sign(
+    { email: this.email, name: this.firstname, roles: this.roles },
+    process.env.JWT_ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRE,
+    }
+  );
+};
+
+UserSchema.methods.getSignedJwtRefreshToken = function () {
+  return jwt.sign(
+    { email: this.email, name: this.firstname, roles: this.roles },
+    process.env.JWT_REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRE,
+    }
+  );
 };
 
 UserSchema.methods.getResetPasswordToken = function () {
   const resetToken = randomBytes(20).toString("hex");
 
   // Hash token (private key) and save to database
-  this.resetPasswordToken = createHash("sha256").update(resetToken).digest("hex");
+  this.resetPasswordToken = createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
 
   // Set token expire date
   this.resetPasswordExpire = Date.now() + 10 * (60 * 1000); // Ten Minutes

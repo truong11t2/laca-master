@@ -5,7 +5,10 @@ import User from "../models/user.js";
 const protect = async (req, res, next) => {
   let token;
 
-  if (req.headers.authorization && req.headers.authorization.startwith("Bearer")) {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startwith("Bearer")
+  ) {
     token = req.headers.authorization.split("  ")[1];
   }
 
@@ -14,7 +17,7 @@ const protect = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET);
     const curUser = await User.find(decoded.email);
 
     if (!curUser) {
