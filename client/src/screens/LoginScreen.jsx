@@ -13,6 +13,7 @@ import {
   useToast,
   //Checkbox,
   Link,
+  useColorModeValue as mode,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { Formik } from "formik";
@@ -23,6 +24,8 @@ import PasswordField from "../components/PasswordField";
 import TextField from "../components/TextField";
 import { login } from "../redux/actions/userActions";
 import { Link as ReactLink } from "react-router-dom";
+import getGoogleUrl from "../components/oauth2/getGoogleUrl";
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 const LoginScreen = () => {
   const navigate = useNavigate();
@@ -31,7 +34,7 @@ const LoginScreen = () => {
   //for admin
   //const redirect = "/admin-console";
   //for user
-  const redirect = "/";
+  const redirect = -1;
   const toast = useToast();
 
   const user = useSelector((state) => state.user);
@@ -67,18 +70,23 @@ const LoginScreen = () => {
     >
       {(formik) => (
         <Container maxW="lg" py={{ base: "12", md: "24" }} px={{ base: "0", md: "8" }} minH="4xl">
-          <Stack spacing="8">
-            <Stack spacing="6">
-              <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
+          <Stack spacing="0">
+              <Stack py={{ base: "6", md: "6" }} spacing={{ base: "2", md: "3" }} textAlign="center">
                 <Heading size={headingBR}>Đăng Nhập</Heading>
               </Stack>
-            </Stack>
             <Box
               py={{ base: "0", md: "8" }}
               px={{ base: "4", md: "10" }}
               bg={{ boxBR }}
               boxShadow={{ base: "none", md: "xl" }}
             >
+              <Stack pb={{ base: "2", md: "6" }} spacing="6">
+                <Box as='button' borderRadius='md' bg={mode("#3182ce", "#90cdf4")} color='white' px={4} h='48px'>
+                  <Link href={getGoogleUrl()} isExternal={false}>
+                    Google <ExternalLinkIcon mx='2px' />
+                  </Link>
+                </Box>
+              </Stack>
               <Stack spacing="6" as="form" onSubmit={formik.handleSubmit}>
                 {error && (
                   <Alert

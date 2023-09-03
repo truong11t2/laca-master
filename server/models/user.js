@@ -28,6 +28,10 @@ const UserSchema = new Schema(
       minlength: 6,
       select: false,
     },
+    picture: {
+      type: String,
+      required: false,
+    },
     roles: {
       type: [String],
       default: ["user"],

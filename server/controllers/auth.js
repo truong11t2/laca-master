@@ -3,6 +3,8 @@ import ErrorResponse from "../utils/errorResponse.js";
 import User from "../models/user.js";
 import sendEmail from "../utils/sendEmail.js";
 import jwt from "jsonwebtoken";
+import axios from "axios";
+import qs from "qs";
 
 // @desc Login user
 // @route POST /api/login
@@ -197,4 +199,102 @@ const sendToken = (user, statusCode, res) => {
 
   const token = user.getSignedJwtAccessToken();
   res.status(statusCode).json({ token });
+};
+
+export async function googleOauthHandler(req, res) {
+  // get the code from qs
+  const code = req.query.code;
+  //console.log(code);
+
+  try {
+    // get the id and access token with the code
+    const { access_token, id_token, refresh_token } =
+      await getGoogleOAuthTokens({
+        code,
+      });
+    console.log({ access_token, id_token, refresh_token });
+
+    // get user with tokens
+    const googleUser = await getGoogleUser({ id_token, access_token });
+    jwt.decode(id_token);
+
+    console.log({ googleUser });
+
+    if (!googleUser.verified_email) {
+      return res.status(403).send("Google account is not verified");
+    }
+
+    // upsert the user
+    const user = await findAndUpdateUser(
+      {
+        email: googleUser.email,
+      },
+      {
+        email: googleUser.email,
+        firstname: googleUser.given_name,
+        lastname: googleUser.family_name,
+        picture: googleUser.picture,
+      },
+      {
+        upsert: true,
+        new: true,
+      }
+    );
+
+    // create and send token
+    sendToken(user, 200, res);
+
+    // redirect back to client
+    //res.redirect(process.env.ORIGIN);
+  } catch (error) {
+    console.log("Failed to authorize Google user");
+    //todo: create oauth error page on front end
+    return res.redirect(`${process.env.ORIGIN}/oauth/error`);
+  }
+}
+
+const getGoogleOAuthTokens = async ({ code }) => {
+  //const url = `https://oauth2.googleapis.com/token`;
+  const url = "https://accounts.google.com/o/oauth2/token";
+  const values = {
+    code,
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    client_secret: process.env.GOOGLE_CLIENT_SECRET,
+    redirect_uri: process.env.GOOGLE_OAUTH_REDIRECT_URI,
+    grant_type: "authorization_code",
+  };
+  const config = {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  };
+
+  // Send request to get tokens
+  try {
+    const res = await axios.post(url, qs.stringify(values), config);
+    return res.data;
+  } catch (error) {
+    return new ErrorResponse("Bad request", 400);
+  }
+};
+
+const getGoogleUser = async ({ access_token, id_token }) => {
+  try {
+    const url = `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${id_token}`,
+      },
+    };
+    const res = await axios.get(url, config);
+    //console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.log("Error fetching Google user");
+    return new ErrorResponse("Error fetching Google user", 400);
+  }
+};
+
+const findAndUpdateUser = async (query, update, options) => {
+  return User.findOneAndUpdate(query, update, options);
 };

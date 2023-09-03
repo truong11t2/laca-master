@@ -102,3 +102,15 @@ p a:active {
   display: table;
   clear: both;
 }
+
+table {
+  border: 1px solid rgb(130, 130, 130);
+}
+
+table tbody tr td {
+  border: 1px solid rgb(130, 130, 130);
+}
+
+table thead tr th {
+  border: 1px solid rgb(130, 130, 130);
+}
