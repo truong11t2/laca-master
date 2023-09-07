@@ -10,7 +10,8 @@ export default function TinyMCE({ value, onEditorChange }) {
         onInit={(evt, editor) => (editorRef.current = editor)}
         value={value}
         init={{
-          height: 500,
+          resize: "both",
+          height: 800,
           menubar: true,
           plugins: [
             "advlist",
