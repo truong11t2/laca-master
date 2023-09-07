@@ -25,7 +25,7 @@ const RegisterScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  const redirect = "/";
+  const redirect = -1;
   const toast = useToast();
 
   const user = useSelector((state) => state.user);

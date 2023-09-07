@@ -6,7 +6,7 @@ const errorHandler = (err, req, res, next) => {
   error.message = err.message;
 
   if (err.code === 11000) {
-    const message = `Duplicate Field value entered`;
+    const message = `Email này đã được đăng ký`;
     error = new ErrorResponse(message, 400);
   }
 

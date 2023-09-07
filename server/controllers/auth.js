@@ -5,13 +5,28 @@ import sendEmail from "../utils/sendEmail.js";
 import jwt from "jsonwebtoken";
 import axios from "axios";
 import qs from "qs";
+import dotenv from "dotenv";
+dotenv.config();
+
+export const accessTokenCookieOptions = {
+  maxAge: process.env.ACCESS_TOKEN_COOKIE_MAX_AGE, // 15 mins
+  httpOnly: true,
+  domain: "localhost",
+  path: "/",
+  sameSite: "lax",
+  secure: false,
+};
+
+export const refreshTokenCookieOptions = {
+  ...accessTokenCookieOptions,
+  maxAge: process.env.REFRESH_TOKEN_COOKIE_MAX_AGE, // 1 year
+};
 
 // @desc Login user
 // @route POST /api/login
 // @access Public - for everybody can login
 export async function login(req, res, next) {
   const { email, password } = req.body;
-  console.log(typeof email);
 
   // Check if email and password is provided
   if (!email || !password) {
@@ -33,8 +48,23 @@ export async function login(req, res, next) {
       return next(new ErrorResponse("Invalid credentials", 401));
     }
 
-    // Send accessToken containing username and roles
-    sendToken(user, 200, res);
+    // Create access token
+    res.cookie(
+      "laca-accessToken",
+      user.getSignedJwtAccessToken(),
+      accessTokenCookieOptions
+    );
+
+    // Create refresh token
+    res.cookie(
+      "laca-refreshToken",
+      user.getSignedJwtRefreshToken(),
+      refreshTokenCookieOptions
+    );
+
+    // Send token back to client
+    const token = user.getSignedJwtToken();
+    res.status(200).json({ token });
   } catch (err) {
     next(err);
   }
@@ -62,8 +92,15 @@ export async function refresh(req, res, next) {
     const { email } = decoded;
     const user = await User.findOne({ email });
 
-    // Send accessToken containing username and roles
-    sendToken(user, 200, res);
+    // Create access token
+    res.cookie(
+      "laca-accessToken",
+      user.getSignedJwtAccessToken(),
+      accessTokenCookieOptions
+    );
+
+    // Redirect to login page on client
+    res.status(200).send("New access token has been sent in cookie");
   } catch (error) {
     return next(new ErrorResponse("Not authorized to access this router", 401));
   }
@@ -77,7 +114,16 @@ export async function logout(req, res, next) {
 
   if (!cookie) return next(new ErrorResponse("No content", 204));
 
-  res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
+  res.clearCookie("laca-accessToken", {
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
+  });
+  res.clearCookie("laca-refreshToken", {
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
+  });
   res.json({ message: "Cookie cleared" });
 }
 
@@ -95,7 +141,23 @@ export async function register(req, res, next) {
       password,
     });
 
-    sendToken(user, 200, res);
+    // Create access token
+    res.cookie(
+      "laca-accessToken",
+      user.getSignedJwtAccessToken(),
+      accessTokenCookieOptions
+    );
+
+    // Create refresh token
+    res.cookie(
+      "laca-refreshToken",
+      user.getSignedJwtRefreshToken(),
+      refreshTokenCookieOptions
+    );
+
+    // Send token back to client
+    const token = user.getSignedJwtToken();
+    res.status(200).json({ token });
   } catch (err) {
     next(err);
   }
@@ -188,19 +250,33 @@ export async function resetPassword(req, res, next) {
   }
 }
 
-const sendToken = (user, statusCode, res) => {
-  // Create secure cookie with refresh token
-  res.cookie("jwt", user.getSignedJwtRefreshToken(), {
-    httpOnly: true, //accessible only by web server
-    secure: true, //https
-    sameSite: "None", //cross-site cookie
-    maxAge: 7 * 24 * 60 * 60 * 1000, //cookie expiry: set to match rT
-  });
+export async function getToken(req, res, next) {
+  const cookie = req.headers.cookie;
+  const cookies = cookie.split(";");
+  if (cookies[0].includes("laca-accessToken")) {
+    var accessToken = cookies[0].split("=")[1];
+  } else {
+    var accessToken = cookies[1].split("=")[1];
+  }
+  //console.log(accessToken);
 
-  const token = user.getSignedJwtAccessToken();
-  res.status(statusCode).json({ token });
-};
+  // For a valid access token
+  try {
+    const decoded = jwt.verify(
+      accessToken,
+      process.env.JWT_ACCESS_TOKEN_SECRET
+    );
 
+    if (decoded) {
+      const { email } = decoded;
+      const user = await User.findOne({ email });
+      let token = user.getSignedJwtToken();
+      res.status(200).json({ token });
+    }
+  } catch (error) {
+    return next(new ErrorResponse("Not authorized to access this router", 401));
+  }
+}
 export async function googleOauthHandler(req, res) {
   // get the code from qs
   const code = req.query.code;
@@ -241,11 +317,22 @@ export async function googleOauthHandler(req, res) {
       }
     );
 
-    // create and send token
-    sendToken(user, 200, res);
+    // Create access token
+    res.cookie(
+      "laca-accessToken",
+      user.getSignedJwtAccessToken(),
+      accessTokenCookieOptions
+    );
 
-    // redirect back to client
-    //res.redirect(process.env.ORIGIN);
+    // Create refresh token
+    res.cookie(
+      "laca-refreshToken",
+      user.getSignedJwtRefreshToken(),
+      refreshTokenCookieOptions
+    );
+
+    // Redirect back to client
+    res.redirect(`${process.env.ORIGIN}/login-success`);
   } catch (error) {
     console.log("Failed to authorize Google user");
     //todo: create oauth error page on front end
@@ -254,7 +341,6 @@ export async function googleOauthHandler(req, res) {
 }
 
 const getGoogleOAuthTokens = async ({ code }) => {
-  //const url = `https://oauth2.googleapis.com/token`;
   const url = "https://accounts.google.com/o/oauth2/token";
   const values = {
     code,
@@ -298,3 +384,23 @@ const getGoogleUser = async ({ access_token, id_token }) => {
 const findAndUpdateUser = async (query, update, options) => {
   return User.findOneAndUpdate(query, update, options);
 };
+
+export async function reIssueAccessToken(refreshToken) {
+  try {
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.JWT_REFRESH_TOKEN_SECRET
+    );
+
+    const { email } = decoded;
+    const user = await User.findOne({ email });
+
+    // Create access token
+    const token = user.getSignedJwtAccessToken();
+    return token;
+  } catch (error) {
+    return next(
+      new ErrorResponse("Something went wrong. Try to login again", 500)
+    );
+  }
+}

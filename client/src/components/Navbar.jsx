@@ -405,7 +405,7 @@ const Navbar = () => {
               <NavLink key="login" path="/login">
                 Đăng Nhập
               </NavLink>
-              <text> / </text>
+              <Text> / </Text>
                 <NavLink key="register" path="/register">
                   Đăng Ký
                 </NavLink>

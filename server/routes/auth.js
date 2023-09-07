@@ -8,6 +8,7 @@ import {
   refresh,
   logout,
   googleOauthHandler,
+  getToken,
 } from "../controllers/auth.js";
 
 const authRouter = Router();
@@ -25,5 +26,7 @@ authRouter.route("/forgotpassword").post(forgotPassword);
 authRouter.route("/passwordreset/:resetToken").put(resetPassword);
 
 authRouter.route("/google/oauth2").get(googleOauthHandler);
+
+authRouter.route("/gettoken").get(getToken);
 
 export default authRouter;

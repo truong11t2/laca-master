@@ -56,6 +56,16 @@ UserSchema.methods.matchPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
+UserSchema.methods.getSignedJwtToken = function () {
+  return jwt.sign(
+    { email: this.email, name: this.firstname, roles: this.roles },
+    process.env.JWT_TOKEN_SECRET,
+    {
+      expiresIn: process.env.JWT_TOKEN_EXPIRE,
+    }
+  );
+};
+
 UserSchema.methods.getSignedJwtAccessToken = function () {
   return jwt.sign(
     { email: this.email, name: this.firstname, roles: this.roles },
