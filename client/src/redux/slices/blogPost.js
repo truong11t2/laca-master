@@ -10,6 +10,7 @@ export const initialState = {
   lastId: 0,
   status: 200,
   updateButtonLoading: false,
+  saveButtonLoading: false,
   blogPostCreated: false,
   blogPostUpdated: false,
   blogPostRemoved: false,
@@ -70,6 +71,7 @@ export const blogPostSlice = createSlice({
     blogPostCreated: (state, { payload }) => {
       state.blogPostCreated = payload;
       state.updateButtonLoading = false;
+      state.saveButtonLoading = false;
       state.loading = false;
       state.error = null;
     },
@@ -80,6 +82,11 @@ export const blogPostSlice = createSlice({
     },
     setUpdateButtonLoading: (state, { payload }) => {
       state.updateButtonLoading = payload;
+      state.loading = false;
+      state.error = null;
+    },
+    setSaveButtonLoading: (state, { payload }) => {
+      state.saveButtonLoading = payload;
       state.loading = false;
       state.error = null;
     },
@@ -107,6 +114,7 @@ export const blogPostSlice = createSlice({
       state.blogPostRemoved = false;
       state.blogPostUpdated = false;
       state.updateButtonLoading = false;
+      state.saveButtonLoading = false;
       state.removeButtonLoading = false;
       state.loading = false;
       state.pageNumber = 1;
@@ -148,6 +156,7 @@ export const {
   blogPostUpdated,
   setRemoveButtonLoading,
   setUpdateButtonLoading,
+  setSaveButtonLoading,
   setNextPage,
   reset,
   setStatus,

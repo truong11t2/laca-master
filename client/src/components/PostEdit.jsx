@@ -35,7 +35,7 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image 
   const [postIntroduction, setPostIntroduction] = useState(introduction);
 
   const blogPostInfo = useSelector((state) => state.blogPosts);
-  const { updateButtonLoading, removeButtonLoading } = blogPostInfo;
+  const { updateButtonLoading, removeButtonLoading, saveButtonLoading } = blogPostInfo;
 
   //Quill
   // const modules = {
@@ -64,7 +64,7 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image 
 
   const dispatch = useDispatch();
 
-  const handleSave = () => {
+  const handleSave = (isPublish) => {
     dispatch(
       updatePost({
         _id,
@@ -74,6 +74,7 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image 
         image: coverImage,
         country: postCountry,
         introduction: postIntroduction,
+        isPublish: isPublish,
       })
     );
   };
@@ -126,14 +127,24 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image 
               <Text>{postImage}</Text>
             </VStack>
             <Button
-              loadingText="Updating Post..."
+              loadingText="Saving Post..."
+              isLoading={saveButtonLoading}
+              minW={{ base: "full", md: "140px" }}
+              colorScheme="blue"
+              mr={{ md: "10" }}
+              onClick={() => handleSave(false)}
+            >
+              Save
+            </Button>
+            <Button
+              loadingText="Publishing Post..."
               isLoading={updateButtonLoading}
               minW={{ base: "full", md: "140px" }}
               colorScheme="green"
               mr={{ md: "10" }}
-              onClick={() => handleSave()}
+              onClick={() => handleSave(true)}
             >
-              Save
+              Publish
             </Button>
             <Button
               loadingText="Removing Post..."

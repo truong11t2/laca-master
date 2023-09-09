@@ -38,7 +38,7 @@ const BlogScreenCountry = () => {
       dispatch(resetPost());
     }
     if(status !== 201) {
-      dispatch(getBlogPostsByCountry(curCountry, lastId, nextPage, country, status));
+      dispatch(getBlogPostsByCountry(curCountry, lastId, nextPage, country));
     }
     
     window.addEventListener("scroll", onScroll);
@@ -68,7 +68,8 @@ const BlogScreenCountry = () => {
       <>
         <Heading>{/* {curCountry.charAt(0).toUpperCase() + curCountry.slice(1)} */} Bài Viết</Heading>
         {blogPosts.map((post) => (
-          <Box key={post._id} maxW={{ base: "3xl", lg: "5xl" }} px={{ base: "6", md: "8", lg: "20" }} py="6">
+          post.isPublish ? (
+            <Box key={post._id} maxW={{ base: "3xl", lg: "5xl" }} px={{ base: "6", md: "8", lg: "20" }} py="6">
             <Stack direction={{ base: "column", lg: "row" }} spacing="7">
               <Link as={ReactLink} to={`/${post._id}`}>
                 <Image src={post.image} minW={{ lg: "350px" }} maxH="245px" loading={<Spinner />} fit="cover" />
@@ -106,6 +107,8 @@ const BlogScreenCountry = () => {
               </Flex>
             </Stack>
           </Box>
+          ): (<></>)
+          
         ))}
         {loading ? (
           <Stack direction="row" spacing="4">

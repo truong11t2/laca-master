@@ -15,6 +15,7 @@ import {
   blogPostUpdated,
   setRemoveButtonLoading,
   setUpdateButtonLoading,
+  setSaveButtonLoading,
   reset,
   setStatus,
   setLastId,
@@ -139,7 +140,14 @@ export const resetLoaderAndFlags = () => async (dispatch) => {
 
 export const createNewBlogPost = (newPost) => async (dispatch, getState) => {
   dispatch(blogPostCreated(false));
-  dispatch(setUpdateButtonLoading(true));
+  if (newPost.isPublish) {
+    dispatch(setUpdateButtonLoading(true));
+    dispatch(setSaveButtonLoading(false));
+  } else {
+    dispatch(setUpdateButtonLoading(false));
+    dispatch(setSaveButtonLoading(true));
+  }
+
   const {
     user: { userInfo },
   } = getState();
@@ -211,7 +219,14 @@ export const uploadFile =
 
 export const updatePost = (updatedPost) => async (dispatch, getState) => {
   dispatch(blogPostUpdated(false));
-  dispatch(setUpdateButtonLoading(true));
+  if (updatedPost.isPublish) {
+    dispatch(setUpdateButtonLoading(true));
+    dispatch(setSaveButtonLoading(false));
+  } else {
+    dispatch(setUpdateButtonLoading(false));
+    dispatch(setSaveButtonLoading(true));
+  }
+
   const {
     user: { userInfo },
   } = getState();

@@ -29,7 +29,11 @@ const blogPostSchema = new mongoose.Schema(
     introduction: {
       type: String,
       require: true,
-    }
+    },
+    isPublish: {
+      type: Boolean,
+      require: true,
+    },
   },
   { timestamps: true }
 );

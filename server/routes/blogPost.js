@@ -182,8 +182,16 @@ const getBlogPost = asyncHandler(async (req, res) => {
 });
 
 const createBlogPost = async (req, res) => {
-  const { image, title, content, category, country, introduction, author } =
-    req.body;
+  const {
+    image,
+    title,
+    content,
+    category,
+    country,
+    introduction,
+    author,
+    isPublish,
+  } = req.body;
 
   const newPost = await blogPost.create({
     image,
@@ -193,6 +201,7 @@ const createBlogPost = async (req, res) => {
     country: String(country).toLowerCase(),
     introduction,
     author,
+    isPublish,
   });
   await newPost.save();
   const posts = await blogPost.find({ title });
@@ -204,8 +213,16 @@ const createBlogPost = async (req, res) => {
 };
 
 const updateBlogPost = asyncHandler(async (req, res) => {
-  const { _id, title, content, category, country, introduction, image } =
-    req.body;
+  const {
+    _id,
+    title,
+    content,
+    category,
+    country,
+    introduction,
+    image,
+    isPublish,
+  } = req.body;
 
   const post = await blogPost.findById(_id);
 
@@ -216,6 +233,7 @@ const updateBlogPost = asyncHandler(async (req, res) => {
     post.country = String(country).toLowerCase();
     post.introduction = introduction;
     post.image = image;
+    post.isPublish = isPublish;
     await post.save();
 
     const posts = await blogPost.find({});

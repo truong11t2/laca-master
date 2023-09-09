@@ -69,6 +69,7 @@ const BlogScreen = () => {
       <>
         <Heading>{/* {curCategory.charAt(0).toUpperCase() + curCategory.slice(1)} */} Bài Viết Mới Nhất</Heading>
         {blogPosts.map((post) => (
+          post.isPublish ? (
           <Box key={post._id} maxW={{ base: "3xl", lg: "5xl" }} px={{ base: "6", md: "8", lg: "20" }} py="6">
             <Stack direction={{ base: "column", lg: "row" }} spacing="7">
               <Center>
@@ -109,6 +110,8 @@ const BlogScreen = () => {
               </Flex>
             </Stack>
           </Box>
+          ):(<></>)
+          
         ))}
         {loading ? (
           <Stack direction="row" spacing="4">

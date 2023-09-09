@@ -33,7 +33,7 @@ const NewPostTab = () => {
   const dispatch = useDispatch();
 
   const blogPostInfo = useSelector((state) => state.blogPosts);
-  const { blogPostCreated, error, updateButtonLoading } = blogPostInfo;
+  const { blogPostCreated, error, updateButtonLoading, saveButtonLoading } = blogPostInfo;
 
   const user = useSelector((state) => state.user);
   const { userInfo } = user;
@@ -43,7 +43,7 @@ const NewPostTab = () => {
   useEffect(() => {
     if (blogPostCreated) {
       toast({
-        title: "Blog post published",
+        title: "Blog post is processed",
         description: "Please have a look on it.",
         status: "success",
         duration: 5000,
@@ -55,10 +55,10 @@ const NewPostTab = () => {
     }
   }, [coverImage, postContent, postTitle, postCategory, blogPostCreated, toast, navigate]);
 
-  const handlePublishPost = () => {
+  const handlePublishPost = (isPublish) => {
     if (coverImage === "" || postCategory === "" || postContent === "" || postTitle === "" || postCountry === "" || postIntroduction === "") {
       toast({
-        title: "Post could not be published",
+        title: "Post could not be processed",
         description: "Please fill out all fields and make sure that you have provided an image.",
         status: "error",
         duration: 9000,
@@ -74,6 +74,7 @@ const NewPostTab = () => {
           country: postCountry,
           introduction: postIntroduction,
           author: userInfo.name,
+          isPublish: isPublish,
         })
       );
     }
@@ -115,11 +116,19 @@ const NewPostTab = () => {
         <Text>{postImage}</Text>
         <Button
           colorScheme="blue"
-          onClick={() => handlePublishPost()}
-          isLoading={updateButtonLoading}
-          loadingText="Uploading"
+          onClick={() => handlePublishPost(false)}
+          isLoading={saveButtonLoading}
+          loadingText="Saving"
         >
-          Publish Post
+          Save
+        </Button>
+        <Button
+          colorScheme="green"
+          onClick={() => handlePublishPost(true)}
+          isLoading={updateButtonLoading}
+          loadingText="Publishing"
+        >
+          Publish
         </Button>
       </Stack>
     </Container>
