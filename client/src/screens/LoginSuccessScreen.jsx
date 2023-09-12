@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import { requestToken } from "../redux/actions/userActions";
 import { useSelector, useDispatch } from "react-redux";
+import { Container, Heading } from "@chakra-ui/react";
 
 const LoginSuccessScreen = () => {
   const dispatch = useDispatch(); 
@@ -24,12 +25,11 @@ const LoginSuccessScreen = () => {
     }, []);
 
   return (
-    <div></div>
-    // <Container maxW="5xl" minH="100vh" mt="20">
-    //   <Heading size="1xl" textAlign="center" pt={10} pb={10}>
-    //     Đăng nhập thành công!
-    //   </Heading>
-    // </Container>
+    <Container maxW="5xl" minH="100vh" mt="20">
+      <Heading size="1xl" textAlign="center" pt={10} pb={10}>
+        Đăng nhập thành công! Vui lòng chờ chuyển trang.
+      </Heading>
+    </Container>
   );
 };
 

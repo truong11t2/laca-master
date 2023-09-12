@@ -11,6 +11,8 @@ import {
   AlertTitle,
   AlertDescription,
   useToast,
+  Link,
+  useColorModeValue as mode,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { Formik } from "formik";
@@ -20,6 +22,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import PasswordField from "../components/PasswordField";
 import TextField from "../components/TextField";
 import { register } from "../redux/actions/userActions";
+import getGoogleUrl from "../components/oauth2/getGoogleUrl";
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 const RegisterScreen = () => {
   const navigate = useNavigate();
@@ -83,6 +87,13 @@ const RegisterScreen = () => {
               bg={{ boxBR }}
               boxShadow={{ base: "none", md: "xl" }}
             >
+              <Stack pb={{ base: "2", md: "6" }} spacing="6">
+                <Box as='button' borderRadius='md' bg={mode("#3182ce", "#90cdf4")} color='white' px={4} h='48px'>
+                  <Link href={getGoogleUrl()} isExternal={false}>
+                    Đăng ký bằng Google <ExternalLinkIcon mx='2px' />
+                  </Link>
+                </Box>
+              </Stack>
               <Stack spacing="6" as="form" onSubmit={formik.handleSubmit}>
                 {error && (
                   <Alert

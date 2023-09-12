@@ -11,7 +11,7 @@ dotenv.config();
 export const accessTokenCookieOptions = {
   maxAge: process.env.ACCESS_TOKEN_COOKIE_MAX_AGE, // 15 mins
   httpOnly: true,
-  domain: "localhost",
+  domain: "laca.fun",
   path: "/",
   sameSite: "lax",
   secure: false,
@@ -183,7 +183,8 @@ export async function forgotPassword(req, res, next) {
     await user.save();
 
     // Create reset url to email to provided email
-    const resetUrl = `http://localhost:3000/passwordreset/${resetToken}`;
+    //const resetUrl = `http://localhost:5000/passwordreset/${resetToken}`;
+    const resetUrl = `https://laca.fun/passwordreset/${resetToken}`;
 
     // HTML Message
     const message = `

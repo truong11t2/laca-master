@@ -51,12 +51,17 @@ const BlogScreenCountry = () => {
   }, [dispatch, location])
 
   const onScroll = () => {
-    const scrollTop = document.documentElement.scrollTop;
-    const scrollHeight = document.documentElement.scrollHeight;
-    const clientHeight = document.documentElement.clientHeight;
+    // const scrollTop = document.documentElement.scrollTop;
+    // const scrollHeight = document.documentElement.scrollHeight;
+    // const clientHeight = document.documentElement.clientHeight;
 
-    if (scrollTop + clientHeight >= scrollHeight) {
-      dispatch(getNextPage());
+    // if ((scrollTop + clientHeight >= scrollHeight) && (status !== 201)) {
+    //   dispatch(getNextPage());
+    // }
+    const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight
+
+    if (window.scrollY >= scrollableHeight) {
+        dispatch(getNextPage());
     }
   };
 
