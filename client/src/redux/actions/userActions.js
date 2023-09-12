@@ -125,8 +125,26 @@ export const resetPassword = (password, token) => async (dispatch) => {
     );
   }
 };
-export const logout = () => (dispatch) => {
+export const logout = () => async (dispatch) => {
   localStorage.removeItem("userInfo");
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    await axios.post("/api/auth/logout", config);
+  } catch (error) {
+    dispatch(
+      setError(
+        error.response && error.response.data.error
+          ? error.response.data.error
+          : error.message
+          ? error.message
+          : "An unexpected error has occured. Please try again later."
+      )
+    );
+  }
   dispatch(userLogout());
 };
 
