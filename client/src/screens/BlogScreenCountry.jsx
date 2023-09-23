@@ -15,6 +15,7 @@ import {
   Box,
   VStack,
   Button,
+  Center,
 } from "@chakra-ui/react";
 import { Link as ReactLink, useParams, useLocation } from "react-router-dom";
 import React, { useEffect } from "react";
@@ -76,9 +77,11 @@ const BlogScreenCountry = () => {
           post.isPublish ? (
             <Box key={post._id} maxW={{ base: "3xl", lg: "5xl" }} px={{ base: "6", md: "8", lg: "20" }} py="6">
             <Stack direction={{ base: "column", lg: "row" }} spacing="7">
-              <Link as={ReactLink} to={`/${post._id}`}>
-                <Image src={post.image} minW={{ lg: "350px" }} maxH="245px" loading={<Spinner />} fit="cover" />
-              </Link>
+              <Center>
+                <Link as={ReactLink} to={`/${post._id}`}>
+                <Image src={post.image} minW={{ lg: "350px" }} height={{ lg: "230px" }} loading={<Spinner />} fit="cover" />
+                </Link>
+              </Center>
               <Flex direction="column">
                 <Link as={ReactLink} to={`/${post._id}`}>
                   <Text fontSize="2xl" fontWeight="semibold" mb="3">
