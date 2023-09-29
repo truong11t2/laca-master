@@ -13,7 +13,9 @@ import { Link } from "@chakra-ui/react";
 const Comments = ({ postId, currentUser }) => {
   const [backendComments, setBackendComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
-  const rootComments = backendComments.filter((backendComment) => backendComment.parentId === null);
+  const rootComments = backendComments.filter(
+    (backendComment) => backendComment.parentId === null
+  );
 
   const getReplies = (commentId) =>
     backendComments
@@ -43,7 +45,9 @@ const Comments = ({ postId, currentUser }) => {
   const deleteComment = (commentId, currentUser) => {
     if (window.confirm("Are you sure you want to remove comment?")) {
       deleteCommentApi(commentId, currentUser).then(() => {
-        const updatedBackendComments = backendComments.filter((backendComment) => backendComment._id !== commentId);
+        const updatedBackendComments = backendComments.filter(
+          (backendComment) => backendComment._id !== commentId
+        );
         setBackendComments(updatedBackendComments);
       });
     }
@@ -56,6 +60,12 @@ const Comments = ({ postId, currentUser }) => {
     });
   }, []);
 
+  const storeCurrentUrl = () => {
+    const previousPageUrl = window.location.href;
+    console.log(previousPageUrl);
+    localStorage.setItem("previousPage", JSON.stringify(previousPageUrl));
+  };
+
   return (
     <div className="comments">
       <h3 className="comments-title">Bình luận</h3>
@@ -65,7 +75,18 @@ const Comments = ({ postId, currentUser }) => {
           <CommentForm submitLabel="Đăng" handleSubmit={addComment} />
         </div>
       ) : (
-        <div className="comment-form-title">Vui lòng <Link as={ReactLink} to={`/login`} color={"blue.500"}>đăng nhập</Link> để bình luận</div>
+        <div className="comment-form-title">
+          Vui lòng{" "}
+          <Link
+            as={ReactLink}
+            to={`/login`}
+            color={"blue.500"}
+            onClick={storeCurrentUrl}
+          >
+            đăng nhập
+          </Link>{" "}
+          để bình luận
+        </div>
       )}
       <div className="comments-container">
         {rootComments.map((rootComment) => (

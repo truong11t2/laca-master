@@ -3,9 +3,12 @@ import { useEffect } from "react";
 import { requestToken } from "../redux/actions/userActions";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Heading } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
 
 const LoginSuccessScreen = () => {
   const dispatch = useDispatch(); 
+  const { token } = useParams();
+  //const navigate = useNavigate();
 
   const user = useSelector((state) => state.user);
   const { userInfo } = user;
@@ -13,7 +16,11 @@ const LoginSuccessScreen = () => {
   useEffect(() => {
     if (userInfo) {
       // go back to prevous page before login
-        window.history.go(-3)
+        const previousPageUrl = JSON.parse(localStorage.getItem("previousPage"))
+        //console.log(previousPageUrl);
+        //navigate(previousPageUrl);
+        window.location.replace(previousPageUrl);
+        //window.history.go(-3)
       }
     }
     , [userInfo]);
@@ -21,7 +28,7 @@ const LoginSuccessScreen = () => {
   useEffect(() => {
     window.scroll(0, 0);
     // make request to get token for access
-    dispatch(requestToken());
+    dispatch(requestToken(token));
     }, []);
 
   return (

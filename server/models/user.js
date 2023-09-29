@@ -76,6 +76,7 @@ UserSchema.methods.getSignedJwtAccessToken = function () {
   );
 };
 
+/* Enable this part if use cookies
 UserSchema.methods.getSignedJwtRefreshToken = function () {
   return jwt.sign(
     { email: this.email, name: this.firstname, roles: this.roles },
@@ -85,6 +86,7 @@ UserSchema.methods.getSignedJwtRefreshToken = function () {
     }
   );
 };
+Enable this part if use cookie */
 
 UserSchema.methods.getResetPasswordToken = function () {
   const resetToken = randomBytes(20).toString("hex");

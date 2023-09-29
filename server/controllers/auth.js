@@ -8,6 +8,7 @@ import qs from "qs";
 import dotenv from "dotenv";
 dotenv.config();
 
+/* Enable this part if use cookie
 export const accessTokenCookieOptions = {
   maxAge: process.env.ACCESS_TOKEN_COOKIE_MAX_AGE, // 15 mins
   httpOnly: true,
@@ -405,3 +406,239 @@ export async function reIssueAccessToken(refreshToken) {
     );
   }
 }
+Enable this part if use cookie */
+
+// @desc    Login user
+export async function login(req, res, next) {
+  const { email, password } = req.body;
+
+  // Check if email and password is provided
+  if (!email || !password) {
+    return next(new ErrorResponse("Please provide an email and password", 400));
+  }
+
+  try {
+    // Check that user exists by email
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user) {
+      return next(new ErrorResponse("Invalid credentials", 401));
+    }
+
+    // Check that password match
+    const isMatch = await user.matchPassword(password);
+
+    if (!isMatch) {
+      return next(new ErrorResponse("Invalid credentials", 401));
+    }
+
+    sendToken(user, 200, res);
+  } catch (err) {
+    next(err);
+  }
+}
+
+// @desc    Register user
+export async function register(req, res, next) {
+  const { firstname, lastname, email, password } = req.body;
+
+  try {
+    const user = await User.create({
+      firstname,
+      lastname,
+      email,
+      password,
+    });
+
+    sendToken(user, 200, res);
+  } catch (err) {
+    next(err);
+  }
+}
+
+// @desc    Forgot Password Initialization
+export async function forgotPassword(req, res, next) {
+  // Send Email to email provided but first check if user exists
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return next(new ErrorResponse("No email could not be sent", 404));
+    }
+
+    // Reset Token Gen and add to database hashed (private) version of token
+    const resetToken = user.getResetPasswordToken();
+
+    await user.save();
+
+    // Create reset url to email to provided email
+    const resetUrl = `http://localhost:3000/passwordreset/${resetToken}`;
+
+    // HTML Message
+    const message = `
+      <h1>You have requested a password reset</h1>
+      <p>Please follow the below link to create a new one:</p>
+      <a href=${resetUrl} clicktracking=off>${resetUrl}</a>
+    `;
+
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: "Password Reset Request",
+        text: message,
+      });
+
+      res.status(200).json({ success: true, data: "Email Sent" });
+    } catch (err) {
+      console.log(err);
+
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+
+      await user.save();
+
+      return next(new ErrorResponse("Email could not be sent", 500));
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
+// @desc    Reset User Password
+export async function resetPassword(req, res, next) {
+  // Compare token in URL params to hashed token
+  const resetPasswordToken = createHash("sha256")
+    .update(req.params.resetToken)
+    .digest("hex");
+
+  try {
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return next(new ErrorResponse("Invalid Token", 400));
+    }
+
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    res.status(201).json({
+      success: true,
+      data: "Password Updated Success",
+      token: user.getSignedJwtAccessToken(),
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+const sendToken = (user, statusCode, res) => {
+  const token = user.getSignedJwtAccessToken();
+  res.status(statusCode).json({ token });
+};
+
+export async function googleOauthHandler(req, res) {
+  // get the code from qs
+  const code = req.query.code;
+  //console.log(code);
+
+  try {
+    // get the id and access token with the code
+    const { access_token, id_token, refresh_token } =
+      await getGoogleOAuthTokens({
+        code,
+      });
+    console.log({ access_token, id_token, refresh_token });
+
+    // get user with tokens
+    const googleUser = await getGoogleUser({ id_token, access_token });
+    //jwt.decode(id_token);
+
+    console.log({ googleUser });
+
+    if (!googleUser.verified_email) {
+      return res.status(403).send("Google account is not verified");
+    }
+
+    // upsert the user
+    const user = await findAndUpdateUser(
+      {
+        email: googleUser.email,
+      },
+      {
+        email: googleUser.email,
+        firstname: googleUser.given_name,
+        lastname: googleUser.family_name,
+        picture: googleUser.picture,
+      },
+      {
+        upsert: true,
+        new: true,
+      }
+    );
+
+    const accessToken = user.getSignedJwtAccessToken();
+    const queryParams = new URLSearchParams(accessToken).toString();
+
+    // Redirect back to client
+    res.redirect(`${process.env.ORIGIN}/login-success/${queryParams}`);
+  } catch (error) {
+    console.log("Failed to authorize Google user");
+    //todo: create oauth error page on front end
+    return res.redirect(`${process.env.ORIGIN}/oauth/error`);
+  }
+}
+
+const getGoogleOAuthTokens = async ({ code }) => {
+  const url = "https://accounts.google.com/o/oauth2/token";
+  const values = {
+    code,
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    client_secret: process.env.GOOGLE_CLIENT_SECRET,
+    redirect_uri: process.env.GOOGLE_OAUTH_REDIRECT_URI,
+    grant_type: "authorization_code",
+  };
+  const config = {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  };
+
+  // Send request to get tokens
+  try {
+    const res = await axios.post(url, qs.stringify(values), config);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return new ErrorResponse("Bad request", 400);
+  }
+};
+
+const getGoogleUser = async ({ access_token, id_token }) => {
+  try {
+    const url = `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${id_token}`,
+      },
+    };
+    const res = await axios.get(url, config);
+    //console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    console.log("Error fetching Google user");
+    return new ErrorResponse("Error fetching Google user", 400);
+  }
+};
+
+const findAndUpdateUser = async (query, update, options) => {
+  return User.findOneAndUpdate(query, update, options);
+};

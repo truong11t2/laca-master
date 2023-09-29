@@ -37,11 +37,14 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
-export const requestToken = () => async (dispatch) => {
+export const requestToken = (data) => async (dispatch) => {
   try {
-    const { data } = await axios.get("/api/auth/gettoken");
-    dispatch(userLogin(data));
-    localStorage.setItem("userInfo", JSON.stringify(data));
+    // Enable below line if use cookie
+    // const { data } = await axios.get("/api/auth/gettoken");
+
+    const token = { token: data };
+    dispatch(userLogin(token));
+    localStorage.setItem("userInfo", JSON.stringify(token));
   } catch (error) {
     dispatch(
       setError(

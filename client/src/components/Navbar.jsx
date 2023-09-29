@@ -81,6 +81,7 @@ const NavLink = ({ path, children }) => (
     py="2"
     fontWeight="semibold"
     _hover={{ textDecoration: "none", bg: mode("blue.100", "blue.800") }}
+    onClick={storeCurrentUrl}
   >
     {children}
   </Link>
@@ -95,11 +96,16 @@ const NavAuthLink = ({ path, children }) => (
     color={'blue.400'}
     //color={mode("blue.900", "greenyellow")}
     _hover={{ textDecoration: "none", bg: mode("blue.100", "blue.800") }}
+    onClick={storeCurrentUrl}
   >
     {children}
   </Link>
 );
-
+const storeCurrentUrl = () => {
+  const previousPageUrl = window.location.href;
+  console.log(previousPageUrl);
+  localStorage.setItem("previousPage", JSON.stringify(previousPageUrl));
+}
 const Navbar = () => {
   // Desktop Menu
   const { isOpen: isIconOpen, onClose: onIconClose, onOpen: onIconOpen } = useDisclosure();
@@ -405,10 +411,9 @@ const Navbar = () => {
               <NavLink key="login" path="/login">
                 Đăng Nhập
               </NavLink>
-              <Text> / </Text>
-                <NavLink key="register" path="/register">
-                  Đăng Ký
-                </NavLink>
+              <NavLink key="register" path="/register">
+                Đăng Ký
+              </NavLink>
             </>
                 
           )}

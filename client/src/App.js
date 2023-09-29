@@ -37,7 +37,7 @@ const App = () => {
             <Route path="/contact" element={<ContactScreen />}></Route>
             <Route path="/login" element={<LoginScreen />}></Route>
             <Route
-              path="/login-success"
+              path="/login-success/:token"
               element={<LoginSuccessScreen />}
             ></Route>
             <Route

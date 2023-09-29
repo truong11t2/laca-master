@@ -36,7 +36,11 @@ const Footer = () => {
     dispatch(logout());
     toast({ description: "Bạn đã đăng xuất.", status: "success", isClosable: true });
   };
-
+  const storeCurrentUrl = () => {
+    const previousPageUrl = window.location.href;
+    console.log(previousPageUrl);
+    localStorage.setItem("previousPage", JSON.stringify(previousPageUrl));
+  }
   return (
     <Box w="100%" bg={mode("blue.200", "blue.900")}>
       <Container as="footer" role="contentinfo" maxW="7xl">
@@ -50,7 +54,7 @@ const Footer = () => {
                 Đăng xuất
               </Button>
             ) : (
-              <Button mt={3} variant="link" as={ReactLink} to="/login" alignSelf="flex-start">
+              <Button mt={3} variant="link" as={ReactLink} to="/login" alignSelf="flex-start" onClick={storeCurrentUrl}>
                 Đăng nhập
               </Button>
             )}
