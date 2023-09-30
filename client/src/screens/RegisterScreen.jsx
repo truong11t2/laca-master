@@ -78,7 +78,7 @@ const RegisterScreen = () => {
           <Stack spacing="8">
             <Stack spacing="6">
               <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
-                <Heading size={headingBR}>Đăng Ký Tài Khoản</Heading>
+                <Heading pt={12} fontSize="2xl">Đăng Ký Tài Khoản</Heading>
               </Stack>
             </Stack>
             <Box

@@ -72,7 +72,7 @@ const LoginScreen = () => {
         <Container maxW="lg" py={{ base: "12", md: "24" }} px={{ base: "0", md: "8" }} minH="4xl">
           <Stack spacing="0">
               <Stack py={{ base: "6", md: "6" }} spacing={{ base: "2", md: "3" }} textAlign="center">
-                <Heading size={headingBR}>Đăng Nhập</Heading>
+                <Heading fontSize="2xl">Đăng Nhập</Heading>
               </Stack>
             <Box
               py={{ base: "0", md: "8" }}

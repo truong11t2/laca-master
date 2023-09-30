@@ -25,88 +25,89 @@ import { Link as ReactLink } from "react-router-dom";
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon, ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import { GiWorld } from "react-icons/gi";
 // import { FaTwitter, FaYoutube, FaFacebook, FaInstagram } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MdAdminPanelSettings } from "react-icons/md";
 
 import { logout } from "../redux/actions/userActions";
 
-const authLinks = [
-  { linkName: "Đăng nhập", path: "/login" },
-  { linkName: "Đăng ký", path: "/register" },
-];
-
-const links = [
-  { linkName: "GIỚI THIỆU", path: "/about" },
-  { linkName: "LIÊN HỆ", path: "/contact" },
-];
-
-const homeLink = {linkName: "BÀI VIẾT", path: "/blog/latest"}
-
-const blogLinks = [
-  //Todo: route to most viewed posts
-  // { linkName: "Most Viewed", category: "all" },
-  { linkName: "Tất Cả", category: "all" },
-  { linkName: "Mới Nhất", category: "latest" },
-];
-
-const europeLinks = [
-  { linkName: "Pháp", category: "europe", country: "france" },
-  { linkName: "Đức", category: "europe", country: "germany" },
-];
-
-const asiaLinks = [
-  { linkName: "Nhật Bản", category: "asia", country: "japan" },
-  { linkName: "Hàn Quốc", category: "asia", country: "korea" },
-];
-
-const americaLinks = [
-  { linkName: "Mỹ", category: "america", country: "usa" },
-  { linkName: "Canada", category: "america", country: "canada" },
-];
-const oceaniaLinks = [
-  { linkName: "Úc", category: "oceania", country: "australia" },
-  { linkName: "New Zealand", category: "oceania", country: "new-zealand" },
-];
-const africaLinks = [
-  { linkName: "Ai Cập", category: "africa", country: "ecrypt" },
-  { linkName: "Nam Phi", category: "africa", country: "south-africa" },
-];
-
-const NavLink = ({ path, children }) => (
-  <Link
-    as={ReactLink}
-    to={path}
-    px="2"
-    py="2"
-    fontWeight="semibold"
-    _hover={{ textDecoration: "none", bg: mode("blue.100", "blue.800") }}
-    onClick={storeCurrentUrl}
-  >
-    {children}
-  </Link>
-);
-
-const NavAuthLink = ({ path, children }) => (
-  <Link
-    as={ReactLink}
-    to={path}
-    px="2"
-    py="2"
-    color={'blue.400'}
-    //color={mode("blue.900", "greenyellow")}
-    _hover={{ textDecoration: "none", bg: mode("blue.100", "blue.800") }}
-    onClick={storeCurrentUrl}
-  >
-    {children}
-  </Link>
-);
-const storeCurrentUrl = () => {
-  const previousPageUrl = window.location.href;
-  console.log(previousPageUrl);
-  localStorage.setItem("previousPage", JSON.stringify(previousPageUrl));
-}
 const Navbar = () => {
+  const authLinks = [
+    { linkName: "Đăng nhập", path: "/login" },
+    { linkName: "Đăng ký", path: "/register" },
+  ];
+
+  const links = [
+    { linkName: "GIỚI THIỆU", path: "/about" },
+    { linkName: "LIÊN HỆ", path: "/contact" },
+  ];
+
+  const homeLink = {linkName: "BÀI VIẾT", path: "/blog/latest"}
+
+  const blogLinks = [
+    //Todo: route to most viewed posts
+    // { linkName: "Most Viewed", category: "all" },
+    { linkName: "Tất Cả", category: "all" },
+    { linkName: "Mới Nhất", category: "latest" },
+  ];
+
+  const europeLinks = [
+    { linkName: "Pháp", category: "europe", country: "france" },
+    { linkName: "Đức", category: "europe", country: "germany" },
+  ];
+
+  const asiaLinks = [
+    { linkName: "Nhật Bản", category: "asia", country: "japan" },
+    { linkName: "Hàn Quốc", category: "asia", country: "korea" },
+  ];
+
+  const americaLinks = [
+    { linkName: "Mỹ", category: "america", country: "usa" },
+    { linkName: "Canada", category: "america", country: "canada" },
+  ];
+  const oceaniaLinks = [
+    { linkName: "Úc", category: "oceania", country: "australia" },
+    { linkName: "New Zealand", category: "oceania", country: "new-zealand" },
+  ];
+  const africaLinks = [
+    { linkName: "Ai Cập", category: "africa", country: "ecrypt" },
+    { linkName: "Nam Phi", category: "africa", country: "south-africa" },
+  ];
+
+  const NavLink = ({ path, children }) => (
+    <Link
+      as={ReactLink}
+      to={path}
+      px="2"
+      py="2"
+      fontWeight="semibold"
+      _hover={{ textDecoration: "none", bg: mode("blue.100", "blue.800") }}
+      onClick={storeCurrentUrl}
+    >
+      {children}
+    </Link>
+  );
+
+  const NavAuthLink = ({ path, children }) => (
+    <Link
+      as={ReactLink}
+      to={path}
+      px="2"
+      py="2"
+      color={'blue.400'}
+      //color={mode("blue.900", "greenyellow")}
+      _hover={{ textDecoration: "none", bg: mode("blue.100", "blue.800") }}
+      onClick={storeCurrentUrl}
+    >
+      {children}
+    </Link>
+  );
+  const storeCurrentUrl = () => {
+    const previousPageUrl = window.location.href;
+    console.log(previousPageUrl);
+    localStorage.setItem("previousPage", JSON.stringify(previousPageUrl));
+    onIconClose();
+  }
   // Desktop Menu
   const { isOpen: isIconOpen, onClose: onIconClose, onOpen: onIconOpen } = useDisclosure();
   const { isOpen: isMenuOpen, onClose: onMenuClose, onOpen: onMenuOpen } = useDisclosure();
@@ -115,6 +116,8 @@ const Navbar = () => {
   const { isOpen: isMenuAmericaOpen, onClose: onMenuAmericaClose, onOpen: onMenuAmericaOpen } = useDisclosure();
   const { isOpen: isMenuOceaniaOpen, onClose: onMenuOceaniaClose, onOpen: onMenuOceaniaOpen } = useDisclosure();
   const { isOpen: isMenuAfricaOpen, onClose: onMenuAfricaClose, onOpen: onMenuAfricaOpen } = useDisclosure();
+
+  const menuRef = useRef(null);
 
   // Mobile Menu
   const { isOpen: isMenuOpenMobile, onClose: onMenuCloseMobile, onOpen: onMenuOpenMobile } = useDisclosure();
@@ -160,6 +163,23 @@ const Navbar = () => {
     toast({ description: "Bạn đã đăng xuất.", status: "success", isClosable: true });
   };
 
+  // Function to handle clicks outside the menu
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      onIconClose();
+    }
+  };
+
+  useEffect(() => {
+    // Attach the event listener when the component mounts
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  
   return (
     <Box bg={mode("blue.200", "blue.900")} zIndex={["sticky","sticky"]} px={0} position={["fixed", "fixed"]} w="100%" top={0}>
       <Container as="header" maxW="6xl" px={0}>
@@ -405,7 +425,7 @@ const Navbar = () => {
         </Flex>
       </Container>
       {isIconOpen ? (
-        <Box pb="4" display={{ md: "none" }}>
+        <Box pb="4" display={{ md: "none" }} ref={menuRef}>
           {userInfo ? null : (
             <>
               <NavLink key="login" path="/login">
