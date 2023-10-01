@@ -24,8 +24,9 @@ import "react-quill/dist/quill.snow.css";
 //import "./editor/styleEditor.css";
 // import Editor from "./Editor";
 import TinyMCE from "./editor/TinyMCE";
+import { removeVietnameseTones } from "../utils/utils";
 
-const PostEdit = ({ _id, content, title, category, country, introduction, image }) => {
+const PostEdit = ({ _id, content, title, category, country, introduction, image, slug }) => {
   const [coverImage, setCoverImage] = useState(image);
   const [postContent, setPostContent] = useState(content);
   const [postTitle, setPostTitle] = useState(title);
@@ -65,6 +66,10 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image 
   const dispatch = useDispatch();
 
   const handleSave = (isPublish) => {
+    // Create slug from title
+    var slug = removeVietnameseTones(postTitle);
+    slug = slug.replace(/ /g, "-").toLowerCase();
+
     dispatch(
       updatePost({
         _id,
@@ -75,6 +80,7 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image 
         country: postCountry,
         introduction: postIntroduction,
         isPublish: isPublish,
+        slug: slug,
       })
     );
   };

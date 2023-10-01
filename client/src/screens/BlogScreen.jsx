@@ -78,12 +78,12 @@ const BlogScreen = () => {
           <Box key={post._id} maxW={{ base: "3xl", lg: "5xl" }} px={{ base: "6", md: "8", lg: "20" }} py="6">
             <Stack direction={{ base: "column", lg: "row" }} spacing="7">
               <Center>
-                <Link as={ReactLink} to={`/${post._id}`}>
+                <Link as={ReactLink} to={`/${post.slug}`}>
                   <Image src={post.image} minW={{ lg: "350px" }} height={{ lg: "230px" }} loading={<Spinner />} fit="cover" />
                 </Link>
               </Center>
               <Flex direction="column">
-                <Link as={ReactLink} to={`/${post._id}`}>
+                <Link as={ReactLink} to={`/${post.slug}`}>
                   <Text fontSize="2xl" fontWeight="semibold" mb="3">
                     {post.title}
                   </Text>
@@ -107,7 +107,7 @@ const BlogScreen = () => {
                     </Link>
                   </Text>
                   <Spacer />
-                  <Link as={ReactLink} to={`/${post._id}`}>
+                  <Link as={ReactLink} to={`/${post.slug}`}>
                     Xem thêm...
                   </Link>
                 </Flex>

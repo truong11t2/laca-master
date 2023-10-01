@@ -20,6 +20,7 @@ import { createNewBlogPost } from "../redux/actions/blogPostActions";
 import { useNavigate } from "react-router-dom";
 //import Editor from "./Editor";
 import TinyMCE from "./editor/TinyMCE";
+import { removeVietnameseTones } from "../utils/utils";
 
 const NewPostTab = () => {
   const [coverImage, setCoverImage] = useState("");
@@ -65,6 +66,10 @@ const NewPostTab = () => {
         isClosable: true,
       });
     } else {
+      // Create slug from title
+      var slug = removeVietnameseTones(postTitle);
+      slug = slug.replace(/ /g, "-").toLowerCase();
+
       dispatch(
         createNewBlogPost({
           image: coverImage,
@@ -75,6 +80,7 @@ const NewPostTab = () => {
           introduction: postIntroduction,
           author: userInfo.name,
           isPublish: isPublish,
+          slug: slug,
         })
       );
     }

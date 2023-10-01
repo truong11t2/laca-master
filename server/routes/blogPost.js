@@ -172,7 +172,15 @@ const getBlogPostByCountry = asyncHandler(async (req, res) => {
 
 const getBlogPost = asyncHandler(async (req, res) => {
   //console.log(req.params.id);
-  const post = await blogPost.findById(req.params.id);
+  const str = req.params.id;
+  var post = null;
+  if (str.includes("-")) {
+    post = await blogPost.findOne({ slug: str });
+    //console.log(post);
+  } else {
+    post = await blogPost.findById(req.params.id);
+    //console.log(post);
+  }
 
   if (post) {
     res.json(post);
@@ -191,6 +199,7 @@ const createBlogPost = async (req, res) => {
     introduction,
     author,
     isPublish,
+    slug,
   } = req.body;
 
   const newPost = await blogPost.create({
@@ -202,6 +211,7 @@ const createBlogPost = async (req, res) => {
     introduction,
     author,
     isPublish,
+    slug,
   });
   await newPost.save();
   const posts = await blogPost.find({ title });
@@ -222,6 +232,7 @@ const updateBlogPost = asyncHandler(async (req, res) => {
     introduction,
     image,
     isPublish,
+    slug,
   } = req.body;
 
   const post = await blogPost.findById(_id);
@@ -234,6 +245,7 @@ const updateBlogPost = asyncHandler(async (req, res) => {
     post.introduction = introduction;
     post.image = image;
     post.isPublish = isPublish;
+    post.slug = slug;
     await post.save();
 
     const posts = await blogPost.find({});

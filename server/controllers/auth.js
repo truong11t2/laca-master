@@ -585,10 +585,9 @@ export async function googleOauthHandler(req, res) {
     );
 
     const accessToken = user.getSignedJwtAccessToken();
-    const queryParams = new URLSearchParams(accessToken).toString();
 
     // Redirect back to client
-    res.redirect(`${process.env.ORIGIN}/login-success/${queryParams}`);
+    res.redirect(`${process.env.ORIGIN}/login-success/${accessToken}`);
   } catch (error) {
     console.log("Failed to authorize Google user");
     //todo: create oauth error page on front end

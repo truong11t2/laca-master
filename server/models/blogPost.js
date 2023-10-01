@@ -34,6 +34,10 @@ const blogPostSchema = new mongoose.Schema(
       type: Boolean,
       require: true,
     },
+    slug: {
+      type: String,
+      require: true,
+    },
   },
   { timestamps: true }
 );
