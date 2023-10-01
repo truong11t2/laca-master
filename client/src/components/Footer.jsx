@@ -65,7 +65,7 @@ const Footer = () => {
             </Text>
             <Stack spacing='3' shouldWrapChildren>
               <Button variant='link' as={ReactLink} to="/privacy">Chính sách riêng tư</Button>
-              <Button variant='link' as={ReactLink} to="/terms">Điều khoản sử dụng</Button>
+              <Button variant='link' as={ReactLink} to="/terms-and-conditions">Điều khoản sử dụng</Button>
               <Button variant='link' as={ReactLink} to="/copyright">Bản quyền</Button>
             </Stack>
           </Box>

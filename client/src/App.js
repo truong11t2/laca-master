@@ -17,9 +17,12 @@ import AdminScreen from "./screens/AdminScreen";
 import Footer from "./components/Footer";
 import AboutScreen from "./screens/AboutScreen";
 import HomeScreen from "./screens/HomeScreen";
+import PrivacyScreen from "./screens/PrivacyScreen";
 import NotFoundScreen from "./screens/NotFoundScreen";
 import ForgotPasswordScreen from "./screens/ForgotPasswordScreen";
 import ResetPasswordScreen from "./screens/ResetPasswordScreen";
+import TermAndConditionScreen from "./screens/TermAndConditionScreen";
+import CopyRightScreen from "./screens/CopyRightScreen";
 
 const App = () => {
   return (
@@ -57,6 +60,12 @@ const App = () => {
               path="/"
               element={<Navigate to="/blog/latest" replace={true} />}
             ></Route>
+            <Route path="/privacy" element={<PrivacyScreen />}></Route>
+            <Route
+              path="/terms-and-conditions"
+              element={<TermAndConditionScreen />}
+            ></Route>
+            <Route path="/copyright" element={<CopyRightScreen />}></Route>
             <Route path="/404" element={<NotFoundScreen />}></Route>
             <Route
               path="*"
