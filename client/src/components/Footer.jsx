@@ -61,7 +61,7 @@ const Footer = () => {
           </Box>
           <Box pt={3} w='100%' >
             <Text mb={2} fontSize='m' fontWeight='semibold'>
-              Quy định
+              QUY ĐỊNH
             </Text>
             <Stack spacing='3' shouldWrapChildren>
               <Button variant='link' as={ReactLink} to="/privacy">Chính sách riêng tư</Button>
@@ -88,8 +88,8 @@ const Footer = () => {
               <FormControl>
                 <Input placeholder="Địa chỉ email" type="email" required value={email} disabled={state !== 'initial'} onChange={(e) => setEmail(e.target.value)}/>
               </FormControl>
-              <FormControl>
-                <Button variant="primary" flexShrink={0}
+              <FormControl pt='2'>
+                <Button variant='ghost' flexShrink={0}
                   isLoading={state === "submitting"}
                   type={state === "success" ? "button" : "submit"} >
                   {state === 'success' ? <CheckIcon /> : 'Theo dõi'}

@@ -138,6 +138,7 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image,
               minW={{ base: "full", md: "140px" }}
               colorScheme="blue"
               mr={{ md: "10" }}
+              mt={{ base: "10", md: "0" }}
               onClick={() => handleSave(false)}
             >
               Save
@@ -148,6 +149,7 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image,
               minW={{ base: "full", md: "140px" }}
               colorScheme="green"
               mr={{ md: "10" }}
+              mt={{ base: "10", md: "0" }}
               onClick={() => handleSave(true)}
             >
               Publish
@@ -157,6 +159,7 @@ const PostEdit = ({ _id, content, title, category, country, introduction, image,
               isLoading={removeButtonLoading}
               minW={{ base: "full", md: "140px" }}
               colorScheme="red"
+              mr={{ md: "10" }}
               mt={{ base: "10", md: "0" }}
               onClick={() => handleRemove()}
             >

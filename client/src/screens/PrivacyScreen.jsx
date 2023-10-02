@@ -2,11 +2,11 @@ import React from "react";
 import { Link, Container, Heading, Text } from "@chakra-ui/react";
 import { Link as ReactLink } from "react-router-dom";
 
-const PrivacyPage = () => {
+const PrivacyScreen = () => {
   return (
     <Container maxW="5xl" minH="100vh" mt="20">
       <Heading size="1xl" textAlign="center" pt={10} pb={10}>
-        CHÍNH SÁCH QUYỀN RIÊNG TƯ CỦA LACA.FUN
+        CHÍNH SÁCH QUYỀN RIÊNG TƯ
       </Heading>
       <Text pb={5} align="right" ><i>Sửa đổi lần cuối vào tháng 10 năm 2023</i></Text>
       <Text pt={2} pb={2}>
@@ -20,9 +20,11 @@ const PrivacyPage = () => {
         người dùng sẽ có thể mình tự quyết định việc chia sẻ dữ liệu cá nhân với laca.fun. 
         Dữ liệu cá nhân ở đây đề cập đến mọi thông tin liên quan đến một thể nhân có thể định danh/nhận dạng được
         ("Dữ liệu cá nhân"). Khi truy cập laca.fun, người dùng thừa nhận rằng đã đọc 
-        Chính sách Quyền riêng tư này và các Điều khoản Sử dụng (liên kết) của laca.fun cũng như đã hiểu 
+        Chính sách Quyền riêng tư này và các <Link as={ReactLink} to="/terms-and-conditions" color="blue.500">
+         Điều khoản sử dụng</Link> của laca.fun cũng như đã hiểu 
         toàn bộ nội dung & hậu quả của chúng; người dùng đồng ý và chấp thuận cho laca.fun thu thập, 
-        sử dụng, tiết lộ và xử lý Dữ liệu cá nhân theo Chính sách Quyền riêng tư này và/hoặc các Điều khoản Sử dụng. 
+        sử dụng, tiết lộ và xử lý Dữ liệu cá nhân theo Chính sách Quyền riêng tư này và/hoặc các 
+        <Link as={ReactLink} to="/terms-and-conditions" color="blue.500"> Điều khoản sử dụng</Link>. 
         Hơn nữa, người dùng cũng thừa nhận rằng toàn bộ Dữ liệu cá nhân mà người dùng đã cung cấp hoặc sẽ cung cấp 
         là dữ liệu chính chủ, đúng và chính xác.
       </Text>
@@ -35,7 +37,7 @@ const PrivacyPage = () => {
         các chính sách và thông lệ mới nhất từ laca.fun. Nếu người dùng không đồng ý với bất kỳ 
         thay đổi hoặc sửa đổi nào đối với Chính sách Quyền riêng tư, người dùng có quyền rời khỏi laca.fun. 
         Người dùng tiếp tục sử dụng Hệ thống sau ngày sửa đổi có hiệu lực, thì người dùng sẽ được xem là đã đồng ý 
-        và chấp nhận (các) sửa đổi của Chính sách Quyền riêng tư.
+        và chấp nhận sửa đổi của Chính sách Quyền riêng tư.
       </Text>
       <h3>
         Chính sách quyền riêng tư này bao gồm những phần sau:
@@ -43,7 +45,7 @@ const PrivacyPage = () => {
       
       <h4>1. Thu thập thông tin</h4>
       <Text pt={2} pb={2}>
-      La Cà thu thập thông tin khi người dùng đăng ký trên trang web, đăng nhập vào tài khoản. Các thông tin thu thập 
+      laca.fun thu thập thông tin khi người dùng đăng ký trên trang web, đăng nhập vào tài khoản. Các thông tin thu thập 
       bao gồm họ tên, địa chỉ email, hình đại diện.
       </Text>
 
@@ -52,7 +54,7 @@ const PrivacyPage = () => {
         Bất kỳ thông tin laca.fun thu thập từ người dùng sẽ được dùng:
       </Text>
       <ul>
-        <li>Đáp ứng riêng theo sở thích riêng cũng như kinh nghiệm của người dùng</li>
+        <li>Đáp ứng riêng theo sở thích riêng cũng như trải nghiệm của người dùng</li>
         <li>Cung cấp các nội dung quảng cáo phù hợp</li>
         <li>Cải thiện trang web laca.fun</li>
         <li>Cải thiện dịch vụ khách hàng cũng như các yêu cầu trợ giúp từ khách hàng</li>
@@ -84,7 +86,7 @@ const PrivacyPage = () => {
       <h4>5. Bảo mật thông tin</h4>
       <Text pt={2} pb={2}>
         laca.fun ứng dụng nhiều biện pháp để bảo mật dữ liệu cá nhân người dùng. Cụ thể, laca.fun 
-        sử dụng thuật toán mã hóa cao cấp để bảo mật các lần đăng nhập trực tuyến đòi hỏi sự bảo vệ cao. 
+        sử dụng thuật toán mã hóa cao cấp để bảo mật các lần đăng nhập trực tuyến của người dùng. 
       </Text>
 
       <h4>6. laca.fun có dùng cookies?</h4>
@@ -92,14 +94,15 @@ const PrivacyPage = () => {
         Câu trả lời là không, nhưng laca.fun có thể sử dụng cookies trong tương lai.
         Cookies được laca.fun dự định sử dụng để cải thiện tính tiện dụng.
         Ngoài ra, cookies giúp theo dõi cũng như đáp ứng theo nhu cầu riêng của từng người dùng. 
-        Tất cả cookie sử dụng đều không liên quan tới các thông tin cá nhân trên website của laca.fun.
+        Tất cả cookie sử dụng đều không liên quan tới các thông tin cá nhân trên trang web laca.fun.
       </Text>
 
       <h4>7. Hủy nhận thư</h4>
       <Text pt={2} pb={2}>
         laca.fun sử dụng địa chỉ email được người dùng cung cấp để gửi các thông tin và cập nhật 
         mà người dùng quan tâm như các bài viết mới, quảng cáo...
-        Nếu bất kỳ khi nào người dùng muốn hủy nhận thư, laca.fun đều đính kèm các hướng dẫn hủy nhận thử ở cuối mỗi email.
+        Bất kỳ khi nào người dùng muốn hủy nhận thư, người dùng có thể liên lạc với laca.fun qua 
+        <Link as={ReactLink} to="/contact" color="blue.500"> liên kết này</Link>.
       </Text>
  
       <h4>8. Đồng ý</h4>
@@ -111,4 +114,4 @@ const PrivacyPage = () => {
   );
 };
 
-export default PrivacyPage;
+export default PrivacyScreen;

@@ -8,11 +8,14 @@ const CopyRightScreen = () => {
       <Heading size="1xl" textAlign="center" pt={10} pb={10}>
         BẢN QUYỀN
       </Heading>
-      <Text pb={5} >
+      <Text pb={10} >
         <i>VỚI MỤC ĐÍCH CHIA SẺ KINH NGHIỆM DU LỊCH CHO TẤT CẢ MỌI NGƯỜI MỘT CÁCH MIỄN PHÍ. 
-        NHỮNG BÀI VIẾT TRÊN LACA.FUN CÓ THỂ ĐƯỢC SỬ DỤNG LẠI NHƯNG PHẢI CHÚ THÍCH NGUỒN GỐC
+        NHỮNG BÀI VIẾT TRÊN LACA.FUN CÓ THỂ ĐƯỢC CHIA SẺ VÀ SỬ DỤNG LẠI NHƯNG PHẢI CHÚ THÍCH NGUỒN GỐC
         TỪ LACA.FUN</i>
       </Text>
+
+      <Text>Chính sách riêng tư của laca.fun. <Link as={ReactLink} to="/privacy" color="blue.500">Xem tại đây</Link></Text>
+      <Text>Điều khoản sử dụng của laca.fun. <Link as={ReactLink} to="/terms-and-conditions" color="blue.500">Xem tại đây</Link></Text>
       
     </Container>
   );
