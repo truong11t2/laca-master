@@ -3,6 +3,7 @@ dotenv.config();
 import db from "./db.js";
 import express from "express";
 import path from "path";
+import cors from "cors";
 
 //Our Routes
 import blogPostRouter from "./routes/blogPost.js";
@@ -15,6 +16,7 @@ import subscriberRouter from "./routes/subscriber.js";
 
 db();
 const app = express();
+app.use(cors());
 
 app.use(
   express.json({
