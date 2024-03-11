@@ -33,6 +33,16 @@ export const getComments = async (postId) => {
   }
 };
 
+export const getComment = async (commentId) => {
+  try {
+    const { data } = await axios.get(`/api/comment/get/${commentId}`);
+    //console.log(data);
+    return data;
+  } catch (error) {
+    return error.message;
+  }
+};
+
 export const updateComment = async (commentId, content, userInfo) => {
   let updatedComment = {
     _id: commentId,

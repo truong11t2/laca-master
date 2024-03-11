@@ -2,7 +2,9 @@ import { Router } from "express";
 import protectRoute from "../middlewares/authMiddleware.js";
 import comment from "../models/comment.js";
 import asyncHandler from "express-async-handler";
+import dotenv from "dotenv";
 
+dotenv.config();
 const commentRouter = Router();
 
 const createComment = asyncHandler(async (req, res) => {
@@ -24,7 +26,7 @@ const createComment = asyncHandler(async (req, res) => {
   }
 });
 
-const getComment = asyncHandler(async (req, res) => {
+const getComments = asyncHandler(async (req, res) => {
   const { postId } = req.params;
   let comments = null;
   console.log("postId: ", postId);
@@ -35,6 +37,19 @@ const getComment = asyncHandler(async (req, res) => {
     res.status(200).json(comments);
   } else {
     res.status(404).send("There are still no comments");
+  }
+});
+
+const getComment = asyncHandler(async (req, res) => {
+  const { commentId } = req.params;
+  console.log("commentId: ", commentId);
+
+  //Get comments from DB
+  let result = await comment.findById(commentId);
+  if (result) {
+    res.status(200).json(result);
+  } else {
+    res.status(404).send("There are still no comment");
   }
 });
 
@@ -74,10 +89,21 @@ const deleteComments = asyncHandler(async (req, res) => {
   }
 });
 
-commentRouter.route("/create").post(protectRoute, createComment);
-commentRouter.route("/:postId/get").get(getComment);
-commentRouter.route("/update").put(protectRoute, updateComment);
-commentRouter.route("/delete/:commentId").delete(protectRoute, deleteComment);
-commentRouter.route("/delete/post/:postId").delete(protectRoute, deleteComments);
+if (process.env.COMMENT_AUTHORIZATION === "true") {
+  // with authorization
+  commentRouter.route("/create").post(protectRoute, createComment);
+  commentRouter.route("/:postId/get").get(getComments);
+  commentRouter.route("/update").put(protectRoute, updateComment);
+  commentRouter.route("/delete/:commentId").delete(protectRoute, deleteComment);
+  commentRouter.route("/delete/post/:postId").delete(protectRoute, deleteComments);
+} else {
+  // without authorization
+  commentRouter.route("/create").post(createComment);
+  commentRouter.route("/:postId/get").get(getComments);
+  commentRouter.route("/get/:commentId").get(getComment);
+  commentRouter.route("/update").put(updateComment);
+  commentRouter.route("/delete/:commentId").delete(deleteComment);
+  commentRouter.route("/delete/post/:postId").delete(deleteComments);
+}
 
 export default commentRouter;
