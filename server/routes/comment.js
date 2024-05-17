@@ -3,12 +3,18 @@ import protectRoute from "../middlewares/authMiddleware.js";
 import comment from "../models/comment.js";
 import asyncHandler from "express-async-handler";
 import dotenv from "dotenv";
+import Subscriber from "../models/subscriber.js";
 
 dotenv.config();
 const commentRouter = Router();
 
 const createComment = asyncHandler(async (req, res) => {
-  const { postId, parentId, content, email, name } = req.body;
+  const { postId, parentId, content, email, name, subscribe } = req.body;
+
+  if (subscribe) {
+    // store user email into db
+    await Subscriber.create({email,});
+  }
 
   let newComment = await comment.create({
     postId,
