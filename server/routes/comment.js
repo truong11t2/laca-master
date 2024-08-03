@@ -8,12 +8,17 @@ import Subscriber from "../models/subscriber.js";
 dotenv.config();
 const commentRouter = Router();
 
-const createComment = asyncHandler(async (req, res) => {
+const createComment = asyncHandler(async (req, res, next) => {
   const { postId, parentId, content, email, name, subscribe } = req.body;
 
   if (subscribe) {
     // store user email into db
-    await Subscriber.create({email,});
+    try {
+      await Subscriber.create({email,});
+      //res.status(200).json({ success: true, message: "Saved Email" });
+    } catch (err) {
+      //next(err);
+    }
   }
 
   let newComment = await comment.create({
